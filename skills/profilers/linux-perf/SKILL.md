@@ -40,6 +40,7 @@ sudo sysctl -p /etc/sysctl.d/99-perf.conf
 ```
 
 Compile the target with debug symbols for useful frame data:
+
 ```bash
 gcc -g -O2 -fno-omit-frame-pointer -o prog main.c
 # -fno-omit-frame-pointer: essential for frame-pointer-based unwinding
@@ -63,6 +64,7 @@ perf stat -p 12345 sleep 10
 ```
 
 Interpret `perf stat` output:
+
 - **IPC** (instructions per cycle) < 1.0: memory-bound or stalled pipeline
 - **cache-miss rate** > 5%: significant cache pressure
 - **branch-miss rate** > 5%: branch predictor struggling
@@ -103,6 +105,7 @@ perf report --stdio                  # non-interactive text output
 ```
 
 Navigation in TUI:
+
 - `Enter` — expand a symbol
 - `a` — annotate (show assembly with hit counts)
 - `s` — show source (needs debug info)

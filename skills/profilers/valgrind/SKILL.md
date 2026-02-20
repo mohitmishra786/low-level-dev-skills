@@ -50,7 +50,7 @@ Key flags:
 
 ### 2. Understanding Memcheck output
 
-```
+```text
 ==12345== Invalid read of size 4
 ==12345==    at 0x4007A2: foo (main.c:15)
 ==12345==    by 0x400846: main (main.c:30)
@@ -109,6 +109,7 @@ cg_diff cachegrind.out.before cachegrind.out.after
 ```
 
 Key metrics:
+
 - `I1mr` / `ILmr`: L1/LL instruction cache miss rate
 - `D1mr` / `DLmr`: L1/LL data read miss rate
 - `D1mw` / `DLmw`: L1/LL data write miss rate
@@ -144,6 +145,7 @@ Massif shows heap usage over time; useful for finding peak allocation sites and 
 ### 8. Performance considerations
 
 Valgrind Memcheck runs ~10-50x slower than native. Mitigations:
+
 - Use a shorter representative workload
 - Use `--error-exitcode=1` to fail fast in CI
 - Use ASan (`-fsanitize=address`) for faster memory checking during development

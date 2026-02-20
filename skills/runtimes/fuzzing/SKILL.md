@@ -45,6 +45,7 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
 ```
 
 Key rules:
+
 - Never call `abort()`, `exit()`, or use global state that persists across calls
 - Handle all inputs gracefully (crash = bug found)
 - Keep the target fast: the fuzzer calls it millions of times
@@ -192,7 +193,7 @@ For long-duration fuzzing, use OSS-Fuzz or ClusterFuzz infrastructure.
 
 Dictionaries contain interesting tokens to guide mutation:
 
-```
+```bash
 # parser.dict
 kw1="<"
 kw2=">"

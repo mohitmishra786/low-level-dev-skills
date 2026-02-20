@@ -2,12 +2,13 @@
 
 ## strace Output Format
 
-```
+```text
 syscall_name(arg1, arg2, ...) = return_value [error]
 ```
 
 Examples:
-```
+
+```text
 openat(AT_FDCWD, "/etc/passwd", O_RDONLY) = 3
 read(3, "root:x:0:0:root:/root:/bin/bash\n"..., 4096) = 1234
 write(1, "hello\n", 6) = 6
@@ -90,7 +91,7 @@ strace -e trace=mmap,getrlimit,setrlimit ./myapp 2>&1 | head -30
 
 ## strace -c Output Analysis
 
-```
+```text
 % time     seconds  usecs/call     calls    errors syscall
 ------ ----------- ----------- --------- --------- ----------------
  62.34    0.012456         124       100        12 read
@@ -103,6 +104,7 @@ strace -e trace=mmap,getrlimit,setrlimit ./myapp 2>&1 | head -30
 ```
 
 Key columns:
+
 - `% time` → where the process spends time in kernel
 - `usecs/call` → average time per call (high = blocking call)
 - `errors` → failed calls count (non-zero = something wrong)

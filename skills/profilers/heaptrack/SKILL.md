@@ -73,7 +73,7 @@ heaptrack_print heaptrack.myapp.*.zst 2>/dev/null
 
 Key sections:
 
-```
+```text
 total runtime: 2.34s
 calls to allocation functions: 145,234 (62,064/s)
 temporary allocations: 89,123 (38,087/s)

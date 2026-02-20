@@ -22,7 +22,7 @@ Guide agents through Cargo workspaces, feature management, build scripts (`build
 
 ### 1. Workspace setup
 
-```
+```text
 my-project/
 ├── Cargo.toml           # Workspace root
 ├── Cargo.lock           # Single lock file for all members
@@ -110,6 +110,7 @@ cargo check --all-features
 ```
 
 Feature gotchas:
+
 - Features are additive: once enabled anywhere in the dependency graph, they stay enabled
 - `resolver = "2"` prevents feature leakage between dev-dependencies and regular deps
 - Use `dep:optional_dep` syntax (edition 2021) to avoid implicit feature creation
@@ -211,6 +212,7 @@ cargo nextest run --profile ci
 ```
 
 `nextest.toml`:
+
 ```toml
 [profile.ci]
 fail-fast = false
@@ -243,6 +245,7 @@ cargo upgrade                   # Update to latest (cargo-edit)
 ```
 
 `deny.toml`:
+
 ```toml
 [licenses]
 allow = ["MIT", "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause"]

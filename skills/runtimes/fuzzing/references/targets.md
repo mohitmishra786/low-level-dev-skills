@@ -1,10 +1,11 @@
 # Fuzzing Targets and Corpus Reference
 
-Source: https://llvm.org/docs/LibFuzzer.html
-Source: https://github.com/AFLplusplus/AFLplusplus/blob/stable/docs/fuzzing_in_depth.md
-Source: https://google.github.io/clusterfuzz/
+Source: <https://llvm.org/docs/LibFuzzer.html>
+Source: <https://github.com/AFLplusplus/AFLplusplus/blob/stable/docs/fuzzing_in_depth.md>
+Source: <https://google.github.io/clusterfuzz/>
 
 ## Table of Contents
+
 1. [libFuzzer flags reference](#libfuzzer-flags-reference)
 2. [AFL++ flags reference](#afl-flags-reference)
 3. [Writing good fuzz targets](#writing-good-fuzz-targets)
@@ -237,7 +238,7 @@ llvm-cov report ./fuzz_target -instr-profile=fuzz.profdata
 
 Dictionaries guide the fuzzer with interesting tokens for the target format:
 
-```
+```c
 # parser.dict — one entry per line
 # String tokens (double-quoted)
 kw1="<"
@@ -334,7 +335,8 @@ Do not combine TSan with ASan or MSan.
 OSS-Fuzz runs fuzzing at scale for open-source projects.
 
 Minimal project layout:
-```
+
+```text
 oss-fuzz-project/
 ├── project.yaml       # project metadata
 ├── Dockerfile         # build environment
@@ -343,6 +345,7 @@ oss-fuzz-project/
 ```
 
 `build.sh` example:
+
 ```bash
 #!/bin/bash -eu
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
@@ -352,4 +355,4 @@ cp corpus.zip $OUT/fuzz_parser_seed_corpus.zip
 cp parser.dict $OUT/fuzz_parser.dict
 ```
 
-See: https://google.github.io/oss-fuzz/getting-started/new-project-guide/
+See: <https://google.github.io/oss-fuzz/getting-started/new-project-guide/>

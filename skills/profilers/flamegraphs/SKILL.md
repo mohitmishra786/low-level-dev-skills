@@ -48,6 +48,7 @@ open flamegraph.svg          # macOS
 ```
 
 One-liner:
+
 ```bash
 perf record -F 999 -g ./prog && perf script | stackcollapse-perf.pl | flamegraph.pl > fg.svg
 ```
@@ -94,6 +95,7 @@ flamegraph.pl out.collapsed > fg.svg
 ### 6. Reading flamegraphs
 
 A flamegraph is a call-stack visualisation:
+
 - **X axis**: time on CPU (not time sequence) — wider = more time
 - **Y axis**: call stack depth — taller = deeper call chain
 - **Color**: random (no significance) — unless using differential mode
@@ -109,11 +111,13 @@ A flamegraph is a call-stack visualisation:
 | Many narrow identical stacks | Many threads doing the same work | Consider parallelism or batching |
 
 **Identifying the actionable hotspot:**
+
 1. Find the widest top frame (a frame with no or narrow children above it)
 2. That is where CPU time is actually spent
 3. Trace down to understand what called it and why
 
 **Differential flamegraph:**
+
 - Red frames: more time in new profile (regression)
 - Blue frames: less time in new profile (improvement)
 - Frames only in one profile appear solid colored

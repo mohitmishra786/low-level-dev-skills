@@ -3,7 +3,8 @@
 ## ASan report types
 
 ### heap-buffer-overflow
-```
+
+```text
 ERROR: AddressSanitizer: heap-buffer-overflow on address 0x602000000050
 WRITE of size 4 at 0x602000000050 thread T0
     #0 0x401234 in write_past_end main.c:12
@@ -22,7 +23,8 @@ allocated by thread T0 here:
 ---
 
 ### use-after-free
-```
+
+```text
 ERROR: AddressSanitizer: heap-use-after-free on address 0x602000000050
 READ of size 8 at 0x602000000050 thread T0
     #0 0x401234 in use_ptr main.c:20
@@ -41,7 +43,8 @@ allocated by thread T0 here:
 ---
 
 ### stack-buffer-overflow
-```
+
+```text
 ERROR: AddressSanitizer: stack-buffer-overflow on address 0x7fff...
 WRITE of size 1 at 0x7fff... thread T0
     #0 0x401234 in foo main.c:8
@@ -56,7 +59,8 @@ Address 0x7fff... is located at offset 28 in frame <main.c:5:foo>
 ---
 
 ### double-free
-```
+
+```text
 ERROR: AddressSanitizer: attempting double-free on 0x602000000050
     #0 0x401234 in bad_free main.c:25
 
@@ -73,25 +77,29 @@ freed here (2nd time / current):
 ## UBSan report types
 
 ### signed-integer-overflow
-```
+
+```text
 src/main.c:15:12: runtime error: signed integer overflow: 2147483647 + 1 cannot be represented in type 'int'
 ```
 Fix: use `int64_t` or check for overflow before the operation.
 
 ### null pointer dereference
-```
+
+```text
 src/main.c:20:3: runtime error: member access within null pointer of type 'struct Foo'
 ```
 Fix: check pointer != NULL before deref.
 
 ### shift exponent too large
-```
+
+```text
 src/main.c:8:14: runtime error: shift exponent 32 is too large for 32-bit type 'int'
 ```
 Fix: cast to `uint64_t` before shifting, or use `__builtin_expect`.
 
 ### misaligned access
-```
+
+```text
 src/main.c:12:10: runtime error: load of misaligned address 0x... for type 'int', which requires 4-byte alignment
 ```
 Fix: use `memcpy` to read unaligned data; or ensure pointer is correctly aligned.
@@ -101,7 +109,8 @@ Fix: use `memcpy` to read unaligned data; or ensure pointer is correctly aligned
 ## TSan report types
 
 ### data race
-```
+
+```text
 WARNING: ThreadSanitizer: data race (pid=12345)
   Write of size 4 at 0x7f... by thread T2:
     #0 counter_increment counter.c:8
@@ -114,7 +123,8 @@ WARNING: ThreadSanitizer: data race (pid=12345)
 **Fix:** Add mutex, atomic, or use `__atomic_*` / `std::atomic`.
 
 ### lock order inversion (deadlock risk)
-```
+
+```text
 WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock)
   Mutex M1 acquired here while holding M2:
   Mutex M2 acquired here while holding M1:
@@ -125,7 +135,7 @@ Fix: establish a global lock ordering; always acquire M1 before M2.
 
 ## LSan report
 
-```
+```text
 ==12345==ERROR: LeakSanitizer: detected memory leaks
 
 Direct leak of 40 byte(s) in 1 object(s) allocated from:

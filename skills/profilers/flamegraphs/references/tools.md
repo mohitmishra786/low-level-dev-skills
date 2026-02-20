@@ -171,6 +171,7 @@ difffolded.pl -n after.folded before.folded | flamegraph.pl --negate > diff_inv.
 ```
 
 Reading the diff:
+
 - **Saturated red**: function took significantly more time in the new profile
 - **Saturated blue**: function took significantly less time
 - **Pale colors**: small change

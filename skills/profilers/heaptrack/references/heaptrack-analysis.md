@@ -18,7 +18,7 @@ Options:
 
 ## Output Sections Explained
 
-```
+```text
 total runtime: 5.23s
 calls to allocation functions: 1,234,567 (236,049/s)
 temporary allocations: 987,654 (188,847/s)
@@ -37,7 +37,7 @@ total memory leaked: 4.56MB
 
 ## Hotspot Output Format
 
-```
+```text
 hotspot 1: 45.23MB peak in 12,345 allocations with 67,890 temporary allocations
   myapp::cache::Cache::insert at src/cache.cpp:142
     myapp::request::handle at src/request.cpp:89
@@ -45,6 +45,7 @@ hotspot 1: 45.23MB peak in 12,345 allocations with 67,890 temporary allocations
 ```
 
 Reading:
+
 - First line: total bytes at peak, total allocations, temporary count
 - Stack trace: top = leaf (where alloc happened), bottom = root caller
 
@@ -71,7 +72,7 @@ xdg-open heap-peak.svg
 
 ### Pattern: Excessive small allocations
 
-```
+```text
 hotspot: 50MB peak in 5,000,000 allocations
   std::string::operator= (copying small strings)
 ```
@@ -80,7 +81,7 @@ Fix: Use `std::string_view`, arena allocator, or SSO-optimised string.
 
 ### Pattern: Container growth
 
-```
+```text
 hotspot: 30MB peak in 100,000 allocations
   std::vector::push_back (repeated reallocations)
 ```
@@ -89,7 +90,7 @@ Fix: `vec.reserve(expected_size)` before push_back loop.
 
 ### Pattern: Leaked connection/handle
 
-```
+```text
 leak: 2MB in 100 allocations
   MyConnection::connect at src/conn.cpp:45
 ```
@@ -98,7 +99,7 @@ Fix: Check destructor, ensure RAII wrapper, add `unique_ptr`.
 
 ### Pattern: Temporary string allocations
 
-```
+```text
 temporary: 10M allocs/sec
   std::to_string(int) in hot loop
 ```
@@ -124,6 +125,7 @@ grep "peak heap" baseline.txt jemalloc.txt mimalloc.txt
 ## heaptrack GUI (heaptrack_gui)
 
 The Qt-based GUI shows:
+
 - Timeline of heap usage over time
 - Flamegraph view (interactive)
 - Top allocations table
@@ -138,6 +140,7 @@ heaptrack_gui  # File → Open
 ```
 
 GUI tabs:
+
 1. **Summary**: overall stats
 2. **Bottom-Up**: callers → callees (who caused the allocation)
 3. **Top-Down**: callees → callers (allocation call trees)

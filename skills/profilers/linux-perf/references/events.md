@@ -1,9 +1,10 @@
 # Linux perf Events Reference
 
-Source: https://perf.wiki.kernel.org/index.php/Main_Page
-Source: https://man7.org/linux/man-pages/man1/perf-stat.1.html
+Source: <https://perf.wiki.kernel.org/index.php/Main_Page>
+Source: <https://man7.org/linux/man-pages/man1/perf-stat.1.html>
 
 ## Table of Contents
+
 1. [Hardware events](#hardware-events)
 2. [Software events](#software-events)
 3. [Tracepoints](#tracepoints)

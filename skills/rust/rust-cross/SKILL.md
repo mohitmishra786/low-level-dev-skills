@@ -106,6 +106,7 @@ cargo zigbuild --target x86_64-pc-windows-gnu --release
 ```
 
 `cargo-zigbuild` advantages over `cross`:
+
 - No Docker required
 - Faster (no container startup)
 - Works for most targets out of the box

@@ -21,12 +21,14 @@
 ## When to use which
 
 **Use ASan when:**
+
 - You control the build process
 - You want fast iteration in development
 - You need to catch stack overflows and global OOB
 - CI/CD integration (speed matters)
 
 **Use Valgrind when:**
+
 - You cannot recompile (testing pre-built binaries)
 - You need uninitialised value detection (use `--track-origins=yes`)
 - You need cache profiling (Cachegrind) or call graphs (Callgrind)

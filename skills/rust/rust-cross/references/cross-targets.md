@@ -2,7 +2,7 @@
 
 ## Full Target Triple Format
 
-```
+```text
 <cpu_arch>-<vendor>-<os>-<abi>
 ```
 
@@ -101,7 +101,7 @@ OPENSSL_STATIC=1 cargo zigbuild --target aarch64-unknown-linux-gnu
 
 ## Embedded Project Structure
 
-```
+```text
 my-embedded/
 ├── .cargo/
 │   └── config.toml    # default target, runner, linker
@@ -112,7 +112,7 @@ my-embedded/
     └── main.rs        # #![no_std] #![no_main]
 ```
 
-```
+```text
 # .cargo/config.toml for STM32F4
 [build]
 target = "thumbv7em-none-eabihf"

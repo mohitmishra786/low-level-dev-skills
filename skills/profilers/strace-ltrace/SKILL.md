@@ -151,13 +151,15 @@ ltrace -c ./myapp
 ```
 
 Typical ltrace output:
-```
+
+```text
 malloc(1024) = 0x55a1b2c3d000
 fopen("/etc/myapp.conf", "r") = 0
 free(0x55a1b2c3d000) = <void>
 ```
 
 strace vs ltrace:
+
 | | strace | ltrace |
 |--|--------|--------|
 | Traces | Kernel syscalls | User-space library calls |

@@ -1,10 +1,10 @@
 # Sanitizer Flags Reference
 
-Source: https://clang.llvm.org/docs/UsersManual.html#controlling-code-generation
-Source: https://clang.llvm.org/docs/AddressSanitizer.html
-Source: https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html
-Source: https://clang.llvm.org/docs/ThreadSanitizer.html
-Source: https://clang.llvm.org/docs/MemorySanitizer.html
+Source: <https://clang.llvm.org/docs/UsersManual.html#controlling-code-generation>
+Source: <https://clang.llvm.org/docs/AddressSanitizer.html>
+Source: <https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html>
+Source: <https://clang.llvm.org/docs/ThreadSanitizer.html>
+Source: <https://clang.llvm.org/docs/MemorySanitizer.html>
 
 ## Quick reference table
 

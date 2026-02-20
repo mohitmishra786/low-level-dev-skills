@@ -22,7 +22,7 @@ Guide agents through choosing, enabling, and interpreting compiler runtime sanit
 
 ### 1. Decision tree: which sanitizer?
 
-```
+```bash
 Bug class?
 ├── Memory OOB, use-after-free, double-free → AddressSanitizer (ASan)
 ├── Stack OOB, global OOB → ASan (all three covered)
@@ -43,6 +43,7 @@ clang -fsanitize=address -fno-omit-frame-pointer -g -O1 -o prog main.c
 ```
 
 Runtime options (via `ASAN_OPTIONS`):
+
 ```bash
 ASAN_OPTIONS=detect_leaks=1:abort_on_error=1:log_path=/tmp/asan.log ./prog
 ```
@@ -57,7 +58,8 @@ ASAN_OPTIONS=detect_leaks=1:abort_on_error=1:log_path=/tmp/asan.log ./prog
 | `quarantine_size_mb=256` | Delay reuse of freed memory |
 
 **Interpreting ASan output:**
-```
+
+```text
 ==12345==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x602000000050
 READ of size 4 at 0x602000000050 thread T0
     #0 0x401234 in foo /home/user/src/main.c:15
@@ -80,6 +82,7 @@ gcc -fsanitize=undefined,integer -g -O1 -o prog main.c
 ```
 
 Common UBSan checks:
+
 - `signed-integer-overflow`
 - `unsigned-integer-overflow` (not in `undefined` by default)
 - `null` — null pointer dereference
@@ -100,7 +103,8 @@ gcc -fsanitize=undefined \
 `-fno-sanitize-recover=all`: makes UBSan abort on first error (important for CI).
 
 **Interpreting UBSan output:**
-```
+
+```text
 src/main.c:15:12: runtime error: signed integer overflow: 2147483647 + 1 cannot be represented in type 'int'
 ```
 
@@ -114,7 +118,8 @@ clang -fsanitize=thread -g -O1 -o prog main.c
 ```
 
 **Interpreting TSan output:**
-```
+
+```text
 WARNING: ThreadSanitizer: data race (pid=12345)
   Write of size 4 at 0x7f... by thread T2:
     #0 increment /home/user/src/counter.c:8
