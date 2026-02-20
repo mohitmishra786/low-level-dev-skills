@@ -1,9 +1,69 @@
 # low-level-dev-skills
 
-A curated suite of AI agent skills for systems and low-level C/C++ development toolchains. Install via the `skills` CLI:
+A curated suite of AI agent skills for systems and low-level C/C++ development toolchains. These skills provide expert guidance for compilers, debuggers, profilers, build systems, and low-level programming tasks.
 
+**[View on skills.sh](https://skills.sh/mohitmishra786/low-level-dev-skills)**
+
+## Installation
+
+Install all skills with a single command:
+
+```bash
+npx skills add mohitmishra786/low-level-dev-skills --all
 ```
+
+Or select specific skills interactively:
+
+```bash
 npx skills add mohitmishra786/low-level-dev-skills
+```
+
+Install globally to make skills available in all projects:
+
+```bash
+npx skills add mohitmishra786/low-level-dev-skills --all --global
+```
+
+## Supported Agents
+
+Skills work with 30+ AI coding agents:
+
+| Agent | Skill Directory |
+|-------|-----------------|
+| [Claude Code](https://claude.com/product/claude-code) | `.claude/skills/` |
+| [Cursor](https://cursor.sh) | `.cursor/skills/` |
+| [Codex](https://openai.com/codex) | `.codex/skills/` |
+| [GitHub Copilot](https://github.com/features/copilot) | `.github/copilot/skills/` |
+| [Cline](https://cline.bot) | `.cline/skills/` |
+| [Windsurf](https://codeium.com/windsurf) | `.windsurf/skills/` |
+| [Gemini CLI](https://gemini.google.com) | `.gemini/skills/` |
+| [Kilo](https://kilo.ai) | `.kilo/skills/` |
+
+And many more including: Amp, Antigravity, Augment, Droid, Goose, Kiro CLI, OpenCode, Roo, Trae, VSCode, and others.
+
+## Usage Examples
+
+After installation, invoke skills in your AI agent:
+
+### In Claude Code
+```
+/gcc How do I enable link-time optimization?
+/gdb Set a conditional breakpoint in GDB
+/cmake What's the modern way to find packages?
+```
+
+### In Cursor
+```
+/sanitizers Which sanitizer should I use for detecting memory leaks?
+/valgrind How do I suppress known false positives?
+/linux-perf Generate a flame graph from perf data
+```
+
+### In Codex
+```
+/clang Enable all recommended warnings for production code
+/assembly-x86 Explain the calling convention for x86-64 System V
+/linkers-lto Debug "undefined reference" linker errors
 ```
 
 ## Skills
@@ -38,3 +98,16 @@ npx skills add mohitmishra786/low-level-dev-skills
 Each skill follows the [SKILL.md format](https://github.com/anthropics/skills). The body stays under 500 lines; detailed reference material lives in `references/` and is loaded only when needed (progressive disclosure).
 
 Skills cross-reference each other where workflows overlap (e.g., `sanitizers` + `gcc` or `clang`, `flamegraphs` + `linux-perf`).
+
+## Contributing
+
+Contributions are welcome! To add or improve a skill:
+
+1. Fork the repository
+2. Create or modify skills in `skills/<category>/<skill-name>/SKILL.md`
+3. Follow the SKILL.md format with required sections (Purpose, Triggers, Workflow, Related skills)
+4. Submit a pull request
+
+## Topics
+
+`ai-agent-skills` `low-level-programming` `c-cpp-toolchain` `systems-programming` `compilers` `debuggers` `profilers` `build-systems`
