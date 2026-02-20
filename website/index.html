@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Low-Level Dev Skills — AI Agent Skills for C/C++ Toolchains</title>
+  <meta name="description" content="A curated suite of AI agent skills for systems and low-level C/C++ development toolchains. Compilers, debuggers, profilers, and more.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <meta property="og:title" content="Low-Level Dev Skills — AI Agent Skills for C/C++ Toolchains">
+  <meta property="og:description" content="A curated suite of AI agent skills for systems and low-level C/C++ development toolchains.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Low-Level Dev Skills — AI Agent Skills for C/C++ Toolchains">
+  <meta name="twitter:description" content="A curated suite of AI agent skills for systems and low-level C/C++ development toolchains.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="crt-overlay"></div>
+  <div class="scanlines"></div>
+
+  <nav class="nav">
+    <div class="nav-left">
+      <span class="nav-prompt">></span>
+      <span class="nav-title">low-level-dev-skills</span>
+    </div>
+    <div class="nav-right">
+      <span class="nav-time" id="clock"></span>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <pre class="ascii-art" aria-hidden="true">
+ _     _____ ___ _     ___ ___  ___  ___ 
+| |   |  ___|_ _| |   |_ _/ _ \/ _ \/ __|
+| |___| |_   | || |    | | (_) | (_) \__ \
+|_____|_|   |___|_|   |___\___/ \___/|___/
+      ___  ___  ___ _____ _____   ___  ___  ___ 
+     / _ \| _ \/ __|_   _| __\ \ / / |/ _ \/ __|
+    | (_) |   / (__  | | | _| \ V /| | (_) \__ \
+     \___/|_|_\\___| |_| |___| \_/ |_|\___/|___/
+      ___  ___ ___ _  _ ___ ___   __  __ ___ 
+     | _ )/ __|_ _| \| | __| _ \  \ \/ /| __|
+     | _ \ (_ || || .` | _||   /   >  < | _| 
+     |___/\___|___|_|\_|___|_|_\  /_/\_\|___|
+      </pre>
+
+      <div class="terminal-line">
+        <span class="prompt">$</span>
+        <span class="typing" id="heroText"></span>
+        <span class="cursor">_</span>
+      </div>
+
+      <p class="hero-description">
+        <span class="highlight">22 skills</span> for compilers, debuggers, profilers, build systems, and low-level programming.
+      </p>
+    </section>
+
+    <section class="install-section">
+      <div class="terminal-window">
+        <div class="terminal-header">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+          <span class="terminal-title">install.sh</span>
+        </div>
+        <div class="terminal-body">
+          <div class="terminal-line">
+            <span class="prompt">$</span>
+            <span class="command">npx skills add mohitmishra786/low-level-dev-skills --all</span>
+          </div>
+          <div class="terminal-output success" id="installOutput">
+            <span class="output-line">[OK] Cloning repository...</span>
+            <span class="output-line">[OK] Found 22 skills</span>
+            <span class="output-line">[OK] Installing to all agents</span>
+            <span class="output-line highlight">>>> Installation complete!</span>
+          </div>
+        </div>
+        <button class="copy-btn" id="copyBtn" title="Copy to clipboard">
+          <span class="copy-icon">[COPY]</span>
+          <span class="copy-feedback" id="copyFeedback">COPIED!</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="skills-section">
+      <div class="section-header">
+        <span class="section-prompt">></span>
+        <span class="section-title">ls skills/</span>
+      </div>
+
+      <div class="category-tabs" id="categoryTabs">
+        <button class="tab active" data-category="all">all</button>
+        <button class="tab" data-category="compilers">compilers</button>
+        <button class="tab" data-category="debuggers">debuggers</button>
+        <button class="tab" data-category="profilers">profilers</button>
+        <button class="tab" data-category="build-systems">build-systems</button>
+        <button class="tab" data-category="binaries">binaries</button>
+        <button class="tab" data-category="runtimes">runtimes</button>
+        <button class="tab" data-category="low-level-programming">low-level</button>
+      </div>
+
+      <div class="skills-grid" id="skillsGrid"></div>
+    </section>
+
+    <section class="agents-section">
+      <div class="section-header">
+        <span class="section-prompt">></span>
+        <span class="section-title">cat supported_agents.txt</span>
+      </div>
+      <div class="agents-grid" id="agentsGrid"></div>
+    </section>
+
+    <section class="usage-section">
+      <div class="section-header">
+        <span class="section-prompt">></span>
+        <span class="section-title">man usage</span>
+      </div>
+      <div class="usage-examples">
+        <div class="usage-card">
+          <div class="usage-header">Claude Code</div>
+          <code>/gcc How do I enable link-time optimization?</code>
+        </div>
+        <div class="usage-card">
+          <div class="usage-header">Cursor</div>
+          <code>/sanitizers Which sanitizer for memory leaks?</code>
+        </div>
+        <div class="usage-card">
+          <div class="usage-header">Codex</div>
+          <code>/gdb Set a conditional breakpoint</code>
+        </div>
+      </div>
+    </section>
+
+    <section class="structure-section">
+      <div class="section-header">
+        <span class="section-prompt">></span>
+        <span class="section-title">tree -L 2</span>
+      </div>
+      <div class="tree-view">
+        <pre id="treeView"></pre>
+      </div>
+    </section>
+
+    <section class="contributing-section">
+      <div class="section-header">
+        <span class="section-prompt">></span>
+        <span class="section-title">./contribute.sh</span>
+      </div>
+      <div class="steps" id="stepsContainer"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="https://github.com/mohitmishra786/low-level-dev-skills" class="footer-link">[GitHub]</a>
+      <a href="https://skills.sh/mohitmishra786/low-level-dev-skills" class="footer-link">[skills.sh]</a>
+    </div>
+    <div class="footer-copy">
+      <span class="prompt">$</span> echo "Built for systems programmers"
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
