@@ -3,7 +3,7 @@
 A curated suite of AI agent skills for systems and low-level C/C++ development toolchains. Install via the `skills` CLI:
 
 ```
-npx skills add chessman/low-level-dev-skills
+npx skills add mohitmishra786/low-level-dev-skills
 ```
 
 ## Skills
