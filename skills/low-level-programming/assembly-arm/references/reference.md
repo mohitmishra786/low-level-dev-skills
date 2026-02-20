@@ -1,9 +1,10 @@
 # AArch64 / ARM Assembly Reference
 
-Source: https://developer.arm.com/documentation/ddi0487/latest (ARM Architecture Reference Manual)
-Source: https://developer.arm.com/documentation/ihi0055/latest (AAPCS64)
+Source: <https://developer.arm.com/documentation/ddi0487/latest> (ARM Architecture Reference Manual)
+Source: <https://developer.arm.com/documentation/ihi0055/latest> (AAPCS64)
 
 ## Table of Contents
+
 1. [Condition codes](#condition-codes)
 2. [Key instructions by category](#key-instructions-by-category)
 3. [Memory ordering](#memory-ordering)
@@ -161,6 +162,7 @@ msr  nzcv, x0           ; write flags register
 | `float64x2_t` | 2 | double |
 
 Common intrinsic categories (prefix `v`):
+
 - Load: `vld1q_f32`, `vld2q_u8` (interleaved)
 - Store: `vst1q_f32`
 - Arithmetic: `vaddq_f32`, `vsubq_s32`, `vmulq_f32`

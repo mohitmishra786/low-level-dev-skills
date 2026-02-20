@@ -548,6 +548,87 @@ main {
   padding: 0.1em 0.3em;
 }
 
+/* Tag-based install section */
+.tag-install-section {
+  margin: 4rem 0;
+}
+
+.tag-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.tag-card {
+  background: var(--bg-secondary);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tag-card:hover {
+  background: var(--bg-tertiary);
+}
+
+.tag-label {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.tag-card--cyan .tag-label { color: var(--cyan); text-shadow: 0 0 8px rgba(0,255,255,0.4); }
+.tag-card--amber .tag-label { color: var(--amber); text-shadow: 0 0 8px rgba(255,170,0,0.4); }
+.tag-card--magenta .tag-label { color: var(--magenta); text-shadow: 0 0 8px rgba(255,0,255,0.4); }
+.tag-card--green .tag-label { color: var(--accent); text-shadow: var(--glow); }
+.tag-card--red .tag-label { color: var(--red); text-shadow: 0 0 8px rgba(255,51,51,0.4); }
+
+.tag-desc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.tag-cmd-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.tag-cmd {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  word-break: break-all;
+  flex: 1;
+}
+
+.tag-copy-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 0.2rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.tag-copy-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Tree comment color */
+.tree-view .comment {
+  color: var(--text-dim);
+}
+
 .footer {
   border-top: 1px solid var(--border);
   padding: 2rem;

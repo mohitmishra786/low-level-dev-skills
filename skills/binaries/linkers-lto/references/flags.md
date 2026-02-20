@@ -1,11 +1,12 @@
 # Linker and LTO Flags Reference
 
-Source: https://sourceware.org/binutils/docs/ld/Options.html
-Source: https://clang.llvm.org/docs/ThinLTO.html
-Source: https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html (LTO section)
-Source: https://lld.llvm.org/
+Source: <https://sourceware.org/binutils/docs/ld/Options.html>
+Source: <https://clang.llvm.org/docs/ThinLTO.html>
+Source: <https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html> (LTO section)
+Source: <https://lld.llvm.org/>
 
 ## Table of Contents
+
 1. [Linker selection](#linker-selection)
 2. [GNU ld / gold flags](#gnu-ld--gold-flags)
 3. [lld flags](#lld-flags)
@@ -247,6 +248,7 @@ SECTIONS {
 ```
 
 Key concepts:
+
 - `MEMORY`: defines address regions with permissions
 - `SECTIONS`: maps sections to regions
 - `AT > FLASH`: load address in FLASH, run address in RAM (copy at startup)

@@ -1,9 +1,10 @@
 # x86-64 Assembly Reference
 
-Source: https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html
-Source: https://gitlab.com/x86-psABIs/x86-64-ABI (System V AMD64 ABI)
+Source: <https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html>
+Source: <https://gitlab.com/x86-psABIs/x86-64-ABI> (System V AMD64 ABI)
 
 ## Table of Contents
+
 1. [Instruction set quick reference](#instruction-set-quick-reference)
 2. [RFLAGS bits](#rflags-bits)
 3. [Conditional jump codes](#conditional-jump-codes)

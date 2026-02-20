@@ -2,7 +2,7 @@
 
 ## Minimal C library + executable
 
-```
+```text
 myproject/
 ├── CMakeLists.txt
 ├── include/

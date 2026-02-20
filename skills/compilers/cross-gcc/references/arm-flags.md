@@ -1,7 +1,7 @@
 # ARM / AArch64 GCC Flags Reference
 
-Source: https://gcc.gnu.org/onlinedocs/gcc/ARM-Options.html
-Source: https://gcc.gnu.org/onlinedocs/gcc/AArch64-Options.html
+Source: <https://gcc.gnu.org/onlinedocs/gcc/ARM-Options.html>
+Source: <https://gcc.gnu.org/onlinedocs/gcc/AArch64-Options.html>
 
 ## AArch64 (64-bit ARM)
 
@@ -47,6 +47,7 @@ arm-none-eabi-gcc \
 ```
 
 Key flags explained:
+
 - `-ffreestanding`: no hosted C library assumed
 - `-nostdlib`: don't link standard libraries
 - `-nostartfiles`: don't use standard startup files (`crt0.o`, etc.)

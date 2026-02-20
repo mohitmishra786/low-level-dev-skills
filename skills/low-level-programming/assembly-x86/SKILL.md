@@ -67,6 +67,7 @@ objdump -d -M intel -S prog  # Intel + source (needs -g)
 `%xmm0`–`%xmm7`
 
 **Return values:**
+
 - Integer: `%rax` (low), `%rdx` (high if 128-bit)
 - Float: `%xmm0` (low), `%xmm1` (high)
 
@@ -141,6 +142,7 @@ static inline int atomic_inc(volatile int *p) {
 ```
 
 Constraint codes:
+
 - `"r"` — any general register
 - `"m"` — memory operand
 - `"i"` — immediate integer

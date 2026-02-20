@@ -1,8 +1,9 @@
 # LLVM IR Reference
 
-Source: https://llvm.org/docs/LangRef.html
+Source: <https://llvm.org/docs/LangRef.html>
 
 ## Table of Contents
+
 1. [Types](#types)
 2. [Instructions](#instructions)
 3. [Attributes and metadata](#attributes-and-metadata)
@@ -113,6 +114,7 @@ define i32 @hot() alwaysinline {
 ```
 
 Common function attributes:
+
 - `noinline` — never inline
 - `alwaysinline` — always inline
 - `noreturn` — never returns (like `abort`)
@@ -142,6 +144,7 @@ Common function attributes:
 | `reassociate` | Reassociation for better constant folding |
 
 Pipeline example:
+
 ```bash
 opt -passes='mem2reg,instcombine,simplifycfg,gvn,licm' input.ll -S -o out.ll
 ```

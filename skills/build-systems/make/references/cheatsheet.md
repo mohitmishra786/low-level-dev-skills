@@ -1,6 +1,6 @@
 # GNU Make Cheatsheet
 
-Source: https://www.gnu.org/software/make/manual/make.html
+Source: <https://www.gnu.org/software/make/manual/make.html>
 
 ## Automatic variables
 

@@ -91,7 +91,7 @@ cmake -DCMAKE_C_COMPILER=clang-cl -DCMAKE_CXX_COMPILER=clang-cl ..
 
 Minimum Clang version for MSVC STL compatibility: Clang 8+. For C++20 features with MSVC STL: Clang 14+.
 
-Source: https://learn.microsoft.com/en-us/cpp/build/clang-support-msbuild
+Source: <https://learn.microsoft.com/en-us/cpp/build/clang-support-msbuild>
 
 ### 5. PDB files and debugging
 

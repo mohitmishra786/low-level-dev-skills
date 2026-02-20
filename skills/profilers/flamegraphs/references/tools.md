@@ -1,9 +1,10 @@
 # Flamegraph Tools Reference
 
-Source: https://github.com/brendangregg/FlameGraph
-Source: https://www.brendangregg.com/flamegraphs.html
+Source: <https://github.com/brendangregg/FlameGraph>
+Source: <https://www.brendangregg.com/flamegraphs.html>
 
 ## Table of Contents
+
 1. [FlameGraph scripts](#flamegraph-scripts)
 2. [stackcollapse scripts by profiler](#stackcollapse-scripts-by-profiler)
 3. [flamegraph.pl options](#flamegraphpl-options)

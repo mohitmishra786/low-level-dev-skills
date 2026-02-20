@@ -41,6 +41,7 @@ ninja install
 ```
 
 CMake also supports `Ninja Multi-Config`:
+
 ```bash
 cmake -S . -B build -G "Ninja Multi-Config"
 cmake --build build --config Release
@@ -89,6 +90,7 @@ ninja -t clean -g       # also remove generated files
 ```
 
 Or via CMake:
+
 ```bash
 cmake --build build --target clean
 ```
@@ -126,6 +128,7 @@ default all
 ```
 
 Key concepts:
+
 - `rule`: defines how to produce outputs from inputs
 - `build`: instantiates a rule with specific files
 - `$in` / `$out`: automatic variables for inputs/outputs

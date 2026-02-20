@@ -142,6 +142,7 @@ static inline uint64_t read_cntvct(void) {
 ```
 
 AArch64-specific constraints:
+
 - `"Q"` — memory operand suitable for exclusive/acquire/release instructions
 - `"r"` — any general-purpose register
 - `"w"` — any FP/SIMD register
@@ -164,6 +165,7 @@ float total = vgetq_lane_f32(sum, 0);
 ```
 
 Naming convention: `v<op><q>_<type>`
+
 - `q` suffix: 128-bit (quad) vector
 - `_f32`: float32, `_s32`: int32, `_u8`: uint8, etc.
 

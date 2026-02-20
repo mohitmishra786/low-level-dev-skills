@@ -50,6 +50,7 @@ clean:
 ```
 
 Automatic variables:
+
 - `$@` — target name
 - `$<` — first prerequisite
 - `$^` — all prerequisites (deduplicated)
@@ -144,6 +145,7 @@ build/%.o: src/%.c | build
 ```
 
 Override silence: `make V=1` if you guard with `$(V)`:
+
 ```makefile
 Q := $(if $(V),,@)
 build/%.o: src/%.c

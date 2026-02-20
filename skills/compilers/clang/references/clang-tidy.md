@@ -1,6 +1,6 @@
 # clang-tidy Reference
 
-Source: https://clang.llvm.org/extra/clang-tidy/
+Source: <https://clang.llvm.org/extra/clang-tidy/>
 
 ## Configuration (.clang-tidy)
 
@@ -71,6 +71,7 @@ MyType* ptr = new MyType();
 ```
 
 In `.clang-tidy`, prefix a check with `-` to disable:
+
 ```yaml
 Checks: 'modernize-*,-modernize-use-trailing-return-type'
 ```

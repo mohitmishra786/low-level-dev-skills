@@ -1,9 +1,10 @@
 # GDB Command Cheatsheet
 
-Source: https://sourceware.org/gdb/documentation/
-Source: https://aaronbloomfield.github.io/pdr/docs/gdb_vs_lldb.html
+Source: <https://sourceware.org/gdb/documentation/>
+Source: <https://aaronbloomfield.github.io/pdr/docs/gdb_vs_lldb.html>
 
 ## Table of Contents
+
 1. [Startup](#startup)
 2. [Execution control](#execution-control)
 3. [Breakpoints & watchpoints](#breakpoints--watchpoints)
@@ -18,7 +19,7 @@ Source: https://aaronbloomfield.github.io/pdr/docs/gdb_vs_lldb.html
 
 ## Startup
 
-```
+```gdb
 gdb prog                         Load binary
 gdb prog core                    Load with core
 gdb -p PID                       Attach to process
@@ -31,7 +32,7 @@ set args a b c                   Set args after load
 
 ## Execution control
 
-```
+```gdb
 run / r [args]                   Start
 continue / c                     Resume
 next / n                         Step over (source)
@@ -51,7 +52,7 @@ kill                             Kill program
 
 ## Breakpoints & watchpoints
 
-```
+```gdb
 break main                       Function
 break file.c:42                  Line
 break *0x400abc                  Address
@@ -77,7 +78,7 @@ commands N                       Run commands on hit
 
 ## Inspection
 
-```
+```gdb
 print expr / p expr              Print expression
 print/x expr                     Print hex
 print/t expr                     Print binary
@@ -106,7 +107,7 @@ info variables                   All global variables
 
 ## Stack
 
-```
+```gdb
 backtrace / bt                   Call stack
 bt N                             Top N frames
 bt full                          Frames + locals
@@ -122,7 +123,7 @@ info locals                      Current frame locals
 
 ## Memory
 
-```
+```gdb
 x/Nuf addr                       Examine memory
   N = count
   u = unit: b(byte) h(half=2) w(word=4) g(giant=8)
@@ -143,7 +144,7 @@ set var = 42                     Set variable
 
 ## Threads
 
-```
+```gdb
 info threads                     List threads
 thread N                         Switch to thread N
 thread apply all bt              Backtrace all
@@ -156,7 +157,7 @@ set scheduler-locking on/off     Lock/unlock other threads during step
 
 ## Reverse debugging
 
-```
+```gdb
 record                           Start software record
 record btrace                    Start hardware trace
 record stop                      Stop recording

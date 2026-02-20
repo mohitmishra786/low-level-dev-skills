@@ -74,6 +74,7 @@ aarch64-linux-gnu-gcc --sysroot=/path/to/aarch64-sysroot -O2 -o prog main.c
 ```
 
 Verify the sysroot is correct:
+
 ```bash
 aarch64-linux-gnu-gcc --sysroot=/path/to/sysroot -v -E - < /dev/null 2>&1 | grep sysroot
 ```

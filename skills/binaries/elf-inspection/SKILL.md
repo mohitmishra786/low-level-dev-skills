@@ -44,6 +44,7 @@ ldd ./libfoo.so
 If `ldd` shows `not found`, the shared library is missing from `LD_LIBRARY_PATH` or `/etc/ld.so.conf`.
 
 Fix:
+
 ```bash
 export LD_LIBRARY_PATH=/path/to/libs:$LD_LIBRARY_PATH
 # Or install the library and run ldconfig
@@ -65,6 +66,7 @@ nm -D /usr/lib/libssl.so | grep SSL_read
 ```
 
 Symbol type codes:
+
 - `T` / `t` — text (code): global / local
 - `D` / `d` — data (initialised): global / local
 - `B` / `b` — BSS (uninitialised): global / local
@@ -151,6 +153,7 @@ file prog | grep BuildID
 ### 9. Common diagnosis flows
 
 **"undefined symbol at runtime"**
+
 ```bash
 # Which library was expected to provide it?
 nm -D libfoo.so | grep mysymbol
@@ -160,6 +163,7 @@ ldd ./prog | grep libfoo
 ```
 
 **"binary is too large"**
+
 ```bash
 size --format=sysv prog | sort -k2 -nr | head
 nm -S --defined-only prog | sort -k2 -nr | head -20

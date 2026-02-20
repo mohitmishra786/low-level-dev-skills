@@ -12,17 +12,20 @@
 ## Standard build recipes
 
 ### Debug build
+
 ```bash
 gcc -std=c11 -g -Og -Wall -Wextra -Wpedantic -o prog src/*.c
 ```
 
 ### Release build
+
 ```bash
 gcc -std=c11 -O2 -DNDEBUG -Wall -fstack-protector-strong -D_FORTIFY_SOURCE=2 \
     -o prog src/*.c
 ```
 
 ### Shared library
+
 ```bash
 gcc -std=c11 -O2 -fPIC -Wall -shared -Wl,-soname,libfoo.so.1 \
     -o libfoo.so.1.0 foo.c
@@ -31,6 +34,7 @@ ln -sf libfoo.so.1   libfoo.so
 ```
 
 ### Freestanding (embedded)
+
 ```bash
 arm-none-eabi-gcc -std=c11 -O2 -g -Wall \
     -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 \
@@ -45,6 +49,7 @@ arm-none-eabi-gcc -std=c11 -O2 -g -Wall \
 ### undefined reference to 'foo'
 
 **Cause:** Linker cannot find the symbol. Most common reasons:
+
 1. Missing `-lfoo` flag
 2. Library listed before the object that needs it
 

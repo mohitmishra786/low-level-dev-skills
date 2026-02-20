@@ -32,7 +32,7 @@ lldb ./prog core.1234               # binary + core
 
 ### 2. GDB → LLDB command map
 
-Source: https://lldb.llvm.org/use/map.html
+Source: <https://lldb.llvm.org/use/map.html>
 
 | GDB | LLDB | Notes |
 |-----|------|-------|

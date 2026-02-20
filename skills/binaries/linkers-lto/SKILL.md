@@ -85,6 +85,7 @@ gcc-ranlib libfoo.a
 ```
 
 Parallel LTO:
+
 ```bash
 gcc -O2 -flto=auto foo.o bar.o -o prog   # uses jobserver
 gcc -O2 -flto=4   foo.o bar.o -o prog    # 4 parallel jobs
@@ -134,13 +135,15 @@ __attribute__((visibility("default"))) int my_public_function(void);
 ```
 
 Or use a version script:
-```
+
+```text
 # foo.ver
 {
   global: my_public_function; my_other_public;
   local: *;
 };
 ```
+
 ```bash
 gcc -Wl,--version-script=foo.ver -shared -fPIC -o libfoo.so foo.o
 ```

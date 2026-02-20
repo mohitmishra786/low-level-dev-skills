@@ -1,6 +1,6 @@
 # GDB Python Scripting and Pretty-Printers
 
-Source: https://sourceware.org/gdb/current/onlinedocs/gdb.html/Python.html
+Source: <https://sourceware.org/gdb/current/onlinedocs/gdb.html/Python.html>
 
 ## GDB Python API basics
 
@@ -59,6 +59,7 @@ gdb.pretty_printers.append(build_printer)
 ```
 
 Load in GDB:
+
 ```gdb
 source /path/to/printer.py
 ```

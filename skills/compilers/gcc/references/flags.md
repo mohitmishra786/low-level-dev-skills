@@ -1,8 +1,8 @@
 # GCC Flag Reference
 
-Source: https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html
-Source: https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
-Source: https://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html
+Source: <https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html>
+Source: <https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html>
+Source: <https://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html>
 
 ## Table of Contents
 
@@ -65,7 +65,7 @@ Source: https://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html
 
 ### Recommended baseline
 
-```
+```bash
 -Wall -Wextra -Wpedantic
 ```
 

@@ -1,7 +1,7 @@
 # Clang Flag Reference
 
-Source: https://clang.llvm.org/docs/UsersManual.html
-Source: https://clang.llvm.org/docs/ClangCommandLineReference.html
+Source: <https://clang.llvm.org/docs/UsersManual.html>
+Source: <https://clang.llvm.org/docs/ClangCommandLineReference.html>
 
 ## Table of Contents
 
@@ -104,7 +104,8 @@ See `skills/runtimes/sanitizers` for full decision tree and report interpretatio
 ## Target-specific
 
 ### x86-64
-```
+
+```bash
 -march=x86-64-v2    # SSE4.2, POPCNT (Nehalem+)
 -march=x86-64-v3    # AVX2 (Haswell+)
 -march=x86-64-v4    # AVX-512
@@ -112,14 +113,16 @@ See `skills/runtimes/sanitizers` for full decision tree and report interpretatio
 ```
 
 ### AArch64 / ARM
-```
+
+```bash
 -target aarch64-linux-gnu
 -mcpu=cortex-a72
 -mfloat-abi=hard
 ```
 
 ### WebAssembly
-```
+
+```bash
 --target=wasm32-unknown-unknown
 -nostdlib
 ```

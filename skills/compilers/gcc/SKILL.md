@@ -38,6 +38,7 @@ Always pass `-std=c11` / `-std=c++17` (or the required standard) explicitly. Nev
 Start with `-Wall -Wextra`. For stricter standards compliance add `-Wpedantic`. To treat all warnings as errors in CI: `-Werror`.
 
 Suppress a specific warning only in a narrow scope:
+
 ```c
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -58,7 +59,7 @@ Pair `-g` with `-Og` (not `-O0`) when you need readable optimised code in GDB.
 
 ### 4. Optimisation decision tree
 
-```
+```text
 Need max throughput on a fixed machine?
   yes -> -O3 -march=native -flto
   no  -> profiling available?

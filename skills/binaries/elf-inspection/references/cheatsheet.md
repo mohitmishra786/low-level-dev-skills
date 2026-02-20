@@ -1,9 +1,9 @@
 # ELF Inspection Cheatsheet
 
-Source: https://man7.org/linux/man-pages/man1/readelf.1.html
-Source: https://man7.org/linux/man-pages/man1/objdump.1.html
-Source: https://man7.org/linux/man-pages/man1/nm.1.html
-Source: https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/8/html-single/developing_c_and_cpp_applications_in_rhel_8/index
+Source: <https://man7.org/linux/man-pages/man1/readelf.1.html>
+Source: <https://man7.org/linux/man-pages/man1/objdump.1.html>
+Source: <https://man7.org/linux/man-pages/man1/nm.1.html>
+Source: <https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/8/html-single/developing_c_and_cpp_applications_in_rhel_8/index>
 
 ## Quick reference
 

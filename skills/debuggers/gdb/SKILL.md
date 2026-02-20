@@ -134,6 +134,7 @@ record instruction-history
 ### 8. Remote debugging with gdbserver
 
 On target:
+
 ```bash
 gdbserver :1234 ./prog
 # Or attach:
@@ -141,6 +142,7 @@ gdbserver :1234 --attach 5678
 ```
 
 On host:
+
 ```bash
 gdb ./prog
 (gdb) target remote 192.168.1.10:1234

@@ -1,10 +1,11 @@
 # Core Dump Cheatsheet
 
-Source: https://man7.org/linux/man-pages/man5/core.5.html
-Source: https://sourceware.org/gdb/current/onlinedocs/gdb.html/Core-File-Generation.html
-Source: https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/8/html-single/developing_c_and_cpp_applications_in_rhel_8/index
+Source: <https://man7.org/linux/man-pages/man5/core.5.html>
+Source: <https://sourceware.org/gdb/current/onlinedocs/gdb.html/Core-File-Generation.html>
+Source: <https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/8/html-single/developing_c_and_cpp_applications_in_rhel_8/index>
 
 ## Table of Contents
+
 1. [Enable core dumps](#enable-core-dumps)
 2. [Core pattern configuration](#core-pattern-configuration)
 3. [systemd / coredumpctl](#systemd--coredumpctl)

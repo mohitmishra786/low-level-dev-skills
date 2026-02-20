@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Low-Level Dev Skills — AI Agent Skills for C/C++ Toolchains</title>
-  <meta name="description" content="A curated suite of AI agent skills for systems and low-level C/C++ development toolchains. Compilers, debuggers, profilers, and more.">
+  <title>Low-Level Dev Skills — AI Agent Skills for C/C++, Rust &amp; Zig</title>
+  <meta name="description" content="45 AI agent skills for systems programming — C/C++, Rust, and Zig toolchains. Compilers, debuggers, profilers, sanitizers, build systems, and more.">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <meta property="og:title" content="Low-Level Dev Skills — AI Agent Skills for C/C++ Toolchains">
-  <meta property="og:description" content="A curated suite of AI agent skills for systems and low-level C/C++ development toolchains.">
+  <meta property="og:title" content="Low-Level Dev Skills — AI Agent Skills for C/C++, Rust &amp; Zig">
+  <meta property="og:description" content="45 AI agent skills for systems programming — C/C++, Rust, and Zig toolchains.">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Low-Level Dev Skills — AI Agent Skills for C/C++ Toolchains">
-  <meta name="twitter:description" content="A curated suite of AI agent skills for systems and low-level C/C++ development toolchains.">
+  <meta name="twitter:title" content="Low-Level Dev Skills — AI Agent Skills for C/C++, Rust &amp; Zig">
+  <meta name="twitter:description" content="45 AI agent skills for systems programming — C/C++, Rust, and Zig toolchains.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=VT323&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -52,7 +52,7 @@
       </div>
 
       <p class="hero-description">
-        <span class="highlight">22 skills</span> for compilers, debuggers, profilers, build systems, and low-level programming.
+        <span class="highlight">45 skills</span> for C/C++, Rust, and Zig — compilers, debuggers, profilers, build systems, sanitizers, and low-level programming.
       </p>
     </section>
 
@@ -71,7 +71,7 @@
           </div>
           <div class="terminal-output success" id="installOutput">
             <span class="output-line">[OK] Cloning repository...</span>
-            <span class="output-line">[OK] Found 22 skills</span>
+            <span class="output-line">[OK] Found 45 skills</span>
             <span class="output-line">[OK] Installing to all agents</span>
             <span class="output-line highlight">>>> Installation complete!</span>
           </div>
@@ -83,6 +83,14 @@
       </div>
     </section>
 
+    <section class="tag-install-section">
+      <div class="section-header">
+        <span class="section-prompt">></span>
+        <span class="section-title">install by language</span>
+      </div>
+      <div class="tag-grid" id="tagGrid"></div>
+    </section>
+
     <section class="skills-section">
       <div class="section-header">
         <span class="section-prompt">></span>
@@ -90,7 +98,7 @@
       </div>
 
       <div class="category-tabs" id="categoryTabs">
-        <button class="tab active" data-category="all">all</button>
+        <button class="tab active" data-category="all">all (45)</button>
         <button class="tab" data-category="compilers">compilers</button>
         <button class="tab" data-category="debuggers">debuggers</button>
         <button class="tab" data-category="profilers">profilers</button>
@@ -98,6 +106,8 @@
         <button class="tab" data-category="binaries">binaries</button>
         <button class="tab" data-category="runtimes">runtimes</button>
         <button class="tab" data-category="low-level-programming">low-level</button>
+        <button class="tab" data-category="rust">rust</button>
+        <button class="tab" data-category="zig">zig</button>
       </div>
 
       <div class="skills-grid" id="skillsGrid"></div>
@@ -118,16 +128,28 @@
       </div>
       <div class="usage-examples">
         <div class="usage-card">
-          <div class="usage-header">Claude Code</div>
+          <div class="usage-header">C/C++ — Claude Code</div>
           <code>/gcc How do I enable link-time optimization?</code>
         </div>
         <div class="usage-card">
-          <div class="usage-header">Cursor</div>
+          <div class="usage-header">C/C++ — Cursor</div>
           <code>/sanitizers Which sanitizer for memory leaks?</code>
         </div>
         <div class="usage-card">
-          <div class="usage-header">Codex</div>
-          <code>/gdb Set a conditional breakpoint</code>
+          <div class="usage-header">C/C++ — Codex</div>
+          <code>/static-analysis Run clang-tidy on my project</code>
+        </div>
+        <div class="usage-card">
+          <div class="usage-header">Rust — Claude Code</div>
+          <code>/rustc-basics Configure a max-performance release build</code>
+        </div>
+        <div class="usage-card">
+          <div class="usage-header">Rust — Cursor</div>
+          <code>/rust-ffi Generate C bindings with bindgen</code>
+        </div>
+        <div class="usage-card">
+          <div class="usage-header">Zig — Claude Code</div>
+          <code>/zig-cinterop Call a C library from Zig</code>
         </div>
       </div>
     </section>

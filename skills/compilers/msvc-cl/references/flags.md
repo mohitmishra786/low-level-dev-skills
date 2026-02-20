@@ -1,7 +1,7 @@
 # MSVC cl.exe Flag Reference
 
-Source: https://learn.microsoft.com/en-us/cpp/build/reference/compiler-options
-Source: https://learn.microsoft.com/en-us/cpp/build/clang-support-msbuild
+Source: <https://learn.microsoft.com/en-us/cpp/build/reference/compiler-options>
+Source: <https://learn.microsoft.com/en-us/cpp/build/clang-support-msbuild>
 
 ## Optimisation
 

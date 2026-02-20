@@ -1,8 +1,9 @@
 # Ninja Cheatsheet
 
-Source: https://ninja-build.org/manual.html
+Source: <https://ninja-build.org/manual.html>
 
 ## Table of Contents
+
 1. [Command line](#command-line)
 2. [Sub-tools (-t)](#sub-tools--t)
 3. [build.ninja format](#buildninja-format)

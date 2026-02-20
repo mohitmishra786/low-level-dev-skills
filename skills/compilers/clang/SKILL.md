@@ -69,6 +69,7 @@ clang -O2 -fsave-optimization-record src.c
 ```
 
 Interpret remarks:
+
 - `remark: foo inlined into bar` — inlining happened; good for hot paths
 - `remark: loop not vectorized: loop control flow is not understood` — restructure the loop
 - `remark: not vectorized: cannot prove it is safe to reorder...` — add `__restrict__` or `#pragma clang loop vectorize(assume_safety)`
@@ -90,6 +91,7 @@ clang-tidy -fix src.cpp --
 ```
 
 Common `clang-tidy` check families:
+
 - `bugprone-*`: real bugs (use-after-move, dangling, etc.)
 - `clang-analyzer-*`: CSA checks (memory, null deref)
 - `modernize-*`: C++11/14/17 modernisation
@@ -133,6 +135,7 @@ AutoFDO (sampling-based, less intrusive): collect with `perf`, convert with `cre
 ### 7. GCC compatibility
 
 Clang is intentionally GCC-compatible for driver flags. Key differences:
+
 - Clang does not support all GCC-specific attributes; check with `__has_attribute(foo)`
 - `-Weverything` enables all Clang warnings (no GCC equivalent); too noisy for production, useful for one-off audits
 - Some GCC intrinsics need `#include <x86intrin.h>` on Clang too
@@ -141,6 +144,7 @@ Clang is intentionally GCC-compatible for driver flags. Key differences:
 ### 8. macOS specifics
 
 On macOS, `clang` is the system compiler (Apple LLVM). Key points:
+
 - `ld64` is the default linker; `lld` requires explicit `-fuse-ld=lld` and Homebrew LLVM
 - Use `-mmacosx-version-min=X.Y` to set deployment target
 - Sanitizers on macOS use `DYLD_INSERT_LIBRARIES`; do not strip the binary

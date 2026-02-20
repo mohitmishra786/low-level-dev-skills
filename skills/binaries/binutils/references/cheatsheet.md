@@ -1,9 +1,10 @@
 # GNU Binutils Cheatsheet
 
-Source: https://sourceware.org/binutils/docs/binutils/
-Source: https://man7.org/linux/man-pages/man1/objcopy.1.html
+Source: <https://sourceware.org/binutils/docs/binutils/>
+Source: <https://man7.org/linux/man-pages/man1/objcopy.1.html>
 
 ## Table of Contents
+
 1. [ar — static archives](#ar--static-archives)
 2. [strip — remove symbols](#strip--remove-symbols)
 3. [objcopy — binary transformation](#objcopy--binary-transformation)
@@ -100,6 +101,7 @@ strip -v prog
 ```
 
 **Recommended workflow for distribution:**
+
 ```bash
 # 1. Build with full symbols
 gcc -g -O2 -o prog main.c
