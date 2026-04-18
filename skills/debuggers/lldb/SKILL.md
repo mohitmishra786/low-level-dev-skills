@@ -1,6 +1,16 @@
 ---
 name: lldb
 description: LLDB debugger skill for C/C++/Swift/Objective-C programs. Use when debugging with LLDB on macOS, FreeBSD, or Linux-clang environments, mapping GDB mental models to LLDB commands, using LLDB in Xcode or VS Code, or debugging Swift/Objective-C. Activates on queries about LLDB commands, GDB to LLDB migration, Apple platform debugging, LLDB Python scripting, or IDE-integrated debugging with clang-built binaries.
+user-invocable: true
+triggers:
+  - debug with LLDB
+  - GDB to LLDB migration
+  - LLDB commands
+  - debug Swift with LLDB
+  - LLDB in Xcode
+  - LLDB Python scripting
+  - Apple platform debugging LLDB
+  - LLDB VS Code integration
 ---
 
 # LLDB

@@ -1,6 +1,16 @@
 ---
 name: cpp-modules
 description: C++20 modules skill for modern C++ projects. Use when working with named modules, module partitions, header units, CMake MODULE_SOURCES, Clang -fmodules-ts, BMI caching issues, or migrating from headers to modules. Activates on queries about C++20 modules, import statements, module interface units, header units, or BMI files.
+user-invocable: true
+triggers:
+  - C++20 modules
+  - import statement C++
+  - module interface unit
+  - header units C++20
+  - BMI file caching
+  - cmake C++ modules
+  - Clang fmodules-ts
+  - migrate headers to C++ modules
 ---
 
 # C++20 Modules

@@ -1,6 +1,15 @@
 ---
 name: rust-no-std
-description: Rust no_std skill for embedded and bare-metal development. Use when writing #![no_std] crates, understanding what core vs std provides, using the alloc crate with custom allocators, implementing panic handlers for embedded, or testing no_std crates on the host. Activates on queries about no_std Rust, #![no_std], core crate, alloc crate, custom allocators in Rust, embedded panic handler, or testing no_std on host.
+description: "Guide no_std Rust development for embedded and bare-metal targets. Use when writing #![no_std] crates, understanding core vs alloc vs std, implementing custom global allocators, selecting panic handlers for embedded, or testing no_std crates on the host without hardware."
+user-invocable: true
+triggers:
+  - write a no_std Rust crate
+  - use Vec or String without std in Rust
+  - implement a global allocator in Rust
+  - handle panics in no_std embedded Rust
+  - test a no_std crate on the host
+  - set up no_std with the alloc feature
+  - difference between core alloc and std in Rust
 ---
 
 # Rust no_std
@@ -9,14 +18,15 @@ description: Rust no_std skill for embedded and bare-metal development. Use when
 
 Guide agents through `#![no_std]` Rust development: what `core` and `alloc` provide vs `std`, implementing custom global allocators, panic handler selection for embedded targets, and strategies for testing `no_std` crates on the host machine.
 
-## Triggers
+## When to Use
 
-- "How do I write a #![no_std] Rust crate?"
-- "What's the difference between core, alloc, and std in Rust?"
-- "How do I use Vec and String in a no_std environment?"
-- "How do I implement a global allocator in Rust?"
-- "How do I handle panics in no_std Rust?"
-- "How do I test a no_std crate without hardware?"
+Use this skill when writing or debugging `#![no_std]` Rust code — library crates for embedded targets, or bare-metal firmware that cannot link against `std`. For the full embedded development workflow (probe-rs flashing, defmt logging, RTIC), use `skills/embedded/embedded-rust`. For cross-compilation target setup, use `skills/rust/rust-cross`. This skill focuses specifically on the `no_std` / `core` / `alloc` boundary and panic handler selection.
+
+## Examples
+
+- "I need a parser crate that works without std" → structure with `#![no_std]`, feature-gate alloc APIs, use borrowed slices for core API
+- "How do I use Vec in a no_std environment?" → add `alloc` feature, provide a global allocator (e.g., `linked-list-allocator`), use `alloc::vec::Vec`
+- "How do I test my no_std crate on my laptop?" → use `#![cfg_attr(not(test), no_std)]` to allow std in test mode, or `cargo test --target x86_64-unknown-linux-gnu`
 
 ## Workflow
 

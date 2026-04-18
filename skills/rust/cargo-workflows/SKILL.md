@@ -1,6 +1,16 @@
 ---
 name: cargo-workflows
 description: Cargo workflow skill for Rust projects. Use when managing workspaces, feature flags, build scripts, cargo cache, incremental builds, dependency auditing, or CI configuration with Cargo. Activates on queries about cargo workspaces, Cargo.toml features, build.rs, cargo nextest, cargo deny, cargo check vs build, or Cargo.lock management.
+user-invocable: true
+triggers:
+  - cargo workspace setup
+  - feature flags in Cargo.toml
+  - build.rs script
+  - cargo nextest
+  - cargo deny audit
+  - cargo incremental build
+  - manage Cargo.lock
+  - CI config for Rust with Cargo
 ---
 
 # Cargo Workflows
