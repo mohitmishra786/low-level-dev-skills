@@ -205,7 +205,70 @@ wasm-tools print prog.wasm | head -50     # disassemble to WAT
 wasm-tools validate prog.wasm             # validate WASM binary
 ```
 
-### 7. Performance configuration
+### 7. WASM GC (garbage-collected objects)
+
+WASM GC proposal adds struct and array types with managed allocation:
+
+```wat
+;; GC-enabled module (toolchain dependent)
+(struct $point (field (mut f32) x) (field (mut f32) y))
+```
+
+```bash
+# wasm-tools with GC support
+wasm-tools validate --features gc module.wasm
+wasmtime run --wasm gc module.wasm
+```
+
+In Rust/component builds, check wasmtime feature flags for `gc` support. Use `struct.new`, `array.new`, `struct.get`, `array.get` instructions in WAT or compiled output.
+
+### 8. WASM threads and shared memory
+
+```bash
+# Requires SharedArrayBuffer in JS hosts; WASI pthreads in native hosts
+# Compile with threading enabled (Clang/Rust wasm32-wasi-threads)
+clang --target=wasm32-wasi -pthread -matomics -mbulk-memory -o prog.wasm prog.c
+
+# Current wasmtime enables threads + shared-memory by default (see stability-wasm-proposals)
+wasmtime run prog.wasm
+```
+
+Atomics (`i32.atomic.*`) and `memory.atomic.wait/notify` require bulk-memory and threads proposals. Check `wasmtime --help` for `-W`/`-S` overrides if running an older build.
+
+### 9. WASM exception handling
+
+```wat
+(try (do $exn)
+  (throw $exn)
+  (catch $exn (local.get 0) (return)))
+```
+
+```bash
+# Exception handling enabled by default in current wasmtime releases
+wasmtime run module.wasm
+```
+
+Replaces longjmp-style Emscripten patterns with native `try/catch/throw` in WASM. For embedding, enable explicitly if needed:
+
+```rust
+config.wasm_exceptions(true);  // usually on by default in recent wasmtime
+```
+
+### 10. WASI Preview 2 (p2) stabilization
+
+WASIp2 uses the component model with typed interfaces instead of raw syscall imports:
+
+```bash
+# wasmtime 17+ supports component model / WASI p2 (see examples-wasip2.html)
+wasmtime run component.wasm
+
+# wit-bindgen generates host/guest bindings from WIT files
+wit-bindgen rust ./deps/wasi-cli.wit
+```
+
+Migrate from WASI p1 (`wasi_snapshot_preview1`) by regenerating bindings with `cargo component` and WIT packages.
+
+### 11. Performance configuration
 
 ```rust
 // High-performance embedding config

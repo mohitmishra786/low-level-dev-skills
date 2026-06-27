@@ -230,7 +230,96 @@ co_await next_event;
 (gdb) bt
 ```
 
-### 7. Common pitfalls
+### 7. Boost.Asio `co_spawn` and `co_await`
+
+```cpp
+#include <boost/asio.hpp>
+#include <boost/asio/co_spawn.hpp>
+#include <boost/asio/awaitable.hpp>
+
+namespace net = boost::asio;
+
+net::awaitable<void> echo_session(net::ip::tcp::socket socket) {
+    char buf[1024];
+    for (;;) {
+        std::size_t n = co_await socket.async_read_some(net::buffer(buf));
+        co_await net::async_write(socket, net::buffer(buf, n));
+    }
+}
+
+int main() {
+    net::io_context io;
+    net::co_spawn(io, listen_accept(io), net::detached);
+    io.run();
+}
+```
+
+`co_spawn` launches coroutines on an executor; `co_await` chains completion tokens without callback nesting.
+
+### 8. `std::generator` (C++23)
+
+```cpp
+#include <generator>
+#include <ranges>
+
+std::generator<int> fibonacci() {
+    int a = 0, b = 1;
+    while (true) {
+        co_yield a;
+        auto next = a + b;
+        a = b;
+        b = next;
+    }
+}
+
+// Usage
+for (int v : fibonacci() | std::views::take(10))
+    printf("%d\n", v);
+```
+
+Lazy sequences without manual coroutine handle management — compiler provides `std::generator` promise type.
+
+### 9. Coroutine frame layout in GDB
+
+```bash
+# Compile with debug info
+g++ -std=c++20 -g -O0 -o app app.cpp
+gdb ./app
+```
+
+```gdb
+(gdb) break my_coro
+(gdb) run
+(gdb) info frame                    # current stack frame
+(gdb) info locals                   # promise, handle in scope
+
+# Inspect coroutine frame pointer (compiler-specific mangling)
+(gdb) p *(MyPromise*)h.address()    # h = coroutine_handle
+
+# GCC coroutine support (GCC 14+)
+(gdb) info coroutines
+
+# Pretty-print promise state
+(gdb) set print pretty on
+(gdb) p promise
+```
+
+Suspended coroutines may not appear on stack until resumed — trace via stored `coroutine_handle`.
+
+### 10. Compilation time impact
+
+Coroutines increase template instantiation and header parsing cost:
+
+| Mitigation | Effect |
+|------------|--------|
+| `-O2` HALO | Reduces generated frame glue |
+| Out-of-line `co_await` in `.cpp` | Cuts recompilation cascade |
+| Pimpl for coroutine return types | Hides `awaitable` templates from headers |
+| `ccache` / modules | See `skills/rust/rust-build-times` patterns for C++ |
+
+Measure with `g++ -ftime-report` or `clang -ftime-trace`. Coroutine-heavy headers (Asio) benefit from unity builds sparingly — balance with RAM use.
+
+### 11. Common pitfalls
 
 | Issue | Cause | Fix |
 |-------|-------|-----|

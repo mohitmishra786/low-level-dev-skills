@@ -85,7 +85,9 @@ char LICENSE[] SEC("license") = "GPL";
 #include "counter.skel.h"
 
 int main(void) {
-    struct counter_bpf *skel = counter_bpf__open_and_load();
+    struct counter_bpf *skel = counter_bpf__open();
+    if (!skel || counter_bpf__load(skel))
+        return 1;
     counter_bpf__attach(skel);
     // read map, print results
     counter_bpf__destroy(skel);
@@ -93,11 +95,27 @@ int main(void) {
 ```
 
 ```bash
-# Build with libbpf
+# Build with libbpf 1.x
 clang -g -O2 -target bpf -D__TARGET_ARCH_x86 -I/usr/include/bpf \
       -c counter.bpf.c -o counter.bpf.o
 bpftool gen skeleton counter.bpf.o > counter.skel.h
 gcc -o counter counter.c -lbpf -lelf -lz
+```
+
+libbpf 1.x API changes:
+
+```c
+// Open and load (replaces older bpf_object__open/load split patterns)
+struct counter_bpf *skel = counter_bpf__open();
+counter_bpf__load(skel);
+counter_bpf__attach(skel);
+
+// Or explicit file open
+struct bpf_object *obj = bpf_object__open_file("counter.bpf.o", NULL);
+bpf_object__load(obj);
+
+// Skeleton generation (always via bpftool)
+// bpftool gen skeleton counter.bpf.o name counter > counter.skel.h
 ```
 
 ### 4. eBPF map types
@@ -209,6 +227,75 @@ bpftool btf dump file /sys/kernel/btf/vmlinux format c > vmlinux.h
 ls /sys/kernel/btf/vmlinux
 ```
 
+### 8. BPF ring buffer vs perf buffer
+
+```c
+// Ring buffer (preferred for new programs — better perf, no per-CPU loss)
+struct {
+    __uint(type, BPF_MAP_TYPE_RINGBUF);
+    __uint(max_entries, 256 * 1024);
+} rb SEC(".maps");
+
+SEC("kprobe/sys_open")
+int handle_open(struct pt_regs *ctx)
+{
+    struct event *e = bpf_ringbuf_reserve(&rb, sizeof(*e), 0);
+    if (!e)
+        return 0;
+    e->pid = bpf_get_current_pid_tgid() >> 32;
+    bpf_ringbuf_submit(e, 0);
+    // bpf_ringbuf_discard(e, 0) on error paths
+    return 0;
+}
+```
+
+| Feature | Ring buffer | Perf buffer |
+|---------|-------------|-------------|
+| API | `bpf_ringbuf_reserve/submit` | `bpf_perf_event_output` |
+| Backpressure | Reserve fails if full | May drop events |
+| Userspace | `ring_buffer__poll` (libbpf) | `perf_buffer__poll` |
+| Multi-producer | Yes | Per-CPU buffers |
+
+### 9. BPF iterators
+
+```c
+struct {
+    __uint(type, BPF_MAP_TYPE_PROG_ARRAY);
+    __uint(max_entries, 1);
+} iter_prog SEC(".maps");
+
+SEC("iter/task")
+int dump_tasks(struct bpf_iter__task *ctx)
+{
+    struct task_struct *task = ctx->task;
+    if (task)
+        bpf_seq_printf(ctx->meta->seq, "%d %s\n", task->tgid, task->comm);
+    return 0;
+}
+```
+
+```bash
+# Read iterator output from userspace
+bpftool prog tracelog   # or attach iter to seq_file reader
+cat /sys/kernel/debug/tracing/trace_pipe
+```
+
+Iterators walk kernel data structures (tasks, maps, TCP sockets) without kprobe overhead per element.
+
+### 10. BPF atomics
+
+```c
+// GCC/Clang atomic builtins in BPF programs (kernel 5.12+)
+static __always_inline void inc_counter(__u32 *counter)
+{
+    __sync_fetch_and_add(counter, 1);
+}
+
+// Use for per-CPU or map-backed counters under concurrent probes
+```
+
+Prefer per-CPU array maps for high-frequency counters; use atomics when aggregating into a single map value.
+
 For the full map types reference, see [references/ebpf-map-types.md](references/ebpf-map-types.md).
 
 ## Related skills
@@ -217,3 +304,4 @@ For the full map types reference, see [references/ebpf-map-types.md](references/
 - Use `skills/profilers/linux-perf` for perf-based tracing without eBPF
 - Use `skills/runtimes/binary-hardening` for seccomp-bpf syscall filtering
 - Use `skills/low-level-programming/linux-kernel-modules` for kernel module development
+- Use `skills/async-io/af-xdp` for XDP_REDIRECT to AF_XDP sockets

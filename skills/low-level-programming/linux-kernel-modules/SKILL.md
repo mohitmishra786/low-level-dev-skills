@@ -281,27 +281,118 @@ cat /sys/kernel/debug/tracing/trace
 echo "module hello +p" > /sys/kernel/debug/dynamic_debug/control
 ```
 
-### 7. Module signing (Secure Boot)
+### 7. EXPORT_SYMBOL vs EXPORT_SYMBOL_GPL
+
+```c
+// EXPORT_SYMBOL — any module can link (including proprietary)
+EXPORT_SYMBOL(my_helper);
+
+// EXPORT_SYMBOL_GPL — only GPL-compatible modules can link
+EXPORT_SYMBOL_GPL(gpl_only_fn);
+```
+
+Use `EXPORT_SYMBOL_GPL` for symbols that touch GPL-only kernel internals. Loading a non-GPL module that imports GPL symbols fails with a taint warning. Check with `modinfo` and `dmesg` after `insmod`.
+
+### 8. KUnit in-kernel unit tests
+
+```c
+// test_mymod.c — compile into module or standalone KUnit module
+#include <kunit/test.h>
+#include "mymod_internal.h"   // functions under test
+
+static void test_parse_valid(struct kunit *test)
+{
+    KUNIT_EXPECT_EQ(test, mymod_parse("42"), 42);
+}
+
+static struct kunit_case mymod_cases[] = {
+    KUNIT_CASE(test_parse_valid),
+    {}
+};
+
+static struct kunit_suite mymod_suite = {
+    .name = "mymod",
+    .test_cases = mymod_cases,
+};
+kunit_test_suite(mymod_suite);
+```
 
 ```bash
-# Generate signing key
-openssl req -new -x509 -newkey rsa:2048 \
-    -keyout signing_key.pem -out signing_cert.pem \
-    -days 365 -subj "/CN=Module Signing Key/" -nodes
+# In-tree KUnit run (kernel tree with CONFIG_KUNIT=y)
+./tools/testing/kunit/kunit.py run --filter mymod
 
-# Sign the module
+# Out-of-tree: enable CONFIG_KUNIT in test kernel or use kunit module target
+```
+
+See `skills/kernel/kernel-testing` for full KUnit, kselftest, and syzkaller workflows.
+
+### 9. Rust kernel modules (kernel 6.x + CONFIG_RUST=y)
+
+Requires kernel built with `CONFIG_RUST=y` and appropriate Rust toolchain pinned by the kernel tree.
+
+```rust
+// drivers/rust_example/lib.rs
+use kernel::prelude::*;
+
+module! {
+    type: RustExample,
+    name: "rust_example",
+    author: "You",
+    description: "Rust LKM example",
+    license: "GPL",
+}
+
+struct RustExample;
+
+impl kernel::Module for RustExample {
+    fn init(_module: &'static ThisModule) -> Result<Self> {
+        pr_info!("Rust kernel module loaded\n");
+        Ok(RustExample)
+    }
+}
+```
+
+```bash
+# Build from kernel tree with Rust support enabled
+make LLVM=1 rustavailable   # verify Rust toolchain
+make M=drivers/rust_example modules
+sudo insmod drivers/rust_example/rust_example.ko
+```
+
+### 10. Module signing (Secure Boot, kernel 6.x)
+
+Kernel 6.x enforces module signature verification when `CONFIG_MODULE_SIG` is enabled (default on most distro kernels with Secure Boot).
+
+```bash
+# Generate signing key (use org PKI in production)
+openssl req -new -x509 -newkey rsa:4096 \
+    -keyout signing_key.pem -out signing_cert.pem \
+    -days 3650 -subj "/CN=Kernel Module Signing/" -nodes
+
+# Sign module (sha256 or sha512 per kernel config)
 /usr/src/linux-headers-$(uname -r)/scripts/sign-file \
     sha256 signing_key.pem signing_cert.pem hello.ko
 
-# Import certificate to MOK database
+# Verify signature embedded in .ko
+modinfo hello.ko | grep signer
+
+# Enroll key for Secure Boot (MOK on UEFI)
 sudo mokutil --import signing_cert.pem
-# (requires reboot and MOK enrollment at UEFI)
+# Reboot → MOK Manager → enroll → reboot again
+
+# Kernel lockdown mode check
+cat /sys/kernel/security/lockdown
 ```
+
+With lockdown `integrity` or `confidentiality`, unsigned modules are rejected. Distro kernels may also require keys enrolled in the kernel's built-in trusted keyring (`CONFIG_SYSTEM_TRUSTED_KEYS`).
 
 For Kbuild system details, see [references/kbuild-basics.md](references/kbuild-basics.md).
 
 ## Related skills
 
+- Use `skills/kernel/kernel-testing` for KUnit and kselftest harnesses
+- Use `skills/kernel/device-drivers` for char/platform driver patterns beyond minimal modules
+- Use `skills/kernel/kernel-debugging` for kgdb, ftrace, and kprobes
 - Use `skills/observability/ebpf` for userspace kernel tracing without modules
 - Use `skills/debuggers/gdb` for GDB session management with KGDB
 - Use `skills/binaries/elf-inspection` for inspecting module ELF structure

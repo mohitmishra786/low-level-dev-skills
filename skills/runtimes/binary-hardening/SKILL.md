@@ -178,20 +178,67 @@ strace -e trace=all ./prog 2>&1 | grep "killed by SIGSYS"
 strace -c ./prog    # count all syscalls used
 ```
 
-### 7. Shadow stack (Intel CET / Hardware SHSTK)
+### 7. Intel CET (Shadow Stack + IBT)
 
 ```bash
-# Enable on supported x86 hardware (Intel Tiger Lake+, kernel ≥6.6)
-# -fcf-protection=full enables both IBT and SHSTK
-clang -fcf-protection=full -O2 -o prog main.c
+# Full CET: SHSTK (shadow stack) + IBT (indirect branch tracking)
+gcc -fcf-protection=full -O2 -o prog main.c
 
-# Check CET support in binary
-readelf -n prog | grep "NT_GNU_PROPERTY"
-objdump -d prog | grep "endbr64"   # IBT end-branch instructions
+# Verify in binary
+readelf -n prog | grep -E 'SHSTK|IBT'
+readelf --notes prog | grep GNU_PROPERTY
 
-# Kernel support
-cat /proc/cpuinfo | grep shstk     # CPU support
+# IBT landing pads in disassembly
+objdump -d prog | grep endbr64
+
+# CPU and kernel support
+grep -m1 shstk /proc/cpuinfo
 ```
+
+Requires hardware CET support (Intel Tiger Lake+ for SHSTK/IBT; AMD Zen 3+ for shadow stack on supported SKUs) and a kernel built with CET enabled.
+
+### 8. ARM BTI and PAC (AArch64)
+
+```bash
+# Branch Target Identification + Pointer Authentication
+gcc -mbranch-protection=standard -O2 -o prog main.c
+# Or: -mbranch-protection=bti+pauth
+
+readelf -n prog | grep -E 'BTI|PAC'
+llvm-objdump -d prog | grep bti
+```
+
+| Feature | Protects |
+|---------|----------|
+| BTI | Indirect branch to non-marked targets |
+| PAC | Signed return addresses and pointers (ARMv8.3+) |
+
+### 9. ARM Memory Tagging (MTE)
+
+```bash
+# Userspace MTE tagging (experimental, arm64 hardware)
+clang -fsanitize=memtag -g -o prog main.c
+
+# Check MTE CPU support
+grep -m1 mte /proc/cpuinfo
+```
+
+MTE assigns 4-bit tags to 16-byte granules — hardware detects tag mismatch on access.
+
+### 10. glibc shadow stack (2.39+)
+
+```bash
+# Recent glibc may enable shadow stack for CET when hardware supports SHSTK
+ldd --version   # feature availability varies by distro glibc build
+
+# Explicit link with shadow stack support (toolchain dependent)
+gcc -fcf-protection=full -Wl,-z,shstk -o prog main.c
+
+# Verify GNU_PROPERTY_SHSTK in output
+readelf -n prog | grep SHSTK
+```
+
+Shadow stack maintains a hardware-protected copy of return addresses separate from the data stack.
 
 For the full hardening flags reference, see [references/hardening-flags.md](references/hardening-flags.md).
 

@@ -1,6 +1,6 @@
 # low-level-dev-skills
 
-A curated suite of AI agent skills for systems and low-level programming — C/C++, Rust, and Zig toolchains. These skills provide expert guidance for compilers, debuggers, profilers, build systems, sanitizers, low-level programming, embedded development, observability, and WebAssembly.
+A curated suite of AI agent skills for systems and low-level programming — C/C++, Rust, Zig, GPU, bare-metal firmware, Linux kernel/driver development, computer architecture, compiler internals, HPC, and more. These skills provide expert guidance for compilers, debuggers, profilers, build systems, sanitizers, low-level programming, embedded development, observability, virtualization, security, and WebAssembly.
 
 **[View on skills.sh](https://skills.sh/mohitmishra786/low-level-dev-skills)**
 
@@ -38,8 +38,20 @@ npx skills add mohitmishra786/low-level-dev-skills --skill rustc-basics cargo-wo
 # Zig bundle (compiler, build system, C interop, debugging, cross, testing, comptime)
 npx skills add mohitmishra786/low-level-dev-skills --skill zig-compiler zig-build-system zig-cinterop zig-debugging zig-cross zig-testing zig-comptime
 
-# Embedded (FreeRTOS, Zephyr, OpenOCD, linker scripts, embedded Rust)
-npx skills add mohitmishra786/low-level-dev-skills --skill freertos zephyr openocd-jtag linker-scripts embedded-rust
+# Embedded (RTOS, OpenOCD, linker scripts, embedded Rust, bare-metal)
+npx skills add mohitmishra786/low-level-dev-skills --skill freertos zephyr openocd-jtag linker-scripts embedded-rust baremetal-startup mmio-and-bit-manipulation interrupts-and-exceptions-baremetal gpio-baremetal uart-serial-baremetal spi-i2c-baremetal dma-baremetal stm32-baremetal low-power-embedded
+
+# Bare-metal focused
+npx skills add mohitmishra786/low-level-dev-skills --skill baremetal-startup mmio-and-bit-manipulation interrupts-and-exceptions-baremetal peripherals-from-datasheet gpio-baremetal uart-serial-baremetal spi-i2c-baremetal timers-pwm-baremetal adc-dac-baremetal dma-baremetal stm32-baremetal datasheet-and-refmanual-reading bootloaders-embedded low-power-embedded
+
+# Kernel & driver development
+npx skills add mohitmishra786/low-level-dev-skills --skill linux-kernel-architecture kernel-memory-management kernel-concurrency device-tree platform-device-model writing-char-drivers bus-drivers-i2c-spi kernel-debugging-advanced qemu-for-kernel-development kernel-internals device-drivers
+
+# Computer architecture
+npx skills add mohitmishra786/low-level-dev-skills --skill cpu-pipelines-and-hazards memory-hierarchy-and-caches virtual-memory-paging-and-tlb abi-and-calling-conventions branch-prediction-and-speculation
+
+# QEMU & constrained-systems tooling
+npx skills add mohitmishra786/low-level-dev-skills --skill qemu-embedded-simulation qemu-for-kernel-development protocol-analysis resource-optimization-lowend verilog-basics-for-lowlevel
 
 # Observability (eBPF, binary hardening)
 npx skills add mohitmishra786/low-level-dev-skills --skill ebpf ebpf-rust binary-hardening
@@ -61,6 +73,36 @@ npx skills add mohitmishra786/low-level-dev-skills --skill sanitizers fuzzing ru
 
 # Binary analysis (ELF, linkers, dynamic linking, binutils, DWARF)
 npx skills add mohitmishra786/low-level-dev-skills --skill elf-inspection linkers-lto binutils dynamic-linking dwarf-debug-format
+
+# GPU programming (CUDA, Triton, ROCm, memory model)
+npx skills add mohitmishra786/low-level-dev-skills --skill cuda cuda-profiling cuda-debugging triton-lang hip-rocm gpu-memory-model
+
+# Kernel internals and drivers
+npx skills add mohitmishra786/low-level-dev-skills --skill kernel-internals device-drivers kernel-debugging kernel-testing os-dev-scratch
+
+# Async I/O and kernel bypass networking
+npx skills add mohitmishra786/low-level-dev-skills --skill io-uring dpdk af-xdp
+
+# Allocators and NUMA
+npx skills add mohitmishra786/low-level-dev-skills --skill custom-allocators numa-programming
+
+# Compiler internals (frontend, IR, passes, codegen, MLIR, JIT)
+npx skills add mohitmishra786/low-level-dev-skills --skill compiler-frontend llvm-passes llvm-ir-and-passes compiler-optimizations-deep code-generation-and-backends mlir jit-compilation
+
+# Virtualization
+npx skills add mohitmishra786/low-level-dev-skills --skill qemu-kvm hypervisor-internals containers-internals
+
+# HPC and parallel programming
+npx skills add mohitmishra786/low-level-dev-skills --skill openmp mpi rdma-verbs
+
+# Security and reverse engineering
+npx skills add mohitmishra786/low-level-dev-skills --skill reverse-engineering kernel-security
+
+# Platform-specific (ARM SVE, RISC-V privileged, Apple Silicon)
+npx skills add mohitmishra786/low-level-dev-skills --skill arm-sve riscv-privileged apple-silicon
+
+# Emerging languages (Carbon, Hare)
+npx skills add mohitmishra786/low-level-dev-skills --skill carbon-lang hare-lang
 ```
 
 ## Supported Agents
@@ -121,13 +163,26 @@ After installation, invoke skills in your AI agent:
 /zig-comptime Write a generic Stack using comptime
 ```
 
-### Embedded
+### Embedded and bare-metal
 ```
 /freertos How do I detect stack overflow in FreeRTOS?
 /zephyr Build and flash a Zephyr app with west
 /openocd-jtag Connect GDB to my STM32 via OpenOCD
 /linker-scripts Place my code in CCM RAM with a linker script
 /embedded-rust Flash and debug with probe-rs and defmt
+/baremetal-startup Fix .bss init so globals are zero before main
+/stm32-baremetal Scaffold CMSIS-only STM32F4 without HAL
+/bootloaders-embedded Jump from bootloader to app at 0x08010000
+```
+
+### Kernel drivers and architecture
+```
+/linux-kernel-architecture Where does the page fault handler live?
+/device-tree Write a DTS node for an I2C sensor with interrupt
+/writing-char-drivers Add ioctl to my platform driver
+/cpu-pipelines-and-hazards Break a RAW hazard in this hot loop
+/llvm-ir-and-passes Explain what -O2 changed in this LLVM IR
+/qemu-embedded-simulation Run my Cortex-M firmware in QEMU with GDB
 ```
 
 ### Observability and security
@@ -155,6 +210,30 @@ After installation, invoke skills in your AI agent:
 /concurrency-debugging Read a TSan data race report
 /debug-optimized-builds Why does GDB say "value optimized out"?
 /dwarf-debug-format Set up debuginfod for automatic symbols
+```
+
+### GPU and HPC
+```
+/cuda How do I fix warp divergence in my kernel?
+/cuda-profiling Is my kernel memory-bound or compute-bound?
+/openmp Parallelize this loop with a dynamic schedule
+/mpi Debug a deadlock in my MPI_Send/Recv pattern
+```
+
+### Kernel and systems
+```
+/kernel-internals Interpret /proc/meminfo during memory pressure
+/device-drivers Write a platform_driver with threaded IRQs
+/io-uring Build a server with liburing multi-shot accept
+/qemu-kvm Boot my custom kernel with -kernel -append
+```
+
+### Security and platform
+```
+/reverse-engineering Triage this stripped ELF with Ghidra
+/kernel-security Write an AppArmor profile for my daemon
+/arm-sve Write a vector-length agnostic SAXPY kernel
+/apple-silicon Profile my app with Instruments on M-series
 ```
 
 ## Skills
@@ -259,6 +338,58 @@ After installation, invoke skills in your AI agent:
 | `linker-scripts` | MEMORY/SECTIONS, VMA vs LMA, .bss/.data init, weak symbols |
 | `embedded-rust` | probe-rs, cargo-embed, defmt, RTIC, cortex-m-rt, no_std |
 
+### Bare-Metal (14 skills)
+
+| Skill | Purpose |
+|-------|---------|
+| `baremetal-startup` | Reset vector, .data/.bss, stack, crt0, Cortex-M/RISC-V bring-up |
+| `mmio-and-bit-manipulation` | volatile MMIO, RMW, alignment, endianness, register masks |
+| `interrupts-and-exceptions-baremetal` | NVIC, ISRs, priority, HardFault, latency |
+| `peripherals-from-datasheet` | Driver methodology from reference manual register maps |
+| `gpio-baremetal` | Pin modes, AF mux, EXTI — STM32, nRF, ESP32 patterns |
+| `uart-serial-baremetal` | Polling and IRQ UART, baud, framing, DMA basics |
+| `spi-i2c-baremetal` | Master transactions, register read/write protocols |
+| `timers-pwm-baremetal` | Timer config, PWM, input capture, output compare |
+| `adc-dac-baremetal` | Sampling, calibration, DMA, DAC output |
+| `dma-baremetal` | Channel setup, memory/peripheral transfers, IRQ completion |
+| `stm32-baremetal` | CMSIS-only STM32 project layout without HAL |
+| `datasheet-and-refmanual-reading` | Fast extraction from DS/RM, errata, pin tables |
+| `bootloaders-embedded` | VTOR relocation, app validation, OTA/DFU basics |
+| `low-power-embedded` | Sleep/stop/standby, clock gating, wake sources |
+
+### Kernel & Driver Development (9 skills)
+
+| Skill | Purpose |
+|-------|---------|
+| `linux-kernel-architecture` | Subsystems, boot flow, initcalls, source navigation |
+| `kernel-memory-management` | Buddy, SLUB, kmalloc, vmalloc, zones, OOM |
+| `kernel-concurrency` | Spinlocks, mutex, RCU, seqlock, barriers |
+| `device-tree` | DTS syntax, bindings, phandles, overlays |
+| `platform-device-model` | platform_driver, probe/remove, sysfs, deferred probe |
+| `writing-char-drivers` | file_operations, cdev, copy_to/from_user, ioctl, mmap |
+| `bus-drivers-i2c-spi` | i2c_driver, spi_driver, regmap client drivers |
+| `kernel-debugging-advanced` | ftrace, trace-cmd, kprobes, kgdb, vmcore |
+| `qemu-for-kernel-development` | QEMU + rootfs for kernel/module iteration |
+
+### Computer Architecture (5 skills)
+
+| Skill | Purpose |
+|-------|---------|
+| `cpu-pipelines-and-hazards` | Pipeline stages, RAW hazards, forwarding, stalls |
+| `memory-hierarchy-and-caches` | L1/L2/L3, coherence, false sharing, prefetch |
+| `virtual-memory-paging-and-tlb` | Page tables, faults, TLB pressure, huge pages |
+| `abi-and-calling-conventions` | SysV AMD64, AAPCS, RISC-V psABI, stack frames |
+| `branch-prediction-and-speculation` | Predictors, mispredict, Spectre/Meltdown awareness |
+
+### QEMU & Constrained Systems (4 skills)
+
+| Skill | Purpose |
+|-------|---------|
+| `qemu-embedded-simulation` | Bare-metal ARM/RISC-V in QEMU, -kernel, GDB |
+| `protocol-analysis` | sigrok/PulseView I2C/SPI/UART decode |
+| `resource-optimization-lowend` | Flash/RAM, linker maps, stack analysis, -Os |
+| `verilog-basics-for-lowlevel` | Read RTL for MMIO, resets, CDC, bus interfaces |
+
 ### Rust (12 skills)
 
 | Skill | Purpose |
@@ -288,7 +419,93 @@ After installation, invoke skills in your AI agent:
 | `zig-testing` | zig build test, comptime testing, test allocators, fuzz testing |
 | `zig-comptime` | comptime evaluation, anytype generics, @typeInfo reflection |
 
-**Total: 74 skills**
+### GPU (6 skills)
+
+| Skill | Purpose |
+|-------|---------|
+| `cuda` | CUDA kernels, memory hierarchy, streams, nvcc, Thrust |
+| `cuda-profiling` | Nsight Systems/Compute, NCU CLI, roofline diagnosis |
+| `cuda-debugging` | cuda-gdb, compute-sanitizer, device printf, error codes |
+| `triton-lang` | Triton JIT kernels, autotuning, PyTorch integration |
+| `hip-rocm` | AMD HIP, hipify porting, rocprof, MI300X tuning |
+| `gpu-memory-model` | SIMT, coalescing, bank conflicts, occupancy tradeoffs |
+
+### Kernel Internals (5 skills)
+
+| Skill | Purpose |
+|-------|---------|
+| `kernel-internals` | Scheduler, buddy/SLUB, VFS, page cache, OOM killer |
+| `device-drivers` | platform/i2c/spi drivers, IRQ, DMA, regmap, udev |
+| `kernel-debugging` | kgdb, kdb, ftrace, kprobes, dyndbg, crash dumps |
+| `kernel-testing` | KUnit, kselftest, syzkaller, LTP, KernelCI |
+| `os-dev-scratch` | Bootloader, long mode, IDT, paging, context switch |
+
+### Async I/O (3 skills)
+
+| Skill | Purpose |
+|-------|---------|
+| `io-uring` | liburing SQE/CQE, multi-shot, provided buffers, SEND_ZC |
+| `dpdk` | EAL, PMD, mbuf pools, huge pages, RSS, testpmd |
+| `af-xdp` | UMEM, XSK rings, XDP_REDIRECT, zero-copy packet I/O |
+
+### Allocators (2 skills)
+
+| Skill | Purpose |
+|-------|---------|
+| `custom-allocators` | Pool/arena allocators, jemalloc/mimalloc tuning, GlobalAlloc |
+| `numa-programming` | numactl, libnuma, NUMA-aware structures, lstopo |
+
+### Compiler Internals (7 skills)
+
+| Skill | Purpose |
+|-------|---------|
+| `compiler-frontend` | Lexer, Pratt parser, AST, type checker, LLVM IR emission |
+| `llvm-passes` | New Pass Manager, PassPlugin, llvm-lit, analysis utilities |
+| `llvm-ir-and-passes` | Read LLVM IR/SSA, opt pipelines, llvm-dis inspection |
+| `compiler-optimizations-deep` | RA, vectorization, PGO, BOLT, LICM depth |
+| `code-generation-and-backends` | ISel, TableGen, llc, target lowering overview |
+| `mlir` | Dialects, ODS, lowering passes, mlir-opt, Torch-MLIR/IREE |
+| `jit-compilation` | ORC JIT, LLJIT, Cranelift, inline caches, W^X policy |
+
+### Virtualization (3 skills)
+
+| Skill | Purpose |
+|-------|---------|
+| `qemu-kvm` | KVM flags, virtio, VFIO passthrough, libvirt, kernel boot |
+| `hypervisor-internals` | VT-x/SVM, VMCS/VMCB, EPT/NPT, APIC virtualization |
+| `containers-internals` | namespaces, cgroups v2, overlayfs, runc, seccomp |
+
+### Security (2 skills)
+
+| Skill | Purpose |
+|-------|---------|
+| `reverse-engineering` | Ghidra, radare2, Binary Ninja, stripped binary triage |
+| `kernel-security` | SELinux, AppArmor, seccomp, KASLR, CET, PAC/BTI, KASAN |
+
+### HPC (3 skills)
+
+| Skill | Purpose |
+|-------|---------|
+| `openmp` | Parallel for, reductions, SIMD, task parallelism, GPU offload |
+| `mpi` | Send/recv, collectives, non-blocking, MPI+OpenMP hybrid |
+| `rdma-verbs` | libibverbs, queue pairs, RDMA read/write, RoCE, perftest |
+
+### Platform (3 skills)
+
+| Skill | Purpose |
+|-------|---------|
+| `arm-sve` | SVE/SVE2 intrinsics, predicates, VLA loops, Graviton tuning |
+| `riscv-privileged` | M/S/U modes, CSRs, PLIC/CLINT, OpenSBI, Sv39/Sv48 |
+| `apple-silicon` | Unified memory, AMX/Accelerate, MPS, Instruments, Rosetta |
+
+### Languages (2 skills)
+
+| Skill | Purpose |
+|-------|---------|
+| `carbon-lang` | Carbon syntax, C++ interop, carbon-toolchain, migration |
+| `hare-lang` | hare build/test, stdlib, C FFI, tagged union errors |
+
+**Total: 142 skills**
 
 ## Design
 
@@ -308,4 +525,4 @@ Contributions are welcome! To add or improve a skill:
 
 ## Topics
 
-`ai-agent-skills` `low-level-programming` `c-cpp-toolchain` `systems-programming` `compilers` `debuggers` `profilers` `build-systems` `rust` `zig` `embedded` `cross-compilation` `ebpf` `webassembly` `freertos` `zephyr` `risc-v`
+`ai-agent-skills` `low-level-programming` `c-cpp-toolchain` `systems-programming` `compilers` `debuggers` `profilers` `build-systems` `rust` `zig` `embedded` `bare-metal` `cross-compilation` `ebpf` `webassembly` `freertos` `zephyr` `risc-v` `cuda` `gpu` `linux-kernel` `kernel-drivers` `computer-architecture` `qemu` `hpc` `mpi` `virtualization` `reverse-engineering`

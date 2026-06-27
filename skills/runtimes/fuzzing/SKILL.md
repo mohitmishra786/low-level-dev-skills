@@ -189,7 +189,104 @@ afl-cmin -i afl-output/default/queue -o corpus_min -- ./prog_afl @@
 
 For long-duration fuzzing, use OSS-Fuzz or ClusterFuzz infrastructure.
 
-### 9. Dictionary files
+### 9. Structure-aware fuzzing (libFuzzer)
+
+```c
+// Custom mutator hook — preserve format invariants
+size_t LLVMFuzzerCustomMutator(uint8_t *Data, size_t Size,
+                               size_t MaxSize, unsigned int Seed) {
+    // Delegate to default mutator then fix up structure
+    Size = LLVMFuzzerMutate(Data, Size, MaxSize);
+    if (Size >= 4)
+        fix_checksum(Data, Size);
+    return Size;
+}
+
+// Register custom crossover for structured inputs
+extern "C" size_t LLVMFuzzerCustomCrossOver(
+    const uint8_t *Data1, size_t Size1,
+    const uint8_t *Data2, size_t Size2,
+    uint8_t *Out, size_t MaxOutSize, unsigned int Seed);
+```
+
+Use when naive bit-flipping breaks checksums/headers before reaching deep code paths.
+
+### 10. Atheris (Python fuzzing)
+
+```python
+import atheris
+import sys
+
+with atheris.instrument_imports():
+    import myparser
+
+def TestOneInput(data: bytes) -> None:
+    fdp = atheris.FuzzedDataProvider(data)
+    try:
+        myparser.parse(fdp.ConsumeString(sys.maxsize))
+    except myparser.ParseError:
+        pass
+
+if __name__ == "__main__":
+    atheris.Setup(sys.argv, TestOneInput)
+    atheris.Fuzz()
+```
+
+```bash
+pip install atheris
+python fuzz_myparser.py corpus/ -max_total_time=300
+```
+
+### 11. Dataflow tracing
+
+```bash
+# Track tainted bytes through execution (LLVM dataflow sanitizer + libFuzzer)
+clang -fsanitize=fuzzer,dataflow -g -O1 fuzz.c target.c -o fuzz
+LIBFUZZER_DATAFLOW_TRACE=1 ./fuzz corpus/
+```
+
+Produces traces showing which input bytes influenced branches — guides dictionary and structure-aware mutators.
+
+### 12. OSS-Fuzz integration
+
+```
+OSS-Fuzz workflow
+├── Add project/ in google/oss-fuzz repo (Dockerfile + build.sh)
+├── Fuzz targets linked with -fsanitize=fuzzer,address
+├── ClusterFuzz runs continuously on GCE
+└── Crash reproducers uploaded to issue tracker
+```
+
+```dockerfile
+# project/Dockerfile (minimal)
+FROM gcr.io/oss-fuzz-base/base-builder
+RUN git clone --depth 1 https://github.com/you/yourproject
+WORKDIR yourproject
+COPY build.sh $SRC/
+```
+
+```bash
+# Local OSS-Fuzz repro
+python infra/helper.py build_image yourproject
+python infra/helper.py build_fuzzers yourproject
+python infra/helper.py run_fuzzer yourproject fuzz_target
+```
+
+### 13. Zig fuzz testing
+
+```bash
+# Zig 0.11+ built-in fuzzing
+zig build test --fuzz
+
+# fuzz target in build.zig
+# .root_module.fuzz_tests = &.{
+#     .{ .name = "parser", .path = "src/fuzz/parser.zig" },
+# };
+```
+
+Zig fuzz integrates with `zig test` and sanitizer builds for native targets.
+
+### 14. Dictionary files
 
 Dictionaries contain interesting tokens to guide mutation:
 
@@ -216,3 +313,5 @@ For fuzz target templates, corpus seed examples, and OSS-Fuzz integration guidan
 - Use `skills/runtimes/sanitizers` to add ASan/UBSan to fuzz builds
 - Use `skills/compilers/clang` for Clang-specific libFuzzer flags
 - Use `skills/debuggers/gdb` to debug crash inputs found by the fuzzer
+- Use `skills/zig/zig-testing` for Zig `build test --fuzz` workflows
+- Use `skills/security/kernel-security` for kernel fuzzing with syzkaller

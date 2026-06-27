@@ -7,7 +7,7 @@ description: LLVM IR and pass pipeline skill. Use when working directly with LLV
 
 ## Purpose
 
-Guide agents through the LLVM IR pipeline: generating IR, running optimisation passes with `opt`, lowering to assembly with `llc`, and inspecting IR for debugging or performance work.
+Guide agents through LLVM as a **user**: generating and inspecting IR, running existing optimisation passes with `opt`, lowering to assembly with `llc`, and diagnosing missed optimisations. For **writing new LLVM passes** (PassPlugin, llvm-lit testing), use `skills/compiler-internals/llvm-passes` instead.
 
 ## Triggers
 
@@ -129,6 +129,9 @@ For binutils equivalents, see `skills/binaries/binutils`.
 
 ## Related skills
 
+- Use `skills/compiler-internals/llvm-passes` for writing and testing custom LLVM passes
+- Use `skills/compiler-internals/compiler-frontend` for generating LLVM IR from an AST
+- Use `skills/compiler-internals/jit-compilation` for ORC JIT execution of LLVM IR
 - Use `skills/compilers/clang` for source-level Clang flags
 - Use `skills/binaries/linkers-lto` for LTO at link time
 - Use `skills/profilers/linux-perf` combined with `llvm-mca` for micro-architectural analysis

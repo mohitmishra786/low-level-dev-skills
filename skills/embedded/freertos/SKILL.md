@@ -204,6 +204,77 @@ printf("Stack headroom: %lu words\n", uxHighWaterMark);
 (gdb) printf "%s\n", buf
 ```
 
+### 7. FreeRTOS v11 API updates
+
+FreeRTOS v11 (2024+) extends task notifications and stream buffers:
+
+```c
+// Task notifications v2 — 32-bit values with action semantics
+xTaskNotifyIndexed(xHandle, 0, ulValue, eSetValueWithOverwrite);
+xTaskNotifyWaitIndexed(0, 0, ULONG_MAX, &ulNotified, portMAX_DELAY);
+
+// Stream buffers — ISR-safe send with trigger level
+xStreamBufferSend(xStream, data, len, 0);
+xStreamBufferSetTriggerLevel(xStream, 1);  // wake receiver on 1 byte
+```
+
+Check `FreeRTOS.h` `tskKERNEL_VERSION_NUMBER` at compile time for API availability.
+
+### 8. ARM TrustZone integration
+
+Secure/non-secure world split on Cortex-M33/M55:
+
+```c
+#include "secure_context.h"
+
+// Initialize secure context management (secure side or NSC veneer)
+SecureContext_Init();
+
+// Allocate secure context for task calling secure functions
+xTaskCreateSecure(vSecureTask, "SecTask", STACK, NULL, priority, &xHandle);
+
+// MPU defines NSC (Non-Secure Callable) regions for SG veneers
+```
+
+Requires TrustZone-enabled MCU, secure firmware partition, and NSC linker section placement.
+
+### 9. FreeRTOS+TCP basics
+
+```c
+#include "FreeRTOS_IP.h"
+#include "FreeRTOS_Sockets.h"
+
+// After network stack init (FreeRTOS_IPInit)
+Socket_t xSocket = FreeRTOS_socket(FREERTOS_AF_INET, FREERTOS_SOCK_STREAM,
+                                   FREERTOS_IPPROTO_TCP);
+FreeRTOS_connect(xSocket, &xAddress, sizeof(xAddress));
+FreeRTOS_send(xSocket, buffer, len, 0);
+```
+
+Configure buffer counts and TCP/IP options in `FreeRTOSIPConfig.h` (e.g., `ipconfigUSE_TCP`, `ipconfigNUM_NETWORK_BUFFER_DESCRIPTORS`). Pairs with an Ethernet MAC driver and FreeRTOS+TCP buffer management.
+
+### 10. MPU region configuration
+
+```c
+// Restricted task with MPU regions (Cortex-M with MPU)
+static const TaskParameters_t xRestrictedTaskParams = {
+    .pvTaskCode = vRestrictedTask,
+    .pcName = "Restricted",
+    .usStackDepth = configMINIMAL_STACK_SIZE,
+    .pvParameters = NULL,
+    .uxPriority = tskIDLE_PRIORITY + 1,
+    .puxStackBuffer = stackBuffer,
+    .xRegions = {
+        { .pvBaseAddress = 0x20000000, .ulLength = 0x10000,
+          .ulParameters = tskMPU_REGION_READ_ONLY | tskMPU_REGION_EXECUTE_NEVER },
+        { .pvBaseAddress = 0x00000000, .ulLength = 0, .ulParameters = 0 }  // terminator
+    }
+};
+xTaskCreateRestricted(&xRestrictedTaskParams, &xHandle);
+```
+
+Define separate RAM regions for read-only code/data, privileged peripherals, and task-private stacks.
+
 For OpenOCD setup details, see `skills/embedded/openocd-jtag`.
 For FreeRTOSConfig.h reference, see [references/freertos-config.md](references/freertos-config.md).
 

@@ -194,6 +194,66 @@ endif()
     ctest --test-dir build -j$(nproc) --output-on-failure
 ```
 
+### 10. HWASan (Hardware-Assisted AddressSanitizer)
+
+Lower overhead than ASan on supported ARM64 hardware with TBI (Top Byte Ignore) or MTE.
+
+```bash
+# Clang/LLVM HWASan (userspace)
+clang -fsanitize=hwaddress -g -O1 -o app app.c
+
+# Requires ARM64 with TBI (most Android/arm64 servers) or HWASan tagging support
+# Cannot combine with ASan on same build
+```
+
+| Sanitizer | Overhead | Platform |
+|-----------|----------|----------|
+| ASan | ~2x | x86, arm64 |
+| HWASan | ~1.2–1.5x | arm64 with TBI/MTE |
+| MSan | ~3x | LLVM only |
+
+### 11. MemTagSanitizer (ARM MTE)
+
+Uses ARM Memory Tagging Extension hardware tags for heap/stack/memory safety.
+
+```bash
+# Experimental — LLVM with MTE-capable hardware (arm64)
+clang -fsanitize=memtag -g -O1 -o app app.c
+
+# Kernel MTE (separate from userspace MemTagSanitizer)
+# CONFIG_ARM64_MTE=y — hardware tagging in kernel allocator
+```
+
+### 12. GWP-ASan (production sampling)
+
+Sampled guard-page ASan suitable for production (used in Android; upstream glibc integration is ongoing).
+
+```bash
+# LLVM GWP-ASan (link-time, sampled allocations)
+clang -fsanitize=gwp-asan -O2 -o app app.c
+
+# Android: enabled in some system components for sampled crash detection
+# glibc: experimental GWP-ASan allocator integration (check distro release notes)
+```
+
+Catches heap OOB/UAF probabilistically with near-zero steady-state overhead.
+
+### 13. KASAN for kernel modules
+
+```bash
+# Build test kernel with KASAN
+# CONFIG_KASAN=y CONFIG_KASAN_INLINE=y or CONFIG_KASAN_OUTLINE=y
+
+# Boot KASAN kernel in QEMU for module development
+qemu-system-x86_64 -kernel bzImage -append "kasan=on" ...
+
+# Load module — KASAN reports appear in dmesg
+sudo insmod mymod.ko
+dmesg | tail -30
+```
+
+Pair with `skills/kernel/kernel-testing` for KUnit tests under KASAN. See `skills/security/kernel-security` for KASAN report triage.
+
 For a quick flag reference, see [references/flags.md](references/flags.md).
 For report interpretation examples, see [references/reports.md](references/reports.md).
 

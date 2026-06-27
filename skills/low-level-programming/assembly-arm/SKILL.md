@@ -169,6 +169,56 @@ Naming convention: `v<op><q>_<type>`
 - `q` suffix: 128-bit (quad) vector
 - `_f32`: float32, `_s32`: int32, `_u8`: uint8, etc.
 
+### 8. Darwin vs Linux AArch64 ABI differences
+
+| Aspect | Linux (AAPCS64) | Apple Darwin (arm64) |
+|--------|-----------------|----------------------|
+| Stack alignment | 16 bytes at public interfaces | 16 bytes |
+| Red zone | 128 bytes below SP | No red zone |
+| `x18` register | Platform reserved (TLS) | Platform register (do not use) |
+| Varargs | `x0–x7`, then stack | Same, but different objc_msgSend conventions |
+| Name mangling | Itanium C++ ABI | Same + Apple blocks |
+
+On macOS/iOS, avoid using `x18`; use `_DARWIN_C_LEVEL` headers for platform types.
+
+### 9. AMX primer (Apple Silicon)
+
+Apple Matrix coprocessor (AMX) is not exposed via public intrinsics. Access paths:
+
+```c
+// Practical: Accelerate/vecLib uses AMX internally
+#include <Accelerate/Accelerate.h>
+// cblas_sgemm, vDSP_* dispatch to AMX on M-series
+
+// Low-level: community-documented opcodes — not portable, avoid in production
+```
+
+Prefer Metal Performance Shaders or Accelerate for matrix workloads on Apple Silicon (`skills/platform/apple-silicon`).
+
+### 10. 16KB page size on Apple M-series
+
+macOS on Apple Silicon uses 16KB pages (not 4KB):
+
+```c
+#include <unistd.h>
+long page = sysconf(_SC_PAGESIZE);  // 16384 on macOS arm64
+// Align mmap and posix_memalign to page size
+```
+
+Code assuming `PAGE_SIZE == 4096` may misalign buffers or fail `mmap` on macOS.
+
+### 11. NEON → SVE2 migration hints
+
+```
+Porting checklist
+├── Replace 128-bit fixed loops with svcnt*() strides on SVE hardware
+├── Use predicates (svwhilelt) for tails instead of scalar epilogues
+├── Guard SVE code with #ifdef __ARM_FEATURE_SVE
+└── Keep NEON path for Apple M1–M3 (no SVE); use SVE2 on Graviton/M4+
+```
+
+See `skills/platform/arm-sve` for SVE intrinsics and auto-vectorization flags.
+
 For a register reference, see [references/reference.md](references/reference.md).
 
 ## Related skills
@@ -176,3 +226,5 @@ For a register reference, see [references/reference.md](references/reference.md)
 - Use `skills/low-level-programming/assembly-x86` for x86-64 assembly
 - Use `skills/compilers/cross-gcc` for cross-compilation toolchain
 - Use `skills/debuggers/gdb` for debugging ARM code with gdbserver
+- Use `skills/platform/arm-sve` for SVE/SVE2 scalable vectors
+- Use `skills/platform/apple-silicon` for M-series unified memory and AMX
