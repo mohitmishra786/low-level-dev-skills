@@ -41,6 +41,7 @@ A function is a coroutine if it contains any of these three keywords. Its return
 #include <coroutine>
 #include <stdexcept>
 #include <optional>
+#include <utility>
 
 template <typename T>
 struct Task {
@@ -64,8 +65,14 @@ struct Task {
 
     explicit Task(std::coroutine_handle<promise_type> h) : handle(h) {}
 
-    Task(Task&&) = default;
-    Task& operator=(Task&&) = default;
+    Task(Task&& other) noexcept : handle(std::exchange(other.handle, {})) {}
+    Task& operator=(Task&& other) noexcept {
+        if (this != &other) {
+            if (handle) handle.destroy();
+            handle = std::exchange(other.handle, {});
+        }
+        return *this;
+    }
 
     ~Task() { if (handle) handle.destroy(); }
 

@@ -40,16 +40,19 @@ Kernel `printk` levels: `KERN_EMERG` through `KERN_DEBUG`. Driver `dev_dbg()` re
 
 ### 2. kgdb over serial
 
-Kernel config: `CONFIG_KGDB`, `CONFIG_KGDB_SERIAL_CONSOLE`.
+Kernel config: `CONFIG_KGDB`, `CONFIG_KGDB_SERIAL_CONSOLE`, `CONFIG_MAGIC_SYSRQ`.
+
+> [!WARNING]
+> Debugger entry stops the target kernel and can disrupt its workloads.
+> Identify the exact test target and obtain explicit user approval for the interruption before entering kgdb or kdb; otherwise stop and ask.
 
 ```bash
 # Boot parameter (ttyS0, 115200)
 kgdboc=ttyS0,115200 kgdbwait
-
-# Or at runtime
-echo ttyS0,115200 > /sys/module/kgdboc/parameters/kgdboc
-echo g > /proc/sysrq-trigger   # break into kgdb
 ```
+
+With the target's `kgdboc` I/O driver configured, use SysRq-`g` to enter the debugger.
+See the [kernel kgdb/kdb documentation](https://docs.kernel.org/process/debugging/kgdb.html) for transport setup and entry methods.
 
 GDB host side:
 
@@ -79,10 +82,9 @@ kdb commands (at SysRq break)
 └── cpu <n>     — switch CPU context
 ```
 
-```bash
-# Enter kdb
-echo k > /proc/sysrq-trigger
-```
+With `CONFIG_KGDB`, `CONFIG_KGDB_KDB`, `CONFIG_MAGIC_SYSRQ`, and a configured `kgdboc` console, enter kdb using SysRq-`g` only after the target and interruption are explicitly approved as above.
+SysRq-`k` is the Secure Access Key (SAK): it kills programs on the current virtual console, not debugger entry.
+See the [kernel SysRq command reference](https://docs.kernel.org/admin-guide/sysrq.html).
 
 ### 4. ftrace
 
