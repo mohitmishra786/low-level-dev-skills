@@ -66,6 +66,9 @@ struct Task {
     explicit Task(std::coroutine_handle<promise_type> h) : handle(h) {}
 
     Task(Task&& other) noexcept : handle(std::exchange(other.handle, {})) {}
+    // Before move assignment or destruction, ensure all pending or running
+    // asynchronous resumptions (including TimerAwaitable's detached thread)
+    // have finished. This Task provides no cancellation or synchronization.
     Task& operator=(Task&& other) noexcept {
         if (this != &other) {
             if (handle) handle.destroy();

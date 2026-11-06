@@ -47,11 +47,27 @@ Kernel config: `CONFIG_KGDB`, `CONFIG_KGDB_SERIAL_CONSOLE`, `CONFIG_MAGIC_SYSRQ`
 > Identify the exact test target and obtain explicit user approval for the interruption before entering kgdb or kdb; otherwise stop and ask.
 
 ```bash
-# Boot parameter (ttyS0, 115200)
+# Boot parameter for live debugger entry (ttyS0, 115200)
+kgdboc=ttyS0,115200
+```
+
+With the target's `kgdboc` I/O driver configured and keyboard SysRq enabled, use SysRq-`g` for live entry.
+If `/proc/sys/kernel/sysrq` disables keyboard SysRq, the privileged `/proc/sysrq-trigger` interface still works.
+Only after the exact target and interruption are explicitly approved, run this in a root shell on that target:
+
+```bash
+echo g > /proc/sysrq-trigger
+```
+
+For boot-time entry, build `kgdboc` into the kernel and place `kgdbwait` after its configuration:
+
+```bash
 kgdboc=ttyS0,115200 kgdbwait
 ```
 
-With the target's `kgdboc` I/O driver configured, use SysRq-`g` to enter the debugger.
+This stops the kernel during boot, under the same target identification and interruption approval requirements.
+Resume it with GDB's `continue` (or kdb's `go`) before using SysRq-`g` for later live entry.
+
 See the [kernel kgdb/kdb documentation](https://docs.kernel.org/process/debugging/kgdb.html) for transport setup and entry methods.
 
 GDB host side:
@@ -83,6 +99,8 @@ kdb commands (at SysRq break)
 ```
 
 With `CONFIG_KGDB`, `CONFIG_KGDB_KDB`, `CONFIG_MAGIC_SYSRQ`, and a configured `kgdboc` console, enter kdb using SysRq-`g` only after the target and interruption are explicitly approved as above.
+If it enters kgdb mode and GDB is not connected, type `$3#33` in one pass on the configured debugger console
+to switch to kdb; do not use backspace or delete.
 SysRq-`k` is the Secure Access Key (SAK): it kills programs on the current virtual console, not debugger entry.
 See the [kernel SysRq command reference](https://docs.kernel.org/admin-guide/sysrq.html).
 
