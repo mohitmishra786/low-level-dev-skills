@@ -133,13 +133,14 @@ char bufs[BUF_COUNT][BUF_SIZE];
 // Setup buffer ring
 buf_ring = io_uring_setup_buf_ring(&ring, BUF_COUNT, BUF_GROUP, 0, &ret);
 for (int i = 0; i < BUF_COUNT; i++)
-    io_uring_buf_ring_add(buf_ring, bufs[i], BUF_SIZE, i, BUF_COUNT - 1 - i, 0);
+    io_uring_buf_ring_add(buf_ring, bufs[i], BUF_SIZE, i, BUF_COUNT - 1, i);
 io_uring_buf_ring_advance(buf_ring, BUF_COUNT);
 
 // Recv with provided buffers
 sqe = io_uring_get_sqe(&ring);
 io_uring_prep_recv_multishot(sqe, sock_fd, NULL, 0, 0);
 sqe->buf_group = BUF_GROUP;
+sqe->flags |= IOSQE_BUFFER_SELECT;
 ```
 
 Kernel selects buffer from ring — eliminates per-recv buffer allocation.
