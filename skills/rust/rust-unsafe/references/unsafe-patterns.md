@@ -9,10 +9,15 @@ Every unsafe block has an implicit contract: the programmer claims all safety in
 // # Safety
 // - `ptr` must be non-null
 // - `ptr` must be aligned to `align_of::<T>()`
-// - `ptr` must point to `len` initialized values of type `T`
+// - `ptr` must point to `len` consecutive initialized values of type `T`,
+//   all within a single allocation
+// - `len * size_of::<T>()` must not exceed `isize::MAX`, and the range must not wrap
+//   around the end of the address space
 // - The memory must remain valid and not be mutated for the lifetime of the returned slice
 unsafe fn raw_slice<'a, T>(ptr: *const T, len: usize) -> &'a [T] {
-    std::slice::from_raw_parts(ptr, len)
+    // SAFETY: guaranteed by the caller (see above). Edition 2024 requires the
+    // explicit block: an unsafe fn body is no longer an unsafe context.
+    unsafe { std::slice::from_raw_parts(ptr, len) }
 }
 ```
 

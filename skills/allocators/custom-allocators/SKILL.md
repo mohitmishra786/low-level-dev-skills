@@ -169,14 +169,15 @@ static ALLOCATED: AtomicUsize = AtomicUsize::new(0);
 
 unsafe impl GlobalAlloc for TrackingAllocator {
     unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
-        let ptr = System.alloc(layout);
+        // explicit unsafe block: unsafe_op_in_unsafe_fn warns by default in edition 2024
+        let ptr = unsafe { System.alloc(layout) };
         if !ptr.is_null() {
             ALLOCATED.fetch_add(layout.size(), Ordering::Relaxed);
         }
         ptr
     }
     unsafe fn dealloc(&self, ptr: *mut u8, layout: Layout) {
-        System.dealloc(ptr, layout);
+        unsafe { System.dealloc(ptr, layout) };
         ALLOCATED.fetch_sub(layout.size(), Ordering::Relaxed);
     }
 }

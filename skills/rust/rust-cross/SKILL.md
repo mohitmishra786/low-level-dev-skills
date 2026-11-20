@@ -52,7 +52,8 @@ cargo build --target aarch64-unknown-linux-gnu --release
 | `x86_64-apple-darwin` | macOS x86-64 |
 | `aarch64-apple-darwin` | macOS Apple Silicon |
 | `wasm32-unknown-unknown` | WASM (browser) |
-| `wasm32-wasi` | WASM with WASI |
+| `wasm32-wasip1` | WASM with WASI preview 1 (was `wasm32-wasi`, removed) |
+| `wasm32-wasip2` | WASM component with WASI 0.2 |
 | `thumbv7m-none-eabi` | Cortex-M3 bare metal |
 | `thumbv7em-none-eabihf` | Cortex-M4/M7 with FPU |
 | `riscv32imac-unknown-none-elf` | RISC-V 32-bit bare metal |

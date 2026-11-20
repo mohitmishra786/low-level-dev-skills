@@ -26,7 +26,8 @@ Guide agents through Rust's Foreign Function Interface: calling C from Rust with
 // Declare external C functions manually
 use std::ffi::{c_int, c_char, c_void, CStr, CString};
 
-extern "C" {
+// `unsafe extern` is required in edition 2024 (and accepted since Rust 1.82)
+unsafe extern "C" {
     fn strlen(s: *const c_char) -> usize;
     fn malloc(size: usize) -> *mut c_void;
     fn free(ptr: *mut c_void);
@@ -52,7 +53,7 @@ fn init(config: &str) -> Result<*mut c_void, Error> {
 ```toml
 # Cargo.toml
 [build-dependencies]
-bindgen = "0.70"
+bindgen = "0.73"   # 0.71+ emits `unsafe extern`, required by edition 2024
 ```
 
 ```rust
@@ -121,7 +122,7 @@ version = "0.1.0"
 links = "mylib"          # tells Cargo this crate links libmylib
 
 [build-dependencies]
-bindgen = "0.70"
+bindgen = "0.73"   # 0.71+ emits `unsafe extern`, required by edition 2024
 pkg-config = "0.3"       # for system library detection
 ```
 
@@ -194,25 +195,26 @@ impl Drop for MyLib {
 ```toml
 # Cargo.toml
 [build-dependencies]
-cbindgen = "0.27"
+cbindgen = "0.29"   # 0.28+ understands #[unsafe(no_mangle)]
 ```
 
 ```rust
 // src/lib.rs — exported Rust API
-#[no_mangle]
+// #[unsafe(no_mangle)]: required spelling in edition 2024, accepted since 1.82
+#[unsafe(no_mangle)]
 pub extern "C" fn mylib_create(config: *const std::ffi::c_char) -> *mut MyLib {
     // ...
     Box::into_raw(Box::new(instance))
 }
 
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn mylib_destroy(ptr: *mut MyLib) {
     if !ptr.is_null() {
         unsafe { drop(Box::from_raw(ptr)) };
     }
 }
 
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn mylib_process(
     ptr: *mut MyLib,
     data: *const u8,
