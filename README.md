@@ -30,7 +30,7 @@ Install specific skill bundles using the `--skill` flag (space-separated list):
 
 ```bash
 # C/C++ toolchain (compilers, debuggers, build systems, profilers)
-npx skills add mohitmishra786/low-level-dev-skills --skill gcc clang llvm msvc-cl cross-gcc pgo cmake make ninja meson conan-vcpkg static-analysis gdb lldb core-dumps linux-perf valgrind flamegraphs strace-ltrace heaptrack sanitizers fuzzing elf-inspection linkers-lto binutils dynamic-linking assembly-x86 assembly-arm interpreters simd-intrinsics memory-model cpu-cache-opt
+npx skills add mohitmishra786/low-level-dev-skills --skill gcc clang llvm msvc-cl cross-gcc pgo cmake make ninja meson conan-vcpkg static-analysis gdb lldb core-dumps linux-perf valgrind flamegraphs strace-ltrace heaptrack sanitizers fuzzing elf-inspection linkers-lto binutils dynamic-linking assembly-x86 assembly-arm interpreters simd-intrinsics memory-model cpu-cache-opt modern-c-cpp-standards
 
 # Rust bundle (compiler, Cargo, debugging, profiling, FFI, cross, sanitizers, async, security)
 npx skills add mohitmishra786/low-level-dev-skills --skill rustc-basics cargo-workflows rust-debugging rust-profiling rust-ffi rust-cross rust-sanitizers-miri rust-unsafe rust-async-internals rust-security rust-no-std rust-build-times
@@ -238,7 +238,7 @@ After installation, invoke skills in your AI agent:
 
 ## Skills
 
-### C/C++ Compilers (8 skills)
+### C/C++ Compilers (9 skills)
 
 | Skill | Purpose |
 |-------|---------|
@@ -250,6 +250,7 @@ After installation, invoke skills in your AI agent:
 | `pgo` | Profile-guided optimization — GCC, Clang, BOLT |
 | `cpp-modules` | C++20 modules: named modules, header units, CMake integration |
 | `cpp-templates` | Template error reading, concepts, requires-clauses, Templight |
+| `modern-c-cpp-standards` | C23/C2y features, GCC 15/16 default changes, C++26 reflection and contracts, hardening |
 
 ### Debuggers (6 skills)
 
@@ -506,7 +507,7 @@ After installation, invoke skills in your AI agent:
 | `carbon-lang` | Carbon syntax, C++ interop, carbon-toolchain, migration |
 | `hare-lang` | hare build/test, stdlib, C FFI, tagged union errors |
 
-**Total: 143 skills**
+**Total: 144 skills**
 
 ## Design
 

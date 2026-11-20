@@ -51,6 +51,7 @@ const skills = [
   { name: "cross-gcc", category: "compilers", desc: "Guide agents through setting up and using cross-compilation GCC toolchains: triplets, sysroots, pkg-config, QEMU-based testing, and commo..." },
   { name: "gcc", category: "compilers", desc: "Guide agents through GCC invocation: flag selection, build modes, warning triage, PGO, LTO, and common error patterns. Assume the project..." },
   { name: "llvm", category: "compilers", desc: "Guide agents through LLVM as a user: generating and inspecting IR, running existing optimisation passes with opt, lowering to assembly wi..." },
+  { name: "modern-c-cpp-standards", category: "compilers", desc: "Guide agents through current C and C++ standards: changed GCC defaults (C23, C++20), C23 and C2y features, C++26 reflection and contr..." },
   { name: "msvc-cl", category: "compilers", desc: "Guide agents through Windows C/C++ compilation: MSVC cl.exe, clang-cl as MSVC-compatible driver, MSBuild project settings, and runtime li..." },
   { name: "pgo", category: "compilers", desc: "Guide agents through the full PGO workflow: instrument build \u2192 representative workload \u2192 collect profile \u2192 optimised build, covering both..." },
   // computer-architecture
@@ -207,7 +208,7 @@ const tagInstalls = [
     desc: 'Full C/C++ toolchain — compilers, debuggers, profilers, build systems, binaries, safety, and low-level programming',
     color: 'cyan',
     subcategories: [
-      { label: 'Compilers', skills: ['gcc', 'clang', 'llvm', 'msvc-cl', 'cross-gcc', 'pgo', 'cpp-modules', 'cpp-templates'] },
+      { label: 'Compilers', skills: ['gcc', 'clang', 'llvm', 'msvc-cl', 'cross-gcc', 'pgo', 'cpp-modules', 'cpp-templates', 'modern-c-cpp-standards'] },
       { label: 'Debuggers', skills: ['gdb', 'lldb', 'core-dumps', 'concurrency-debugging', 'debug-optimized-builds', 'dwarf-debug-format'] },
       { label: 'Profilers', skills: ['linux-perf', 'valgrind', 'flamegraphs', 'strace-ltrace', 'heaptrack', 'intel-vtune-amd-uprof', 'hardware-counters'] },
       { label: 'Build Systems', skills: ['cmake', 'make', 'ninja', 'meson', 'conan-vcpkg', 'static-analysis', 'build-acceleration', 'bazel', 'include-what-you-use'] },
@@ -330,14 +331,14 @@ const steps = [
 const treeStructure = `<span class="dir">low-level-dev-skills/</span>
 ├── <span class="file">README.md</span>
 ├── <span class="file">AGENTS.md</span>
-└── <span class="dir">skills/</span>    <span class="comment"># 143 skills across 25 categories</span>
+└── <span class="dir">skills/</span>    <span class="comment"># 144 skills across 25 categories</span>
     ├── <span class="dir">allocators/</span>  <span class="comment"># custom-allocators numa-programming</span>
     ├── <span class="dir">async-io/</span>  <span class="comment"># af-xdp dpdk io-uring</span>
     ├── <span class="dir">baremetal/</span>  <span class="comment"># adc-dac-baremetal baremetal-startup bootloaders-embedded datasheet-and-refmanual-reading dma-baremetal gpio-baremetal +8 more</span>
     ├── <span class="dir">binaries/</span>  <span class="comment"># binutils dynamic-linking elf-inspection linkers-lto</span>
     ├── <span class="dir">build-systems/</span>  <span class="comment"># bazel build-acceleration cmake conan-vcpkg include-what-you-use make +3 more</span>
     ├── <span class="dir">compiler-internals/</span>  <span class="comment"># code-generation-and-backends compiler-frontend compiler-optimizations-deep jit-compilation llvm-ir-and-passes llvm-passes +1 more</span>
-    ├── <span class="dir">compilers/</span>  <span class="comment"># clang cpp-modules cpp-templates cross-gcc gcc llvm +2 more</span>
+    ├── <span class="dir">compilers/</span>  <span class="comment"># clang cpp-modules cpp-templates cross-gcc gcc llvm +3 more</span>
     ├── <span class="dir">computer-architecture/</span>  <span class="comment"># abi-and-calling-conventions branch-prediction-and-speculation cpu-pipelines-and-hazards memory-hierarchy-and-caches virtual-memory-paging-and-tlb</span>
     ├── <span class="dir">debuggers/</span>  <span class="comment"># concurrency-debugging core-dumps debug-optimized-builds dwarf-debug-format gdb lldb</span>
     ├── <span class="dir">embedded/</span>  <span class="comment"># embedded-rust freertos linker-scripts openocd-jtag zephyr</span>

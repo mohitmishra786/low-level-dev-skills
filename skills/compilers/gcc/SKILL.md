@@ -150,3 +150,4 @@ For common error patterns and examples, see [references/examples.md](references/
 - Use `skills/compilers/clang` when switching to clang/LLVM
 - Use `skills/binaries/linkers-lto` for advanced LTO linker flags
 - Use `skills/debuggers/gdb` for debugging GCC-built binaries
+- Use `skills/compilers/modern-c-cpp-standards` for C23/C++20 defaults in GCC 15/16 and C++26 reflection/contracts
