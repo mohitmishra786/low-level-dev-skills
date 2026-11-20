@@ -77,6 +77,7 @@ const skills = [
   { name: "cuda", category: "gpu", desc: "Guide agents through NVIDIA CUDA C/C++ development: kernel launch configuration, the memory hierarchy from registers through global memor..." },
   { name: "cuda-debugging", category: "gpu", desc: "Guide agents through debugging CUDA programs with cuda-gdb for interactive GPU thread inspection, NVIDIA Compute Sanitizer for automated ..." },
   { name: "cuda-profiling", category: "gpu", desc: "Guide agents through profiling CUDA applications with Nsight Systems (timeline-level) and Nsight Compute (kernel-level metrics), using th..." },
+  { name: "cuda-tile", category: "gpu", desc: "Guide agents through NVIDIA's tile programming model: cuTile Python kernels (ct.load/ct.store/ct.mma), CUDA Tile C++ with nvcc --enable-..." },
   { name: "gpu-memory-model", category: "gpu", desc: "Explain the GPU execution and memory model for agents optimizing kernels: SIMT execution, warp (32) vs wavefront (64) divergence costs, g..." },
   { name: "hip-rocm", category: "gpu", desc: "Guide agents through AMD GPU programming with HIP: the HIP runtime API, hipcc compilation, porting CUDA code with HIPIFY (hipify-perl, hi..." },
   { name: "triton-lang", category: "gpu", desc: "Guide agents through writing GPU kernels in OpenAI Triton: the @triton.jit decorator, block-oriented tl.load/tl.store with masking, atomi..." },
@@ -287,7 +288,7 @@ const tagInstalls = [
     desc: 'CUDA, ROCm, Triton, GPU memory model, OpenMP, MPI, and RDMA',
     color: 'cyan',
     subcategories: [
-      { label: 'GPU', skills: ['cuda', 'cuda-profiling', 'cuda-debugging', 'triton-lang', 'hip-rocm', 'gpu-memory-model'] },
+      { label: 'GPU', skills: ['cuda', 'cuda-profiling', 'cuda-debugging', 'triton-lang', 'hip-rocm', 'gpu-memory-model', 'cuda-tile'] },
       { label: 'HPC', skills: ['openmp', 'mpi', 'rdma-verbs'] },
     ],
   },
@@ -334,7 +335,7 @@ const steps = [
 const treeStructure = `<span class="dir">low-level-dev-skills/</span>
 ├── <span class="file">README.md</span>
 ├── <span class="file">AGENTS.md</span>
-└── <span class="dir">skills/</span>    <span class="comment"># 147 skills across 25 categories</span>
+└── <span class="dir">skills/</span>    <span class="comment"># 148 skills across 25 categories</span>
     ├── <span class="dir">allocators/</span>  <span class="comment"># custom-allocators numa-programming</span>
     ├── <span class="dir">async-io/</span>  <span class="comment"># af-xdp dpdk io-uring</span>
     ├── <span class="dir">baremetal/</span>  <span class="comment"># adc-dac-baremetal baremetal-startup bootloaders-embedded datasheet-and-refmanual-reading dma-baremetal gpio-baremetal +8 more</span>
@@ -345,7 +346,7 @@ const treeStructure = `<span class="dir">low-level-dev-skills/</span>
     ├── <span class="dir">computer-architecture/</span>  <span class="comment"># abi-and-calling-conventions branch-prediction-and-speculation cpu-pipelines-and-hazards memory-hierarchy-and-caches virtual-memory-paging-and-tlb</span>
     ├── <span class="dir">debuggers/</span>  <span class="comment"># concurrency-debugging core-dumps debug-optimized-builds dwarf-debug-format gdb lldb</span>
     ├── <span class="dir">embedded/</span>  <span class="comment"># embedded-rust freertos linker-scripts openocd-jtag zephyr</span>
-    ├── <span class="dir">gpu/</span>  <span class="comment"># cuda cuda-debugging cuda-profiling gpu-memory-model hip-rocm triton-lang</span>
+    ├── <span class="dir">gpu/</span>  <span class="comment"># cuda cuda-debugging cuda-profiling cuda-tile gpu-memory-model hip-rocm +1 more</span>
     ├── <span class="dir">hpc/</span>  <span class="comment"># mpi openmp rdma-verbs</span>
     ├── <span class="dir">kernel/</span>  <span class="comment"># device-drivers kernel-debugging kernel-internals kernel-testing os-dev-scratch</span>
     ├── <span class="dir">kernel-dev/</span>  <span class="comment"># bus-drivers-i2c-spi device-tree kernel-concurrency kernel-debugging-advanced kernel-memory-management linux-kernel-architecture +4 more</span>

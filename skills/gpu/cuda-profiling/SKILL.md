@@ -191,3 +191,4 @@ ncu --csv --metrics sm__throughput.avg.pct_of_peak_sustained_elapsed ./app_v2 > 
 - `skills/profilers/intel-vtune-amd-uprof` — CPU-side roofline and hotspot analysis
 - `skills/profilers/flamegraphs` — CPU flamegraphs complementary to nsys timeline
 - `skills/profilers/hardware-counters` — general perf stat concepts
+- Use `skills/gpu/cuda-tile` for tile kernels (Nsight Compute shows a Tile Statistics section)

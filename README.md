@@ -75,7 +75,7 @@ npx skills add mohitmishra786/low-level-dev-skills --skill sanitizers fuzzing ru
 npx skills add mohitmishra786/low-level-dev-skills --skill elf-inspection linkers-lto binutils dynamic-linking dwarf-debug-format
 
 # GPU programming (CUDA, Triton, ROCm, memory model)
-npx skills add mohitmishra786/low-level-dev-skills --skill cuda cuda-profiling cuda-debugging triton-lang hip-rocm gpu-memory-model
+npx skills add mohitmishra786/low-level-dev-skills --skill cuda cuda-profiling cuda-debugging triton-lang hip-rocm gpu-memory-model cuda-tile
 
 # Kernel internals and drivers
 npx skills add mohitmishra786/low-level-dev-skills --skill kernel-internals device-drivers kernel-debugging kernel-testing os-dev-scratch
@@ -423,7 +423,7 @@ After installation, invoke skills in your AI agent:
 | `zig-testing` | zig build test, comptime testing, test allocators, fuzz testing |
 | `zig-comptime` | comptime evaluation, anytype generics, @typeInfo reflection |
 
-### GPU (6 skills)
+### GPU (7 skills)
 
 | Skill | Purpose |
 |-------|---------|
@@ -433,6 +433,7 @@ After installation, invoke skills in your AI agent:
 | `triton-lang` | Triton JIT kernels, autotuning, PyTorch integration |
 | `hip-rocm` | AMD HIP, hipify porting, rocprof, MI300X tuning |
 | `gpu-memory-model` | SIMT, coalescing, bank conflicts, occupancy tradeoffs |
+| `cuda-tile` | cuTile Python and CUDA Tile C++: tile kernels, ct.mma, AOT export, tileiras |
 
 ### Kernel Internals (5 skills)
 
@@ -510,7 +511,7 @@ After installation, invoke skills in your AI agent:
 | `carbon-lang` | Carbon syntax, C++ interop, carbon-toolchain, migration |
 | `hare-lang` | hare build/test, stdlib, C FFI, tagged union errors |
 
-**Total: 147 skills**
+**Total: 148 skills**
 
 ## Design
 
