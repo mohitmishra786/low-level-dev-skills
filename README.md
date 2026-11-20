@@ -30,7 +30,7 @@ Install specific skill bundles using the `--skill` flag (space-separated list):
 
 ```bash
 # C/C++ toolchain (compilers, debuggers, build systems, profilers)
-npx skills add mohitmishra786/low-level-dev-skills --skill gcc clang llvm msvc-cl cross-gcc pgo cmake make ninja meson conan-vcpkg static-analysis gdb lldb core-dumps linux-perf valgrind flamegraphs strace-ltrace heaptrack sanitizers fuzzing elf-inspection linkers-lto binutils dynamic-linking assembly-x86 assembly-arm interpreters simd-intrinsics memory-model cpu-cache-opt modern-c-cpp-standards formal-verification riscv-vector
+npx skills add mohitmishra786/low-level-dev-skills --skill gcc clang llvm msvc-cl cross-gcc pgo cmake make ninja meson conan-vcpkg static-analysis gdb lldb core-dumps linux-perf valgrind flamegraphs strace-ltrace heaptrack sanitizers fuzzing elf-inspection linkers-lto binutils dynamic-linking assembly-x86 assembly-arm interpreters simd-intrinsics memory-model cpu-cache-opt modern-c-cpp-standards formal-verification riscv-vector tracing-profilers
 
 # Rust bundle (compiler, Cargo, debugging, profiling, FFI, cross, sanitizers, async, security)
 npx skills add mohitmishra786/low-level-dev-skills --skill rustc-basics cargo-workflows rust-debugging rust-profiling rust-ffi rust-cross rust-sanitizers-miri rust-unsafe rust-async-internals rust-security rust-no-std rust-build-times
@@ -263,7 +263,7 @@ After installation, invoke skills in your AI agent:
 | `debug-optimized-builds` | RelWithDebInfo, -Og, inlined frames, "value optimized out" |
 | `dwarf-debug-format` | DWARF sections, dwarfdump, split DWARF, debuginfod |
 
-### Profilers (7 skills)
+### Profilers (8 skills)
 
 | Skill | Purpose |
 |-------|---------|
@@ -274,6 +274,7 @@ After installation, invoke skills in your AI agent:
 | `heaptrack` | Heap allocation profiling, leak detection, hotspots |
 | `intel-vtune-amd-uprof` | VTune hotspots, microarchitecture analysis, roofline model |
 | `hardware-counters` | perf stat -e, PAPI, cache miss rates, IPC analysis |
+| `tracing-profilers` | Perfetto SDK + trace processor SQL, Tracy zones and headless capture |
 
 ### Build Systems (9 skills)
 
@@ -512,7 +513,7 @@ After installation, invoke skills in your AI agent:
 | `carbon-lang` | Carbon syntax, C++ interop, carbon-toolchain, migration |
 | `hare-lang` | hare build/test, stdlib, C FFI, tagged union errors |
 
-**Total: 149 skills**
+**Total: 150 skills**
 
 ## Design
 

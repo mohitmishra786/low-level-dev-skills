@@ -131,6 +131,7 @@ const skills = [
   { name: "intel-vtune-amd-uprof", category: "profilers", desc: "Guide agents through CPU microarchitecture profiling with Intel VTune Profiler (free Community Edition) and AMD uProf: hotspot identifica..." },
   { name: "linux-perf", category: "profilers", desc: "Guide agents through perf for CPU profiling: sampling, hardware counter measurement, hotspot identification, and integration with flamegr..." },
   { name: "strace-ltrace", category: "profilers", desc: "Guide agents through tracing system calls with strace and library calls with ltrace \u2014 the most effective tools for diagnosing incorrect b..." },
+  { name: "tracing-profilers", category: "profilers", desc: "Guide agents through instrumentation tracing with Perfetto and Tracy: track events and zones, recording traces, SQL analysis with trac..." },
   { name: "valgrind", category: "profilers", desc: "Guide agents through Valgrind tools: Memcheck for memory errors, Cachegrind for cache simulation, Callgrind for call graphs, and Massif f..." },
   // qemu
   { name: "protocol-analysis", category: "qemu", desc: "Guide agents through software-side serial bus analysis: logic analyzer workflow, sigrok/PulseView decoding, correlating captures with fir..." },
@@ -215,7 +216,7 @@ const tagInstalls = [
     subcategories: [
       { label: 'Compilers', skills: ['gcc', 'clang', 'llvm', 'msvc-cl', 'cross-gcc', 'pgo', 'cpp-modules', 'cpp-templates', 'modern-c-cpp-standards'] },
       { label: 'Debuggers', skills: ['gdb', 'lldb', 'core-dumps', 'concurrency-debugging', 'debug-optimized-builds', 'dwarf-debug-format'] },
-      { label: 'Profilers', skills: ['linux-perf', 'valgrind', 'flamegraphs', 'strace-ltrace', 'heaptrack', 'intel-vtune-amd-uprof', 'hardware-counters'] },
+      { label: 'Profilers', skills: ['linux-perf', 'valgrind', 'flamegraphs', 'strace-ltrace', 'heaptrack', 'intel-vtune-amd-uprof', 'hardware-counters', 'tracing-profilers'] },
       { label: 'Build Systems', skills: ['cmake', 'make', 'ninja', 'meson', 'conan-vcpkg', 'static-analysis', 'build-acceleration', 'bazel', 'include-what-you-use'] },
       { label: 'Binaries', skills: ['elf-inspection', 'linkers-lto', 'binutils', 'dynamic-linking'] },
       { label: 'Safety & Runtimes', skills: ['sanitizers', 'fuzzing', 'binary-hardening', 'formal-verification'] },
@@ -336,7 +337,7 @@ const steps = [
 const treeStructure = `<span class="dir">low-level-dev-skills/</span>
 ├── <span class="file">README.md</span>
 ├── <span class="file">AGENTS.md</span>
-└── <span class="dir">skills/</span>    <span class="comment"># 149 skills across 25 categories</span>
+└── <span class="dir">skills/</span>    <span class="comment"># 150 skills across 25 categories</span>
     ├── <span class="dir">allocators/</span>  <span class="comment"># custom-allocators numa-programming</span>
     ├── <span class="dir">async-io/</span>  <span class="comment"># af-xdp dpdk io-uring</span>
     ├── <span class="dir">baremetal/</span>  <span class="comment"># adc-dac-baremetal baremetal-startup bootloaders-embedded datasheet-and-refmanual-reading dma-baremetal gpio-baremetal +8 more</span>
@@ -355,7 +356,7 @@ const treeStructure = `<span class="dir">low-level-dev-skills/</span>
     ├── <span class="dir">low-level-programming/</span>  <span class="comment"># assembly-arm assembly-riscv assembly-x86 cpp-coroutines cpu-cache-opt interpreters +4 more</span>
     ├── <span class="dir">observability/</span>  <span class="comment"># ebpf ebpf-rust sched-ext</span>
     ├── <span class="dir">platform/</span>  <span class="comment"># apple-silicon arm-sve riscv-privileged</span>
-    ├── <span class="dir">profilers/</span>  <span class="comment"># flamegraphs hardware-counters heaptrack intel-vtune-amd-uprof linux-perf strace-ltrace +1 more</span>
+    ├── <span class="dir">profilers/</span>  <span class="comment"># flamegraphs hardware-counters heaptrack intel-vtune-amd-uprof linux-perf strace-ltrace +2 more</span>
     ├── <span class="dir">qemu/</span>  <span class="comment"># protocol-analysis qemu-embedded-simulation resource-optimization-lowend verilog-basics-for-lowlevel</span>
     ├── <span class="dir">runtimes/</span>  <span class="comment"># binary-hardening formal-verification fuzzing sanitizers wasm-emscripten wasm-wasmtime</span>
     ├── <span class="dir">rust/</span>  <span class="comment"># cargo-workflows rust-async-internals rust-build-times rust-cross rust-debugging rust-ffi +6 more</span>
