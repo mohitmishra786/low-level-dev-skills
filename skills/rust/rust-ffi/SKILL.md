@@ -53,7 +53,7 @@ fn init(config: &str) -> Result<*mut c_void, Error> {
 ```toml
 # Cargo.toml
 [build-dependencies]
-bindgen = "0.70"
+bindgen = "0.73"   # 0.71+ emits `unsafe extern`, required by edition 2024
 ```
 
 ```rust
@@ -122,7 +122,7 @@ version = "0.1.0"
 links = "mylib"          # tells Cargo this crate links libmylib
 
 [build-dependencies]
-bindgen = "0.70"
+bindgen = "0.73"   # 0.71+ emits `unsafe extern`, required by edition 2024
 pkg-config = "0.3"       # for system library detection
 ```
 
@@ -195,7 +195,7 @@ impl Drop for MyLib {
 ```toml
 # Cargo.toml
 [build-dependencies]
-cbindgen = "0.27"
+cbindgen = "0.29"   # 0.28+ understands #[unsafe(no_mangle)]
 ```
 
 ```rust

@@ -298,17 +298,31 @@ For workspace patterns and dependency resolution details, see [references/worksp
 
 ### 8. Edition 2024 migration
 
-Edition 2024 (Rust 1.85+) is the default for `cargo new`. Migrate one crate at a time:
+Edition 2024 (Rust 1.85+) is the default for `cargo new`. Migrate one crate at a time, and one
+edition at a time: `cargo fix --edition` only prepares for the *next* edition, so a 2018 crate goes
+2018 → 2021 → 2024, repeating the steps below for each hop.
 
 ```bash
-# 1. Apply automatic fixes while still on the old edition
-cargo fix --edition --all-targets
+# 1. Apply automatic fixes while still on the old edition.
+#    Cover every feature and platform you support: code behind a disabled
+#    feature or another target's cfg is not seen.
+cargo fix --edition --all-targets --all-features
+cargo fix --edition --all-targets --target aarch64-unknown-linux-gnu   # per extra target
 
-# 2. Set edition = "2024" in Cargo.toml (and resolver = "3" in a virtual workspace)
+# 2. Bump the edition in that crate's Cargo.toml (resolver = "3" in a virtual workspace)
 
-# 3. Build and fix what cargo fix could not
-cargo check --all-targets
+# 3. Build and fix what cargo fix could not, for the same feature/target matrix
+cargo check --all-targets --all-features
 ```
+
+If members inherit `edition.workspace = true`, changing `[workspace.package] edition` moves all of
+them at once. During the migration set `edition = "2024"` per member as each is fixed, then switch
+the shared value once every inheriting member builds.
+
+Review what `cargo fix` generated: it wraps `std::env::set_var`/`remove_var` calls in `unsafe { }`
+without proving they are sound. These are only safe while no other thread reads or writes the
+environment; if you cannot guarantee that, restructure (set variables before spawning threads, or
+pass configuration explicitly) instead of keeping the block.
 
 | Change in 2024 | Old code | Fix |
 |----------------|----------|-----|
@@ -316,7 +330,7 @@ cargo check --all-targets
 | Unsafe attributes | `#[no_mangle]`, `#[export_name]`, `#[link_section]` | `#[unsafe(no_mangle)]` etc. |
 | `unsafe fn` body is not an unsafe context | `unsafe fn f(p: *const u8) -> u8 { *p }` | Wrap operations in `unsafe { }` (lint warns) |
 | References to `static mut` | `let r = &COUNTER;` | Error; use `&raw const COUNTER`, atomics, or `UnsafeCell` |
-| `std::env::set_var` / `remove_var` | Safe call | Now `unsafe`; call before spawning threads |
+| `std::env::set_var` / `remove_var` | Safe call | Now `unsafe`; only sound with no concurrent env access (audit `cargo fix` output) |
 | `gen` is reserved | `let gen = 1;` | Rename or use `r#gen` |
 | RPIT captures all in-scope lifetimes | `-> impl Iterator` borrowing an argument | Usually just works; restrict with `+ use<>` |
 | Default resolver `"3"` | `resolver = "2"` | MSRV-aware: needs `rust-version` to pick compatible deps |
