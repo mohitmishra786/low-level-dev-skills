@@ -54,7 +54,7 @@ npx skills add mohitmishra786/low-level-dev-skills --skill cpu-pipelines-and-haz
 npx skills add mohitmishra786/low-level-dev-skills --skill qemu-embedded-simulation qemu-for-kernel-development protocol-analysis resource-optimization-lowend verilog-basics-for-lowlevel
 
 # Observability (eBPF, binary hardening)
-npx skills add mohitmishra786/low-level-dev-skills --skill ebpf ebpf-rust binary-hardening
+npx skills add mohitmishra786/low-level-dev-skills --skill ebpf ebpf-rust binary-hardening sched-ext
 
 # WebAssembly
 npx skills add mohitmishra786/low-level-dev-skills --skill wasm-emscripten wasm-wasmtime
@@ -322,12 +322,13 @@ After installation, invoke skills in your AI agent:
 | `cpp-coroutines` | co_await/co_yield/co_return, promise_type, frame layout, GDB |
 | `linux-kernel-modules` | LKMs, Kbuild, /proc, sysfs, char devices, KGDB |
 
-### Observability (2 skills)
+### Observability (3 skills)
 
 | Skill | Purpose |
 |-------|---------|
 | `ebpf` | bpftool, libbpf, bpftrace, verifier errors, XDP, CO-RE |
 | `ebpf-rust` | Aya framework, aya-bpf, aya-log, map sharing, tokio integration |
+| `sched-ext` | BPF CPU schedulers: CONFIG_SCHED_CLASS_EXT, scx schedulers, DSQs, writing and debugging a scheduler |
 
 ### Embedded (5 skills)
 
@@ -507,7 +508,7 @@ After installation, invoke skills in your AI agent:
 | `carbon-lang` | Carbon syntax, C++ interop, carbon-toolchain, migration |
 | `hare-lang` | hare build/test, stdlib, C FFI, tagged union errors |
 
-**Total: 144 skills**
+**Total: 145 skills**
 
 ## Design
 

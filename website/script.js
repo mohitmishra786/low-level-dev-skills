@@ -117,6 +117,7 @@ const skills = [
   // observability
   { name: "ebpf", category: "observability", desc: "Guide agents through writing, loading, and debugging eBPF programs using libbpf, bpftrace, and bpftool. Covers map types, program types, ..." },
   { name: "ebpf-rust", category: "observability", desc: "Guide agents through building production eBPF programs in Rust using the Aya framework: writing kernel-side BPF code with aya-bpf, struct..." },
+  { name: "sched-ext", category: "observability", desc: "Guide agents through sched_ext: enabling CONFIG_SCHED_CLASS_EXT, running scx schedulers (scx_lavd, scx_bpfland), writing a BPF schedu..." },
   // platform
   { name: "apple-silicon", category: "platform", desc: "Guide agents through Apple Silicon (M-series) development: unified memory architecture, AMX matrix coprocessor access via Accelerate, Met..." },
   { name: "arm-sve", category: "platform", desc: "Guide agents through ARM Scalable Vector Extension (SVE/SVE2) programming: vector-length agnostic (VLA) code, predicate registers, SVE in..." },
@@ -308,7 +309,7 @@ const tagInstalls = [
     desc: 'eBPF tracing, WebAssembly runtimes, and binary hardening',
     color: 'red',
     subcategories: [
-      { label: 'eBPF', skills: ['ebpf', 'ebpf-rust'] },
+      { label: 'eBPF', skills: ['ebpf', 'ebpf-rust', 'sched-ext'] },
       { label: 'WebAssembly', skills: ['wasm-emscripten', 'wasm-wasmtime'] },
       { label: 'Hardening', skills: ['binary-hardening', 'rust-security'] },
     ],
@@ -331,7 +332,7 @@ const steps = [
 const treeStructure = `<span class="dir">low-level-dev-skills/</span>
 ├── <span class="file">README.md</span>
 ├── <span class="file">AGENTS.md</span>
-└── <span class="dir">skills/</span>    <span class="comment"># 144 skills across 25 categories</span>
+└── <span class="dir">skills/</span>    <span class="comment"># 145 skills across 25 categories</span>
     ├── <span class="dir">allocators/</span>  <span class="comment"># custom-allocators numa-programming</span>
     ├── <span class="dir">async-io/</span>  <span class="comment"># af-xdp dpdk io-uring</span>
     ├── <span class="dir">baremetal/</span>  <span class="comment"># adc-dac-baremetal baremetal-startup bootloaders-embedded datasheet-and-refmanual-reading dma-baremetal gpio-baremetal +8 more</span>
@@ -348,7 +349,7 @@ const treeStructure = `<span class="dir">low-level-dev-skills/</span>
     ├── <span class="dir">kernel-dev/</span>  <span class="comment"># bus-drivers-i2c-spi device-tree kernel-concurrency kernel-debugging-advanced kernel-memory-management linux-kernel-architecture +4 more</span>
     ├── <span class="dir">languages/</span>  <span class="comment"># carbon-lang hare-lang</span>
     ├── <span class="dir">low-level-programming/</span>  <span class="comment"># assembly-arm assembly-riscv assembly-x86 cpp-coroutines cpu-cache-opt interpreters +3 more</span>
-    ├── <span class="dir">observability/</span>  <span class="comment"># ebpf ebpf-rust</span>
+    ├── <span class="dir">observability/</span>  <span class="comment"># ebpf ebpf-rust sched-ext</span>
     ├── <span class="dir">platform/</span>  <span class="comment"># apple-silicon arm-sve riscv-privileged</span>
     ├── <span class="dir">profilers/</span>  <span class="comment"># flamegraphs hardware-counters heaptrack intel-vtune-amd-uprof linux-perf strace-ltrace +1 more</span>
     ├── <span class="dir">qemu/</span>  <span class="comment"># protocol-analysis qemu-embedded-simulation resource-optimization-lowend verilog-basics-for-lowlevel</span>

@@ -196,3 +196,4 @@ For a counter reference and interpretation guide, see [references/events.md](ref
 - Use `skills/profilers/flamegraphs` for SVG flamegraph generation and reading
 - Use `skills/profilers/valgrind` for cache simulation and memory profiling
 - Use `skills/compilers/gcc` or `skills/compilers/clang` for PGO from perf data (AutoFDO)
+- Use `skills/observability/sched-ext` when evaluating BPF schedulers with `perf sched`

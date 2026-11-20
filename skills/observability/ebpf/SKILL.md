@@ -305,3 +305,4 @@ For the full map types reference, see [references/ebpf-map-types.md](references/
 - Use `skills/runtimes/binary-hardening` for seccomp-bpf syscall filtering
 - Use `skills/low-level-programming/linux-kernel-modules` for kernel module development
 - Use `skills/async-io/af-xdp` for XDP_REDIRECT to AF_XDP sockets
+- Use `skills/observability/sched-ext` for CPU schedulers written as BPF struct_ops programs
