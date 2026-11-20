@@ -137,6 +137,7 @@ const skills = [
   { name: "verilog-basics-for-lowlevel", category: "qemu", desc: "Give firmware and kernel engineers enough Verilog/SystemVerilog literacy to read RTL: modules, clocks/resets, combinational vs sequential..." },
   // runtimes
   { name: "binary-hardening", category: "runtimes", desc: "Guide agents through enabling and verifying binary security mitigations: checksec analysis, compiler and linker hardening flags (RELRO, P..." },
+  { name: "formal-verification", category: "runtimes", desc: "Guide agents through formal verification of Rust and C: Kani proof harnesses and contracts, CBMC bounded model checking, Frama-C WP an..." },
   { name: "fuzzing", category: "runtimes", desc: "Guide agents through setting up and running coverage-guided fuzz testing: libFuzzer (in-process) and AFL++ (fork-based), with sanitizer i..." },
   { name: "sanitizers", category: "runtimes", desc: "Guide agents through choosing, enabling, and interpreting compiler runtime sanitizers for finding memory errors, undefined behaviour, dat..." },
   { name: "wasm-emscripten", category: "runtimes", desc: "Guide agents through compiling C/C++ to WebAssembly using Emscripten: emcc flag selection, function exports, memory model configuration, ..." },
@@ -214,7 +215,7 @@ const tagInstalls = [
       { label: 'Profilers', skills: ['linux-perf', 'valgrind', 'flamegraphs', 'strace-ltrace', 'heaptrack', 'intel-vtune-amd-uprof', 'hardware-counters'] },
       { label: 'Build Systems', skills: ['cmake', 'make', 'ninja', 'meson', 'conan-vcpkg', 'static-analysis', 'build-acceleration', 'bazel', 'include-what-you-use'] },
       { label: 'Binaries', skills: ['elf-inspection', 'linkers-lto', 'binutils', 'dynamic-linking'] },
-      { label: 'Safety & Runtimes', skills: ['sanitizers', 'fuzzing', 'binary-hardening'] },
+      { label: 'Safety & Runtimes', skills: ['sanitizers', 'fuzzing', 'binary-hardening', 'formal-verification'] },
       { label: 'Low-Level Programming', skills: ['assembly-x86', 'assembly-arm', 'assembly-riscv', 'simd-intrinsics', 'memory-model', 'cpu-cache-opt', 'interpreters', 'cpp-coroutines', 'linux-kernel-modules'] },
       { label: 'Computer Architecture', skills: ['cpu-pipelines-and-hazards', 'memory-hierarchy-and-caches', 'virtual-memory-paging-and-tlb', 'abi-and-calling-conventions', 'branch-prediction-and-speculation'] },
     ],
@@ -332,7 +333,7 @@ const steps = [
 const treeStructure = `<span class="dir">low-level-dev-skills/</span>
 ├── <span class="file">README.md</span>
 ├── <span class="file">AGENTS.md</span>
-└── <span class="dir">skills/</span>    <span class="comment"># 145 skills across 25 categories</span>
+└── <span class="dir">skills/</span>    <span class="comment"># 146 skills across 25 categories</span>
     ├── <span class="dir">allocators/</span>  <span class="comment"># custom-allocators numa-programming</span>
     ├── <span class="dir">async-io/</span>  <span class="comment"># af-xdp dpdk io-uring</span>
     ├── <span class="dir">baremetal/</span>  <span class="comment"># adc-dac-baremetal baremetal-startup bootloaders-embedded datasheet-and-refmanual-reading dma-baremetal gpio-baremetal +8 more</span>
@@ -353,7 +354,7 @@ const treeStructure = `<span class="dir">low-level-dev-skills/</span>
     ├── <span class="dir">platform/</span>  <span class="comment"># apple-silicon arm-sve riscv-privileged</span>
     ├── <span class="dir">profilers/</span>  <span class="comment"># flamegraphs hardware-counters heaptrack intel-vtune-amd-uprof linux-perf strace-ltrace +1 more</span>
     ├── <span class="dir">qemu/</span>  <span class="comment"># protocol-analysis qemu-embedded-simulation resource-optimization-lowend verilog-basics-for-lowlevel</span>
-    ├── <span class="dir">runtimes/</span>  <span class="comment"># binary-hardening fuzzing sanitizers wasm-emscripten wasm-wasmtime</span>
+    ├── <span class="dir">runtimes/</span>  <span class="comment"># binary-hardening formal-verification fuzzing sanitizers wasm-emscripten wasm-wasmtime</span>
     ├── <span class="dir">rust/</span>  <span class="comment"># cargo-workflows rust-async-internals rust-build-times rust-cross rust-debugging rust-ffi +6 more</span>
     ├── <span class="dir">security/</span>  <span class="comment"># kernel-security reverse-engineering</span>
     ├── <span class="dir">virtualization/</span>  <span class="comment"># containers-internals hypervisor-internals qemu-kvm</span>

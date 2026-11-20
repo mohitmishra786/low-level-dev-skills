@@ -30,7 +30,7 @@ Install specific skill bundles using the `--skill` flag (space-separated list):
 
 ```bash
 # C/C++ toolchain (compilers, debuggers, build systems, profilers)
-npx skills add mohitmishra786/low-level-dev-skills --skill gcc clang llvm msvc-cl cross-gcc pgo cmake make ninja meson conan-vcpkg static-analysis gdb lldb core-dumps linux-perf valgrind flamegraphs strace-ltrace heaptrack sanitizers fuzzing elf-inspection linkers-lto binutils dynamic-linking assembly-x86 assembly-arm interpreters simd-intrinsics memory-model cpu-cache-opt modern-c-cpp-standards
+npx skills add mohitmishra786/low-level-dev-skills --skill gcc clang llvm msvc-cl cross-gcc pgo cmake make ninja meson conan-vcpkg static-analysis gdb lldb core-dumps linux-perf valgrind flamegraphs strace-ltrace heaptrack sanitizers fuzzing elf-inspection linkers-lto binutils dynamic-linking assembly-x86 assembly-arm interpreters simd-intrinsics memory-model cpu-cache-opt modern-c-cpp-standards formal-verification
 
 # Rust bundle (compiler, Cargo, debugging, profiling, FFI, cross, sanitizers, async, security)
 npx skills add mohitmishra786/low-level-dev-skills --skill rustc-basics cargo-workflows rust-debugging rust-profiling rust-ffi rust-cross rust-sanitizers-miri rust-unsafe rust-async-internals rust-security rust-no-std rust-build-times
@@ -298,7 +298,7 @@ After installation, invoke skills in your AI agent:
 | `binutils` | ar, strip, objcopy, addr2line workflows |
 | `dynamic-linking` | dlopen, RPATH/RUNPATH, soname versioning, LD_PRELOAD |
 
-### Runtime Safety (6 skills)
+### Runtime Safety (7 skills)
 
 | Skill | Purpose |
 |-------|---------|
@@ -307,6 +307,7 @@ After installation, invoke skills in your AI agent:
 | `binary-hardening` | checksec, RELRO, PIE, CFI, shadow stack, seccomp-bpf |
 | `wasm-emscripten` | emcc flags, EXPORTED_FUNCTIONS, memory model, Asyncify |
 | `wasm-wasmtime` | wasmtime CLI, WASI preview2, component model, Rust embedding |
+| `formal-verification` | Kani, CBMC, Frama-C WP/EVA: proof harnesses, contracts, unwinding, counterexamples |
 
 ### Low-Level Programming (9 skills)
 
@@ -508,7 +509,7 @@ After installation, invoke skills in your AI agent:
 | `carbon-lang` | Carbon syntax, C++ interop, carbon-toolchain, migration |
 | `hare-lang` | hare build/test, stdlib, C FFI, tagged union errors |
 
-**Total: 145 skills**
+**Total: 146 skills**
 
 ## Design
 

@@ -198,3 +198,4 @@ WARNING: ThreadSanitizer: data race (pid=12345)
 - Use `skills/runtimes/sanitizers` for C/C++ sanitizer usage and comparison
 - Use `skills/rust/rust-unsafe` for unsafe Rust patterns and review checklist
 - Use `skills/runtimes/fuzzing` to generate inputs that trigger sanitizer errors
+- Use `skills/runtimes/formal-verification` for Kani proofs that cover all inputs, not one execution

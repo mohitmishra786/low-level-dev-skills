@@ -190,3 +190,4 @@ For clang-tidy check details, see [references/clang-tidy-checks.md](references/c
 - Use `skills/compilers/gcc` for GCC warnings as complementary analysis
 - Use `skills/runtimes/sanitizers` for runtime bug detection alongside static analysis
 - Use `skills/build-systems/cmake` for `CMAKE_EXPORT_COMPILE_COMMANDS` setup
+- Use `skills/runtimes/formal-verification` for sound proofs with Frama-C and CBMC
