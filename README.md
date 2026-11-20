@@ -30,7 +30,7 @@ Install specific skill bundles using the `--skill` flag (space-separated list):
 
 ```bash
 # C/C++ toolchain (compilers, debuggers, build systems, profilers)
-npx skills add mohitmishra786/low-level-dev-skills --skill gcc clang llvm msvc-cl cross-gcc pgo cmake make ninja meson conan-vcpkg static-analysis gdb lldb core-dumps linux-perf valgrind flamegraphs strace-ltrace heaptrack sanitizers fuzzing elf-inspection linkers-lto binutils dynamic-linking assembly-x86 assembly-arm interpreters simd-intrinsics memory-model cpu-cache-opt modern-c-cpp-standards formal-verification
+npx skills add mohitmishra786/low-level-dev-skills --skill gcc clang llvm msvc-cl cross-gcc pgo cmake make ninja meson conan-vcpkg static-analysis gdb lldb core-dumps linux-perf valgrind flamegraphs strace-ltrace heaptrack sanitizers fuzzing elf-inspection linkers-lto binutils dynamic-linking assembly-x86 assembly-arm interpreters simd-intrinsics memory-model cpu-cache-opt modern-c-cpp-standards formal-verification riscv-vector
 
 # Rust bundle (compiler, Cargo, debugging, profiling, FFI, cross, sanitizers, async, security)
 npx skills add mohitmishra786/low-level-dev-skills --skill rustc-basics cargo-workflows rust-debugging rust-profiling rust-ffi rust-cross rust-sanitizers-miri rust-unsafe rust-async-internals rust-security rust-no-std rust-build-times
@@ -309,7 +309,7 @@ After installation, invoke skills in your AI agent:
 | `wasm-wasmtime` | wasmtime CLI, WASI preview2, component model, Rust embedding |
 | `formal-verification` | Kani, CBMC, Frama-C WP/EVA: proof harnesses, contracts, unwinding, counterexamples |
 
-### Low-Level Programming (9 skills)
+### Low-Level Programming (10 skills)
 
 | Skill | Purpose |
 |-------|---------|
@@ -322,6 +322,7 @@ After installation, invoke skills in your AI agent:
 | `cpu-cache-opt` | Cache misses, AoS vs SoA, false sharing, prefetching |
 | `cpp-coroutines` | co_await/co_yield/co_return, promise_type, frame layout, GDB |
 | `linux-kernel-modules` | LKMs, Kbuild, /proc, sysfs, char devices, KGDB |
+| `riscv-vector` | RVV 1.0 intrinsics and assembly, vsetvli/LMUL, QEMU VLEN testing, RVA23 |
 
 ### Observability (3 skills)
 
@@ -511,7 +512,7 @@ After installation, invoke skills in your AI agent:
 | `carbon-lang` | Carbon syntax, C++ interop, carbon-toolchain, migration |
 | `hare-lang` | hare build/test, stdlib, C FFI, tagged union errors |
 
-**Total: 148 skills**
+**Total: 149 skills**
 
 ## Design
 

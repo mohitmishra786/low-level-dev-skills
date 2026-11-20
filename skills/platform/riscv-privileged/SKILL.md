@@ -238,3 +238,4 @@ make qemu
 - `skills/embedded/zephyr` — Zephyr on RISC-V
 - `skills/kernel/kernel-internals` — Linux VM and scheduler analogies
 - `skills/platform/arm-sve` — other architecture platform skills
+- Use `skills/low-level-programming/riscv-vector` for the vector extension that RVA23 makes mandatory

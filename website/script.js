@@ -114,6 +114,7 @@ const skills = [
   { name: "interpreters", category: "low-level-programming", desc: "Guide agents through implementing efficient bytecode interpreters and simple JITs in C/C++: dispatch strategies, VM architecture choices,..." },
   { name: "linux-kernel-modules", category: "low-level-programming", desc: "Guide agents through writing loadable Linux kernel modules (LKMs): the Kbuild build system, module parameters, /proc and sysfs interfaces..." },
   { name: "memory-model", category: "low-level-programming", desc: "Guide agents through C++ and Rust memory models: memory orderings, the happens-before relation, atomic operations, fences, and practical ..." },
+  { name: "riscv-vector", category: "low-level-programming", desc: "Guide agents through the RISC-V Vector extension: the vector-length-agnostic model (VLEN, SEW, LMUL, vsetvli), intrinsics and assembl..." },
   { name: "simd-intrinsics", category: "low-level-programming", desc: "Guide agents through SIMD: reading auto-vectorization output, writing SSE2/AVX2/NEON intrinsics, runtime CPU feature detection, and choos..." },
   // observability
   { name: "ebpf", category: "observability", desc: "Guide agents through writing, loading, and debugging eBPF programs using libbpf, bpftrace, and bpftool. Covers map types, program types, ..." },
@@ -218,7 +219,7 @@ const tagInstalls = [
       { label: 'Build Systems', skills: ['cmake', 'make', 'ninja', 'meson', 'conan-vcpkg', 'static-analysis', 'build-acceleration', 'bazel', 'include-what-you-use'] },
       { label: 'Binaries', skills: ['elf-inspection', 'linkers-lto', 'binutils', 'dynamic-linking'] },
       { label: 'Safety & Runtimes', skills: ['sanitizers', 'fuzzing', 'binary-hardening', 'formal-verification'] },
-      { label: 'Low-Level Programming', skills: ['assembly-x86', 'assembly-arm', 'assembly-riscv', 'simd-intrinsics', 'memory-model', 'cpu-cache-opt', 'interpreters', 'cpp-coroutines', 'linux-kernel-modules'] },
+      { label: 'Low-Level Programming', skills: ['assembly-x86', 'assembly-arm', 'assembly-riscv', 'simd-intrinsics', 'memory-model', 'cpu-cache-opt', 'interpreters', 'cpp-coroutines', 'linux-kernel-modules', 'riscv-vector'] },
       { label: 'Computer Architecture', skills: ['cpu-pipelines-and-hazards', 'memory-hierarchy-and-caches', 'virtual-memory-paging-and-tlb', 'abi-and-calling-conventions', 'branch-prediction-and-speculation'] },
     ],
   },
@@ -335,7 +336,7 @@ const steps = [
 const treeStructure = `<span class="dir">low-level-dev-skills/</span>
 ├── <span class="file">README.md</span>
 ├── <span class="file">AGENTS.md</span>
-└── <span class="dir">skills/</span>    <span class="comment"># 148 skills across 25 categories</span>
+└── <span class="dir">skills/</span>    <span class="comment"># 149 skills across 25 categories</span>
     ├── <span class="dir">allocators/</span>  <span class="comment"># custom-allocators numa-programming</span>
     ├── <span class="dir">async-io/</span>  <span class="comment"># af-xdp dpdk io-uring</span>
     ├── <span class="dir">baremetal/</span>  <span class="comment"># adc-dac-baremetal baremetal-startup bootloaders-embedded datasheet-and-refmanual-reading dma-baremetal gpio-baremetal +8 more</span>
@@ -351,7 +352,7 @@ const treeStructure = `<span class="dir">low-level-dev-skills/</span>
     ├── <span class="dir">kernel/</span>  <span class="comment"># device-drivers kernel-debugging kernel-internals kernel-testing os-dev-scratch</span>
     ├── <span class="dir">kernel-dev/</span>  <span class="comment"># bus-drivers-i2c-spi device-tree kernel-concurrency kernel-debugging-advanced kernel-memory-management linux-kernel-architecture +4 more</span>
     ├── <span class="dir">languages/</span>  <span class="comment"># carbon-lang hare-lang</span>
-    ├── <span class="dir">low-level-programming/</span>  <span class="comment"># assembly-arm assembly-riscv assembly-x86 cpp-coroutines cpu-cache-opt interpreters +3 more</span>
+    ├── <span class="dir">low-level-programming/</span>  <span class="comment"># assembly-arm assembly-riscv assembly-x86 cpp-coroutines cpu-cache-opt interpreters +4 more</span>
     ├── <span class="dir">observability/</span>  <span class="comment"># ebpf ebpf-rust sched-ext</span>
     ├── <span class="dir">platform/</span>  <span class="comment"># apple-silicon arm-sve riscv-privileged</span>
     ├── <span class="dir">profilers/</span>  <span class="comment"># flamegraphs hardware-counters heaptrack intel-vtune-amd-uprof linux-perf strace-ltrace +1 more</span>

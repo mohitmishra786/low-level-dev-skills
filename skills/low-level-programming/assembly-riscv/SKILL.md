@@ -228,3 +228,4 @@ For the RISC-V psABI calling convention details, see [references/riscv-abi.md](r
 - Use `skills/low-level-programming/assembly-x86` for x86-64 assembly
 - Use `skills/embedded/openocd-jtag` for real hardware RISC-V debugging
 - Use `skills/compilers/cross-gcc` for RISC-V cross-compilation setup
+- Use `skills/low-level-programming/riscv-vector` for RVV 1.0 vector code and the RVA23 profile
