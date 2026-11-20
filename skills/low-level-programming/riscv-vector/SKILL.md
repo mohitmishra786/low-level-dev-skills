@@ -81,14 +81,14 @@ and `m8` for simple streaming loops.
 # GCC cross toolchain (Debian/Ubuntu: gcc-riscv64-linux-gnu, qemu-user)
 riscv64-linux-gnu-gcc -march=rv64gcv -O2 -static -o saxpy saxpy.c
 
-# Clang with the GCC cross sysroot
-clang --target=riscv64-linux-gnu -march=rv64gcv -O2 -fuse-ld=lld \
-      --gcc-install-dir=/usr/lib/gcc-cross/riscv64-linux-gnu/14 -o saxpy saxpy.c
-
-# Run with different vector lengths: the same binary must give the same result
+# Run the static binary with different vector lengths: results must not change
 qemu-riscv64 -cpu rv64,v=true,vlen=128 ./saxpy    # VLENB=16 bytes, e32m8 VLMAX=32, errors=0
 qemu-riscv64 -cpu rv64,v=true,vlen=1024 ./saxpy   # VLENB=128 bytes, e32m8 VLMAX=256, errors=0
-qemu-riscv64 -L /usr/riscv64-linux-gnu -cpu rv64,v=true,vlen=256 ./saxpy   # dynamic binary
+
+# Clang with the GCC cross toolchain (dynamic binary: give QEMU the target sysroot with -L)
+clang --target=riscv64-linux-gnu -march=rv64gcv -O2 -fuse-ld=lld \
+      --gcc-install-dir=/usr/lib/gcc-cross/riscv64-linux-gnu/14 -o saxpy_clang saxpy.c
+qemu-riscv64 -L /usr/riscv64-linux-gnu -cpu rv64,v=true,vlen=256 ./saxpy_clang
 ```
 
 Testing at several `vlen` values catches code that silently assumes a register width.
@@ -114,8 +114,25 @@ vmemcpy:
     .size vmemcpy, .-vmemcpy
 ```
 
+```c
+/* vmemcpy_test.c — check the copy against the source buffer */
+#include <stdio.h>
+#include <string.h>
+void *vmemcpy(void *dst, const void *src, size_t n);
+int main(void)
+{
+    static char src[5000], dst[5000];
+    for (int i = 0; i < 5000; i++) src[i] = (char)(i * 7);
+    vmemcpy(dst, src, sizeof src);
+    printf("memcmp=%d\n", memcmp(dst, src, sizeof src));
+    return 0;
+}
+```
+
 ```bash
+# Save the assembly above as vmemcpy.S
 riscv64-linux-gnu-gcc -march=rv64gcv -O2 -static -o vm vmemcpy_test.c vmemcpy.S
+qemu-riscv64 -cpu rv64,v=true,vlen=512 ./vm       # memcmp=0
 ```
 
 Assembling vector code without `v` in `-march` fails with
@@ -155,7 +172,9 @@ Older boards (RVA22 and earlier, often without V) need Ubuntu 24.04 or another d
 # Clang 23 accepts the profile name directly (Clang 19 needs -menable-experimental-extensions)
 clang --target=riscv64-linux-gnu -march=rva23u64 -O2 ...
 
-# GCC 14 rejects profile names ("ISA string must begin with rv32 or rv64"): spell extensions out
+# GCC 14 rejects profile names ("ISA string must begin with rv32 or rv64").
+# This RVV-capable subset runs on RVA23 hardware but is not the full profile
+# (RVA23 also mandates e.g. Zicond, Zvbb, Zfhmin)
 riscv64-linux-gnu-gcc -march=rv64gcv_zba_zbb_zbs -O2 ...
 
 # QEMU CPU model with the RVA23 extension set
