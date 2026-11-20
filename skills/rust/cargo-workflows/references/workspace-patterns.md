@@ -16,7 +16,7 @@ thiserror = "1.0"
 
 [workspace.package]
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 authors = ["team@example.com"]
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/org/repo"
@@ -38,16 +38,20 @@ serde = { workspace = true, features = ["derive"] }  # Can add features
 
 ## Feature Resolution (resolver = "2")
 
-With `resolver = "2"` (required in edition 2021 workspaces):
+With `resolver = "2"` or later (`"3"` is the edition 2024 default):
 
 ```toml
 [workspace]
-resolver = "2"
+resolver = "3"
 ```
 
 - Build deps, dev-deps, and regular deps get independent feature resolution
 - Prevents a dev-only dependency from enabling features in prod builds
 - `target.cfg()` conditional features respected independently
+- `"3"` (Rust 1.84+) also prefers dependency versions whose `rust-version` fits your MSRV
+
+A virtual workspace (no root `[package]`) does not infer the resolver from member editions.
+Without an explicit `resolver`, cargo warns and falls back to `"1"`.
 
 ## Virtual Manifest Pattern
 
@@ -57,11 +61,11 @@ A workspace without its own `[package]` — just orchestrates members:
 # Root Cargo.toml (virtual manifest)
 [workspace]
 members = ["crates/*", "tools/*"]
-resolver = "2"
+resolver = "3"   # required: virtual manifests default to "1"
 
 [workspace.package]
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 [profile.release]
 lto = "thin"
@@ -153,16 +157,16 @@ steps:
 
 ```toml
 [package]
-rust-version = "1.70"   # MSRV declaration
+rust-version = "1.85"   # MSRV declaration (edition 2024 needs 1.85+)
 
 [workspace.package]
-rust-version = "1.70"
+rust-version = "1.85"
 ```
 
 ```bash
 # Test against MSRV
-rustup install 1.70
-cargo +1.70 check --workspace
+rustup install 1.85
+cargo +1.85 check --workspace
 ```
 
 ## Published Crate Checklist
@@ -171,7 +175,7 @@ cargo +1.70 check --workspace
 [package]
 name = "mycrate"
 version = "1.0.0"
-edition = "2021"
+edition = "2024"
 description = "Short description"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/..."

@@ -57,7 +57,7 @@ members = [
     "crates/server",
     "tools/codegen",
 ]
-resolver = "2"   # Feature resolver v2 (required for edition 2021)
+resolver = "3"   # MSRV-aware resolver; edition 2024 default, but virtual workspaces must set it
 
 # Shared dependency versions (workspace.dependencies)
 [workspace.dependencies]
@@ -295,6 +295,34 @@ cargo metadata --format-version 1 | jq '.packages[].name'
 ```
 
 For workspace patterns and dependency resolution details, see [references/workspace-patterns.md](references/workspace-patterns.md).
+
+### 8. Edition 2024 migration
+
+Edition 2024 (Rust 1.85+) is the default for `cargo new`. Migrate one crate at a time:
+
+```bash
+# 1. Apply automatic fixes while still on the old edition
+cargo fix --edition --all-targets
+
+# 2. Set edition = "2024" in Cargo.toml (and resolver = "3" in a virtual workspace)
+
+# 3. Build and fix what cargo fix could not
+cargo check --all-targets
+```
+
+| Change in 2024 | Old code | Fix |
+|----------------|----------|-----|
+| `extern` blocks must be unsafe | `extern "C" { fn f(); }` | `unsafe extern "C" { fn f(); }`; mark safe items `safe fn` |
+| Unsafe attributes | `#[no_mangle]`, `#[export_name]`, `#[link_section]` | `#[unsafe(no_mangle)]` etc. |
+| `unsafe fn` body is not an unsafe context | `unsafe fn f(p: *const u8) -> u8 { *p }` | Wrap operations in `unsafe { }` (lint warns) |
+| References to `static mut` | `let r = &COUNTER;` | Error; use `&raw const COUNTER`, atomics, or `UnsafeCell` |
+| `std::env::set_var` / `remove_var` | Safe call | Now `unsafe`; call before spawning threads |
+| `gen` is reserved | `let gen = 1;` | Rename or use `r#gen` |
+| RPIT captures all in-scope lifetimes | `-> impl Iterator` borrowing an argument | Usually just works; restrict with `+ use<>` |
+| Default resolver `"3"` | `resolver = "2"` | MSRV-aware: needs `rust-version` to pick compatible deps |
+
+The `unsafe extern` and `#[unsafe(...)]` spellings are accepted from Rust 1.82 on every edition. Use them
+unconditionally in crates that must build on both.
 
 ## Related skills
 

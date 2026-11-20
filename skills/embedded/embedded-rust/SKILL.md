@@ -27,7 +27,7 @@ Guide agents through embedded Rust development: flashing and debugging with prob
 [package]
 name = "my-firmware"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 [dependencies]
 cortex-m = { version = "0.7", features = ["critical-section-single-core"] }

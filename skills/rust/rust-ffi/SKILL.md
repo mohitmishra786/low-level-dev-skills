@@ -26,7 +26,8 @@ Guide agents through Rust's Foreign Function Interface: calling C from Rust with
 // Declare external C functions manually
 use std::ffi::{c_int, c_char, c_void, CStr, CString};
 
-extern "C" {
+// `unsafe extern` is required in edition 2024 (and accepted since Rust 1.82)
+unsafe extern "C" {
     fn strlen(s: *const c_char) -> usize;
     fn malloc(size: usize) -> *mut c_void;
     fn free(ptr: *mut c_void);
@@ -199,20 +200,21 @@ cbindgen = "0.27"
 
 ```rust
 // src/lib.rs — exported Rust API
-#[no_mangle]
+// #[unsafe(no_mangle)]: required spelling in edition 2024, accepted since 1.82
+#[unsafe(no_mangle)]
 pub extern "C" fn mylib_create(config: *const std::ffi::c_char) -> *mut MyLib {
     // ...
     Box::into_raw(Box::new(instance))
 }
 
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn mylib_destroy(ptr: *mut MyLib) {
     if !ptr.is_null() {
         unsafe { drop(Box::from_raw(ptr)) };
     }
 }
 
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn mylib_process(
     ptr: *mut MyLib,
     data: *const u8,

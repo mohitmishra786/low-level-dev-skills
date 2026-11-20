@@ -31,7 +31,8 @@
 | `aarch64-unknown-linux-musl` | ARM64 Linux static | |
 | `armv7-unknown-linux-gnueabihf` | ARM 32-bit Linux | Raspberry Pi 2/3 (32-bit) |
 | `wasm32-unknown-unknown` | WASM browser | No std |
-| `wasm32-wasi` | WASM WASI | Some std |
+| `wasm32-wasip1` | WASM WASI preview 1 (formerly `wasm32-wasi`) | Some std |
+| `wasm32-wasip2` | WASM component, WASI 0.2 | Some std |
 | `x86_64-unknown-freebsd` | FreeBSD | |
 | `aarch64-linux-android` | Android ARM64 | |
 | `x86_64-linux-android` | Android x86-64 | |
