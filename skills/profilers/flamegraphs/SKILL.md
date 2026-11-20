@@ -154,3 +154,4 @@ For tool installation, stackcollapse scripts, and palette options, see [referenc
 - Use `skills/profilers/linux-perf` to collect perf data
 - Use `skills/profilers/valgrind` to collect Callgrind data
 - Use `skills/compilers/clang` for LLVM PGO from sampling profiles
+- Use `skills/profilers/tracing-profilers` when you need per-event timelines rather than aggregated stacks

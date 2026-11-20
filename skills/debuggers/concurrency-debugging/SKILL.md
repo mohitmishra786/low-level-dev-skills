@@ -237,3 +237,4 @@ println!("{}", *counter.lock().unwrap());
 - Use `skills/profilers/valgrind` for Helgrind and Memcheck integration
 - Use `skills/debuggers/gdb` for advanced GDB thread inspection
 - Use `skills/low-level-programming/memory-model` for C++/Rust memory ordering theory
+- Use `skills/profilers/tracing-profilers` to see waits and lock hand-offs on a timeline
