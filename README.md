@@ -45,7 +45,7 @@ npx skills add mohitmishra786/low-level-dev-skills --skill freertos zephyr openo
 npx skills add mohitmishra786/low-level-dev-skills --skill baremetal-startup mmio-and-bit-manipulation interrupts-and-exceptions-baremetal peripherals-from-datasheet gpio-baremetal uart-serial-baremetal spi-i2c-baremetal timers-pwm-baremetal adc-dac-baremetal dma-baremetal stm32-baremetal datasheet-and-refmanual-reading bootloaders-embedded low-power-embedded
 
 # Kernel & driver development
-npx skills add mohitmishra786/low-level-dev-skills --skill linux-kernel-architecture kernel-memory-management kernel-concurrency device-tree platform-device-model writing-char-drivers bus-drivers-i2c-spi kernel-debugging-advanced qemu-for-kernel-development kernel-internals device-drivers
+npx skills add mohitmishra786/low-level-dev-skills --skill linux-kernel-architecture kernel-memory-management kernel-concurrency device-tree platform-device-model writing-char-drivers bus-drivers-i2c-spi kernel-debugging-advanced qemu-for-kernel-development kernel-internals device-drivers rust-for-linux
 
 # Computer architecture
 npx skills add mohitmishra786/low-level-dev-skills --skill cpu-pipelines-and-hazards memory-hierarchy-and-caches virtual-memory-paging-and-tlb abi-and-calling-conventions branch-prediction-and-speculation
@@ -357,7 +357,7 @@ After installation, invoke skills in your AI agent:
 | `bootloaders-embedded` | VTOR relocation, app validation, OTA/DFU basics |
 | `low-power-embedded` | Sleep/stop/standby, clock gating, wake sources |
 
-### Kernel & Driver Development (9 skills)
+### Kernel & Driver Development (10 skills)
 
 | Skill | Purpose |
 |-------|---------|
@@ -370,6 +370,7 @@ After installation, invoke skills in your AI agent:
 | `bus-drivers-i2c-spi` | i2c_driver, spi_driver, regmap client drivers |
 | `kernel-debugging-advanced` | ftrace, trace-cmd, kprobes, kgdb, vmcore |
 | `qemu-for-kernel-development` | QEMU + rootfs for kernel/module iteration |
+| `rust-for-linux` | Rust kernel modules and drivers: module!, pin-init, KBox/KVec, misc/platform drivers, KUnit |
 
 ### Computer Architecture (5 skills)
 
@@ -505,7 +506,7 @@ After installation, invoke skills in your AI agent:
 | `carbon-lang` | Carbon syntax, C++ interop, carbon-toolchain, migration |
 | `hare-lang` | hare build/test, stdlib, C FFI, tagged union errors |
 
-**Total: 142 skills**
+**Total: 143 skills**
 
 ## Design
 

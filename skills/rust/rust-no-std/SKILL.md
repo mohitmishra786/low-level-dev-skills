@@ -241,3 +241,4 @@ cargo build --target thumbv7em-none-eabihf
 - Use `skills/rust/rust-cross` for cross-compilation target setup
 - Use `skills/rust/rust-unsafe` for unsafe patterns needed in allocator implementations
 - Use `skills/embedded/linker-scripts` for heap region placement in bare-metal targets
+- Use `skills/kernel-dev/rust-for-linux` for Rust inside the Linux kernel (`kernel` crate, pin-init)

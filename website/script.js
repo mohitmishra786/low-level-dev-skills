@@ -98,6 +98,7 @@ const skills = [
   { name: "linux-kernel-architecture", category: "kernel-dev", desc: "Provide a mental map of the Linux kernel: boot sequence, major subsystems, key data structures, and where to look in source \u2014 complementi..." },
   { name: "platform-device-model", category: "kernel-dev", desc: "Explain the Linux driver model for platform (and similar) buses: struct device, device_driver, probe/remove, resource acquisition, sysfs,..." },
   { name: "qemu-for-kernel-development", category: "kernel-dev", desc: "Guide agents through QEMU-based kernel and driver development workflows: building/booting custom kernels, attaching virtio block/network,..." },
+  { name: "rust-for-linux", category: "kernel-dev", desc: "Guide agents through writing Linux kernel code in Rust: toolchain setup and rustavailable, the module! macro, pin-init for locks and re..." },
   { name: "writing-char-drivers", category: "kernel-dev", desc: "Guide agents through Linux character device implementation: struct file_operations, cdev registration, safe userspace copies, ioctl desig..." },
   // languages
   { name: "carbon-lang", category: "languages", desc: "Guide agents through the Carbon programming language: syntax fundamentals, bidirectional C++ interoperability via Carbon.h, building from..." },
@@ -235,7 +236,7 @@ const tagInstalls = [
     color: 'red',
     subcategories: [
       { label: 'Architecture & MM', skills: ['linux-kernel-architecture', 'kernel-memory-management', 'kernel-concurrency', 'kernel-internals'] },
-      { label: 'Driver Model', skills: ['device-tree', 'platform-device-model', 'writing-char-drivers', 'bus-drivers-i2c-spi', 'device-drivers'] },
+      { label: 'Driver Model', skills: ['device-tree', 'platform-device-model', 'writing-char-drivers', 'bus-drivers-i2c-spi', 'device-drivers', 'rust-for-linux'] },
       { label: 'Debug & Test', skills: ['kernel-debugging', 'kernel-debugging-advanced', 'kernel-testing', 'qemu-for-kernel-development'] },
     ],
   },
@@ -329,7 +330,7 @@ const steps = [
 const treeStructure = `<span class="dir">low-level-dev-skills/</span>
 ├── <span class="file">README.md</span>
 ├── <span class="file">AGENTS.md</span>
-└── <span class="dir">skills/</span>    <span class="comment"># 142 skills across 25 categories</span>
+└── <span class="dir">skills/</span>    <span class="comment"># 143 skills across 25 categories</span>
     ├── <span class="dir">allocators/</span>  <span class="comment"># custom-allocators numa-programming</span>
     ├── <span class="dir">async-io/</span>  <span class="comment"># af-xdp dpdk io-uring</span>
     ├── <span class="dir">baremetal/</span>  <span class="comment"># adc-dac-baremetal baremetal-startup bootloaders-embedded datasheet-and-refmanual-reading dma-baremetal gpio-baremetal +8 more</span>
@@ -343,7 +344,7 @@ const treeStructure = `<span class="dir">low-level-dev-skills/</span>
     ├── <span class="dir">gpu/</span>  <span class="comment"># cuda cuda-debugging cuda-profiling gpu-memory-model hip-rocm triton-lang</span>
     ├── <span class="dir">hpc/</span>  <span class="comment"># mpi openmp rdma-verbs</span>
     ├── <span class="dir">kernel/</span>  <span class="comment"># device-drivers kernel-debugging kernel-internals kernel-testing os-dev-scratch</span>
-    ├── <span class="dir">kernel-dev/</span>  <span class="comment"># bus-drivers-i2c-spi device-tree kernel-concurrency kernel-debugging-advanced kernel-memory-management linux-kernel-architecture +3 more</span>
+    ├── <span class="dir">kernel-dev/</span>  <span class="comment"># bus-drivers-i2c-spi device-tree kernel-concurrency kernel-debugging-advanced kernel-memory-management linux-kernel-architecture +4 more</span>
     ├── <span class="dir">languages/</span>  <span class="comment"># carbon-lang hare-lang</span>
     ├── <span class="dir">low-level-programming/</span>  <span class="comment"># assembly-arm assembly-riscv assembly-x86 cpp-coroutines cpu-cache-opt interpreters +3 more</span>
     ├── <span class="dir">observability/</span>  <span class="comment"># ebpf ebpf-rust</span>
