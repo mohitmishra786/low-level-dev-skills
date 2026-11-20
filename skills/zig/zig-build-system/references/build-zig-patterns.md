@@ -120,6 +120,7 @@ mylib.root_module.addCSourceFiles(.{
 });
 mylib.root_module.addIncludePath(b.path("vendor/mylib/include"));
 mylib.installHeader(b.path("vendor/mylib/include/mylib.h"), "mylib.h");
+b.installArtifact(mylib);  // installs libmylib.a and, with it, include/mylib.h
 
 exe.root_module.linkLibrary(mylib);
 exe.root_module.addIncludePath(b.path("vendor/mylib/include"));
@@ -149,6 +150,7 @@ const integration_tests = b.addTest(.{
         .optimize = optimize,
         .imports = &.{.{ .name = "mylib", .module = mylib_mod }},
     }),
+    .filters = b.args orelse &.{},
 });
 
 const test_step = b.step("test", "Run all tests");
@@ -170,8 +172,9 @@ b.installDirectory(.{
     .install_subdir = "share/myapp/assets",
 });
 
-// Headers installed alongside a library artifact
+// Headers installed alongside a library artifact (only when the library is installed)
 mylib.installHeader(b.path("src/mylib.h"), "mylib.h");
+b.installArtifact(mylib);
 
 // Change install prefix at build time
 // zig build --prefix /usr/local

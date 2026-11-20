@@ -234,7 +234,12 @@ fn fuzzParse(_: void, smith: *std.testing.Smith) !void {
 
 test "fuzz parseInput" {
     try std.testing.fuzz({}, fuzzParse, .{
-        .corpus = &.{ "\xef\xbe\xad\xde", "abc" },  // seed inputs
+        // Corpus entries are Smith input streams, not raw parser bytes:
+        // slice() reads a 4-byte little-endian length, then that many bytes
+        .corpus = &.{
+            "\x04\x00\x00\x00\xef\xbe\xad\xde",  // slice = ef be ad de (the magic)
+            "\x03\x00\x00\x00abc",                // slice = "abc"
+        },
     });
 }
 ```
@@ -243,12 +248,10 @@ test "fuzz parseInput" {
 # Normal test run: each fuzz test runs once per corpus entry, plus once with empty input
 zig build test
 
-# Fuzz until stopped (implies --webui, live coverage in the browser), or for N runs
-zig build test --fuzz
-zig build test --fuzz=100K
-
-# Zig 0.16.0: the test runner fails to compile in Debug fuzz mode; use a release mode
+# Fuzz until stopped (implies --webui, live coverage in the browser), or for N runs.
+# Zig 0.16.0's test runner fails to compile in Debug fuzz mode, so use a release mode.
 zig build test --fuzz -Doptimize=ReleaseSafe
+zig build test --fuzz=100K -Doptimize=ReleaseSafe
 ```
 
 Other `Smith` helpers: `value(T)`, `valueRangeAtMost(T, lo, hi)`, `bytes(buf)`, `eos()` (end of

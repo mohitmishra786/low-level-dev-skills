@@ -225,6 +225,8 @@ const app_mod = b.createModule(.{
         .{ .name = "utils", .module = utils },
     },
 });
+const app = b.addExecutable(.{ .name = "app", .root_module = app_mod });
+b.installArtifact(app);
 ```
 
 In Zig source:

@@ -140,6 +140,8 @@ const exe = b.addExecutable(.{
 ```zig
 const std = @import("std");
 
+const Point = struct { x: i32, y: i32 };
+
 pub fn main() !void {
     const x: u32 = 42;
     const name = "world";

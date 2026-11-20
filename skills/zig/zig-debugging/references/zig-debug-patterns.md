@@ -10,6 +10,8 @@ pub const panic = std.debug.FullPanic(myPanic);
 
 fn myPanic(msg: []const u8, first_trace_addr: ?usize) noreturn {
     std.debug.print("\n=== PANIC ===\n{s}\n", .{msg});
+    // Error return trace: where an error came from before it hit `catch unreachable`
+    if (@errorReturnTrace()) |trace| std.debug.dumpErrorReturnTrace(trace);
     std.debug.dumpCurrentStackTrace(.{ .first_address = first_trace_addr orelse @returnAddress() });
     std.process.exit(1);
 }

@@ -59,8 +59,9 @@
 | `thumb-freestanding-eabi -mcpu cortex_m0plus` | Cortex-M0/M0+ | RP2040 core |
 | `thumb-freestanding-eabi -mcpu cortex_m3` | Cortex-M3 | STM32F1, LPC17xx |
 | `thumb-freestanding-eabi -mcpu cortex_m4` | Cortex-M4 (soft-float) | |
-| `thumb-freestanding-eabihf -mcpu cortex_m4+vfp4d16sp` | Cortex-M4F (hard-float) | STM32F4, nRF52 |
-| `thumb-freestanding-eabihf -mcpu cortex_m7+fp_armv8d16` | Cortex-M7 with DP FPU | STM32F7/H7 |
+| `thumb-freestanding-eabihf -mcpu cortex_m4+vfp4d16sp` | Cortex-M4F (hard-float) | STM32F4, nRF52832/833/840 (nRF52805/810/811/820 have no FPU: use the soft-float row) |
+| `thumb-freestanding-eabihf -mcpu cortex_m7+fp_armv8d16` | Cortex-M7 with DP FPU | STM32F76x/F77x, STM32H7 |
+| `thumb-freestanding-eabihf -mcpu cortex_m7+fp_armv8d16sp` | Cortex-M7 with SP FPU | STM32F72x/F73x/F74x/F75x |
 | `thumb-freestanding-eabi -mcpu cortex_m23` | Cortex-M23 | |
 | `thumb-freestanding-eabi -mcpu cortex_m33` | Cortex-M33 (soft-float) | |
 | `thumb-freestanding-eabihf -mcpu cortex_m33+fp_armv8d16sp` | Cortex-M33 with FPU | STM32U5, nRF9160 |

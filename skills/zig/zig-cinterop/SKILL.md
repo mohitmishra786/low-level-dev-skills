@@ -53,6 +53,15 @@ const exe = b.addExecutable(.{
         .imports = &.{.{ .name = "c", .module = c_h.createModule() }},
     }),
 });
+
+// The header only declares the API; link the implementation too
+exe.root_module.addIncludePath(b.path("include/"));
+exe.root_module.addCSourceFile(.{ .file = b.path("src/mylib.c"), .flags = &.{"-std=c11"} });
+// or, for a prebuilt library:
+// exe.root_module.addLibraryPath(b.path("vendor/lib"));
+// exe.root_module.linkSystemLibrary("mylib", .{});
+
+b.installArtifact(exe);
 ```
 
 ```zig
