@@ -1,6 +1,6 @@
 ---
 name: modern-c-cpp-standards
-description: Modern C and C++ standards skill for C23, C2y and C++20/26. Use when a compiler upgrade changes the default language standard, migrating code to C23 or C++20, using C23 features such as nullptr, constexpr, #embed and checked arithmetic, trying C++26 static reflection or contracts, or detecting language features portably. Activates on queries about C23, C2y, C++26, -std=c23, -std=c++26, -freflection, -fcontracts, pre/post/contract_assert, std::meta, #embed, _BitInt, stdckdint.h, inplace_vector, or __cpp feature-test macros.
+description: "Modern C and C++ standards skill for C23, C2y and C++20/26. Use when a compiler upgrade changes the default language standard, migrating code to C23 or C++20, using C23 features such as nullptr, constexpr, #embed and checked arithmetic, trying C++26 static reflection or contracts, or detecting language features portably. Activates on queries about C23, C2y, C++26, -std=c23, -std=c++26, -freflection, -fcontracts, pre/post/contract_assert, std::meta, #embed, _BitInt, stdckdint.h, inplace_vector, or __cpp feature-test macros."
 ---
 
 # Modern C and C++ Standards
@@ -88,7 +88,8 @@ int main(void) {
 ```
 
 `#embed` needs GCC 15+ (GCC 14 reports `invalid preprocessing directive #embed`). Clang 23 builds
-this file with `-std=c23`.
+this file with `-std=c23`. `<stdbit.h>` and `<stdckdint.h>` come from the C library: glibc 2.39+
+ships `<stdbit.h>`, so a new compiler on an older glibc still fails on that include.
 
 C2y (next C standard) in GCC 16 with `-std=c2y`:
 
@@ -237,13 +238,22 @@ With `_GLIBCXX_ASSERTIONS`, `v[5]` on a 3-element vector aborts with
 |-------|---------|
 | `__STDC_VERSION__ >= 202311L` | C23 |
 | `__has_include(<stdckdint.h>)` | Checked arithmetic header available |
-| `__has_embed("file")` | `#embed` can find the file |
+| `__has_embed("file")` | `#embed` can find the file (guard with `#ifdef __has_embed`; GCC 14 errors on it) |
 | `__cplusplus >= 202002L` | C++20 (C++26 mode on GCC 16/Clang 23 reports `202400L`) |
 | `__cpp_impl_reflection` | Reflection (GCC 16: `202603L`) |
 | `__cpp_contracts` | Contracts (GCC 16: `202502L`) |
 | `__cpp_expansion_statements` | `template for` |
 | `__cpp_pack_indexing` | `ts...[i]` |
 | `__cpp_lib_inplace_vector` | `std::inplace_vector` (include `<version>` first) |
+
+```c
+/* GCC 14 fails to preprocess `#if __has_embed(...)`, so test the operator first */
+#ifdef __has_embed
+#  if __has_embed("table.bin")
+#    define HAVE_EMBEDDED_TABLE 1
+#  endif
+#endif
+```
 
 ```cpp
 #include <version>
