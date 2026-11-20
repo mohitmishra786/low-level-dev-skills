@@ -237,3 +237,4 @@ make olddefconfig
 - `skills/runtimes/fuzzing` — userspace fuzzing concepts (libFuzzer)
 - `skills/runtimes/sanitizers` — KASAN/KMSAN for kernel
 - `skills/virtualization/qemu-kvm` — QEMU for kernel boot testing
+- Use `skills/kernel-dev/rust-for-linux` for KUnit tests written in Rust (`#[kunit_tests]`, doctests)
