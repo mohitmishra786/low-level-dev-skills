@@ -133,26 +133,30 @@ cmake --build build-pgo -j$(nproc)
 BOLT reorders functions and basic blocks in the final binary based on profile data, improving instruction cache locality. Works after PGO for additional 5-15%.
 
 ```bash
-# Step 1: Build with relocation support
-clang -O2 -Wl,--emit-relocs prog.c -o prog
+# Step 1: Link with relocations kept, so BOLT can move code freely
+clang -O2 -fuse-ld=lld -Wl,--emit-relocs prog.c -o prog
 
-# Step 2: Collect profile with perf
-perf record -e cycles:u -b ./prog < workload.input
+# Step 2a: Profile with hardware branch records (x86: Intel LBR / AMD BRS)
+perf record -e cycles:u -j any,u -- ./prog < workload.input
 perf2bolt prog -p perf.data -o prog.fdata
 
-# Or use instrumented BOLT
-llvm-bolt prog -instrument -o prog.instr
-./prog.instr < workload.input
-# Generates /tmp/prof.fdata
+# Step 2b: Or instrument (works anywhere, including AArch64)
+llvm-bolt prog -instrument -instrumentation-file=prog.fdata -o prog.instr
+./prog.instr < workload.input          # writes prog.fdata (default: /tmp/prof.fdata)
 
 # Step 3: Apply BOLT optimisation
 llvm-bolt prog -data prog.fdata -o prog.bolt \
     -reorder-blocks=ext-tsp \
-    -reorder-functions=hfsort \
+    -reorder-functions=cdsort \
     -split-functions \
     -split-all-cold \
-    -dyno-stats
+    -dyno-stats                         # prints taken branches / executed instructions before and after
 ```
+
+- Without `--emit-relocs`, BOLT runs in non-relocation mode and can only rewrite functions in
+  place; on AArch64 it warns `non-relocation mode for AArch64 is not fully supported`.
+- `-reorder-functions` accepts `cdsort` (cache-directed sort) and the older `hfsort`.
+- Always check the BOLTed binary produces the same output as the original before shipping it.
 
 ### 7. Verifying PGO impact
 
