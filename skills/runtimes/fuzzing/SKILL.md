@@ -324,3 +324,4 @@ For fuzz target templates, corpus seed examples, and OSS-Fuzz integration guidan
 - Use `skills/debuggers/gdb` to debug crash inputs found by the fuzzer
 - Use `skills/zig/zig-testing` for Zig `build test --fuzz` workflows
 - Use `skills/security/kernel-security` for kernel fuzzing with syzkaller
+- Use `skills/runtimes/formal-verification` to prove properties for all inputs with Kani or CBMC
