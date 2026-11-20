@@ -233,3 +233,4 @@ For Intel Intrinsics Guide reference and NEON lookup tables, see [references/int
 - Use `skills/compilers/clang` for vectorization remarks and auto-vectorization control
 - Use `skills/profilers/linux-perf` to measure SIMD impact with perf stat counters
 - Use `skills/low-level-programming/assembly-x86` for reading SIMD assembly output
+- Use `skills/low-level-programming/riscv-vector` for RISC-V Vector (RVV) intrinsics
