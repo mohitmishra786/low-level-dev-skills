@@ -23,7 +23,7 @@ Guide agents through writing and modifying GNU ld linker scripts for embedded ta
 ### 1. Linker script anatomy
 
 ```ld
-/* Minimal Cortex-M linker script */
+/* Minimal Cortex-M linker script (works with newlib and C++) */
 
 ENTRY(Reset_Handler)            /* entry point symbol */
 
@@ -42,33 +42,69 @@ SECTIONS
         *(.text.*)
         *(.rodata)
         *(.rodata.*)
+        KEEP(*(.init))          /* newlib/crt0 prologue/epilogue */
+        KEEP(*(.fini))
+        *(.ARM.extab* .gnu.linkonce.armextab.*)  /* unwind data */
         . = ALIGN(4);
-        _etext = .;             /* end of flash content */
     } > FLASH
 
-    .data : AT(_etext)          /* VMA = RAM, LMA = FLASH */
+    .ARM.exidx :                /* unwind tables (C++ exceptions, backtraces) */
+    {
+        __exidx_start = .;
+        *(.ARM.exidx* .gnu.linkonce.armexidx.*)
+        __exidx_end = .;
+    } > FLASH
+
+    .init_array :               /* static constructors, run by __libc_init_array() */
+    {
+        PROVIDE_HIDDEN(__preinit_array_start = .);
+        KEEP(*(.preinit_array*))
+        PROVIDE_HIDDEN(__preinit_array_end = .);
+        PROVIDE_HIDDEN(__init_array_start = .);
+        KEEP(*(SORT(.init_array.*)))
+        KEEP(*(.init_array*))
+        PROVIDE_HIDDEN(__init_array_end = .);
+        PROVIDE_HIDDEN(__fini_array_start = .);
+        KEEP(*(SORT(.fini_array.*)))
+        KEEP(*(.fini_array*))
+        PROVIDE_HIDDEN(__fini_array_end = .);
+        . = ALIGN(4);
+        _etext = .;             /* end of flash code/constants */
+    } > FLASH
+
+    .data :                     /* VMA = RAM, LMA = FLASH */
     {
         _sdata = .;
         *(.data)
         *(.data.*)
         . = ALIGN(4);
         _edata = .;
-    } > RAM
+    } > RAM AT > FLASH
+    _sidata = LOADADDR(.data);  /* LMA of .data, used by startup copy loop */
 
-    .bss :
+    .bss (NOLOAD) :
     {
         _sbss = .;
+        __bss_start__ = _sbss;  /* name newlib crt0 expects */
         *(.bss)
         *(.bss.*)
         *(COMMON)
         . = ALIGN(4);
         _ebss = .;
+        __bss_end__ = _ebss;
     } > RAM
+
+    PROVIDE(end = _ebss);       /* heap start for newlib _sbrk */
 
     /* Stack at top of RAM */
     _estack = ORIGIN(RAM) + LENGTH(RAM);
 }
 ```
+
+The `.init`/`.fini`, `.ARM.exidx`/`.ARM.extab` and `.init_array` rules are needed as soon as newlib,
+libstdc++ or C++ exceptions are linked in. Without them those sections become orphans after `.text`
+and overlap the load address of `.data`. `__bss_start__`, `__bss_end__` and `end` are the names newlib's
+`crt0` and `_sbrk` expect.
 
 ### 2. VMA vs LMA
 
@@ -78,16 +114,19 @@ SECTIONS
 For `.data`: stored in flash (LMA), copied to RAM at startup (VMA).
 
 ```ld
-/* AT() sets LMA explicitly */
-.data : AT(ADDR(.text) + SIZEOF(.text))
+/* VMA in RAM, LMA in the next free spot of FLASH */
+.data :
 {
     _sdata = .;
     *(.data)
     _edata = .;
-} > RAM          /* VMA goes in RAM */
+} > RAM AT > FLASH
+_sidata = LOADADDR(.data);       /* where startup code copies from */
 ```
 
-LMA of `.data` is automatically placed after `.text` if you use `AT(_etext)`.
+Prefer `> RAM AT > FLASH` over `AT(_etext)` or `AT(ADDR(.text) + SIZEOF(.text))`. The region form puts the
+LMA after every section already placed in FLASH (`.ARM.exidx`, `.init_array`, ...). A fixed address
+ignores them, and they end up overlapping `.data`.
 
 ### 3. Startup .bss / .data initialization
 
@@ -116,18 +155,7 @@ void Reset_Handler(void) {
 }
 ```
 
-Linker script provides `_sidata` (LMA of `.data`):
-
-```ld
-.data : AT(_etext)
-{
-    _sdata = .;
-    *(.data)
-    _edata = .;
-} > RAM
-
-_sidata = LOADADDR(.data);    /* LMA of .data for startup code */
-```
+The linker script provides `_sidata` with `_sidata = LOADADDR(.data);`, as in section 1.
 
 ### 4. Placing code in specific regions
 
@@ -137,24 +165,32 @@ MEMORY
 {
     FLASH (rx) : ORIGIN = 0x08000000, LENGTH = 512K
     RAM   (rwx): ORIGIN = 0x20000000, LENGTH = 128K
-    CCM   (rwx): ORIGIN = 0x10000000, LENGTH = 64K   /* Cortex-M4 CCM */
+    CCM   (rw) : ORIGIN = 0x10000000, LENGTH = 64K   /* STM32F4 CCM: data only */
 }
 
-.fast_code : AT(_etext)
+.fast_code :
 {
+    . = ALIGN(4);
     _sfast = .;
     *(.fast_code)   /* sections marked __attribute__((section(".fast_code"))) */
+    . = ALIGN(4);
     _efast = .;
-} > CCM              /* runs from CCM RAM */
+} > RAM AT > FLASH   /* runs from SRAM, stored in flash */
+_sifast = LOADADDR(.fast_code);
 ```
 
 ```c
 // Mark a function to go in fast_code section
-__attribute__((section(".fast_code")))
+__attribute__((section(".fast_code"), noinline))  /* noinline: keep it out of flash callers */
 void critical_isr_handler(void) {
-    // runs from CCM RAM
+    // runs from SRAM; startup must copy _sifast -> [_sfast, _efast) like .data
 }
 ```
+
+On STM32F4 the CCM RAM is connected to the D-bus only and cannot execute code. Use it for stacks and
+data. Some parts (STM32F3, G4) have executable CCM SRAM; check the bus matrix in the reference manual.
+Flash and SRAM are further apart than the Thumb-2 `BL` range; GNU ld inserts a long-branch veneer
+(`__<name>_veneer`) automatically.
 
 ### 5. KEEP, ALIGN, PROVIDE
 
@@ -217,7 +253,10 @@ void SysTick_Handler(void) {
 | `undefined reference to '_estack'` | Missing linker script symbol | Define `_estack` in linker script |
 | `no rule to process file` | `.ld` extension not recognized | Pass with `-T script.ld` |
 | `cannot find linker script` | Wrong path | Use `-L dir -T name.ld` |
-| Data section `.data` at wrong address | LMA not set | Add `AT(_etext)` after `.data` section definition |
+| Data section `.data` at wrong address | LMA not set | Use `} > RAM AT > FLASH` and `_sidata = LOADADDR(.data)` |
+| `section .init LMA [...] overlaps section .data LMA` | Orphan newlib/C++ sections after `.text` | Add `.init`/`.fini`, `.ARM.exidx`, `.init_array` rules (section 1) |
+| `undefined reference to '__bss_start__'` / `'end'` | newlib `crt0` / `_sbrk` symbol names | Define `__bss_start__`, `__bss_end__`, `PROVIDE(end = ...)` |
+| `undefined reference to '__exidx_start'` | C++ unwinder needs exidx bounds | Define `__exidx_start`/`__exidx_end` around `.ARM.exidx` |
 
 ```bash
 # Analyze section sizes
