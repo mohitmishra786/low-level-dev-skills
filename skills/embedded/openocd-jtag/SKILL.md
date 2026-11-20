@@ -34,18 +34,34 @@ Most Cortex-M microcontrollers support both. Use SWD when pin count is limited.
 
 ### 2. OpenOCD configuration
 
+Use one adapter per config file. Select the transport after the interface and before the target script.
+In Tcl, `#` starts a comment only at the start of a command, so use `;#` for a trailing comment.
+
 ```tcl
-# openocd.cfg — CMSIS-DAP (ST-Link v2, DAPLink)
+# openocd.cfg — CMSIS-DAP probes (DAPLink, Picoprobe/debugprobe, MCU-Link)
 source [find interface/cmsis-dap.cfg]
-source [find target/stm32f4x.cfg]
-adapter speed 4000              # kHz
-
-# For SWD explicitly
 transport select swd
+source [find target/stm32f4x.cfg]
+adapter speed 4000              ;# kHz
+```
 
-# J-Link adapter
+```tcl
+# openocd.cfg — ST-Link v2 / v2-1 / V3 (ST's own protocol, not CMSIS-DAP)
+source [find interface/stlink.cfg]
+transport select hla_swd
+source [find target/stm32f4x.cfg]
+adapter speed 4000              ;# kHz
+
+# Alternative: interface/stlink-dap.cfg with "transport select dapdirect_swd"
+# exposes the ARM DAP directly instead of the hla API.
+# Needs ST-LINK/V2 firmware V2J24 or later, or an STLINK-V3.
+```
+
+```tcl
+# openocd.cfg — SEGGER J-Link
 source [find interface/jlink.cfg]
-jlink serial 123456789          # optional: select by serial
+adapter serial 123456789        ;# optional: select probe by serial number
+transport select swd
 source [find target/nrf52.cfg]
 adapter speed 8000
 ```
