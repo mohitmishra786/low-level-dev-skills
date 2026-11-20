@@ -91,7 +91,7 @@ zig build-exe src/main.zig \
 
 # Common target triples: cpu-os-abi
 # x86_64-linux-gnu, x86_64-windows-gnu, aarch64-macos-none
-# thumbv7m-freestanding-eabi, wasm32-wasi, wasm32-freestanding
+# thumb-freestanding-eabi (+ -mcpu cortex_m3), wasm32-wasi, wasm32-freestanding
 ```
 
 ### 4. zig cc — C compiler drop-in

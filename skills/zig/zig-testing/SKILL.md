@@ -1,13 +1,13 @@
 ---
 name: zig-testing
-description: Zig testing skill for writing and running tests. Use when using zig build test, writing comptime tests, using test filters, working with test allocators to detect leaks, or using Zig's built-in fuzz testing (0.14+). Activates on queries about Zig tests, zig test, zig build test, comptime testing, test allocators, Zig fuzz testing, or detecting memory leaks in Zig tests.
+description: Zig testing skill for writing and running tests. Use when using zig build test, writing comptime tests, using test filters, working with test allocators to detect leaks, or using Zig's built-in fuzz testing (std.testing.fuzz). Activates on queries about Zig tests, zig test, zig build test, comptime testing, test allocators, Zig fuzz testing, or detecting memory leaks in Zig tests.
 ---
 
 # Zig Testing
 
 ## Purpose
 
-Guide agents through Zig's testing system: `zig build test` and `zig test`, comptime testing patterns, test filters, the test allocator for leak detection, and Zig's built-in fuzz testing introduced in 0.14.
+Guide agents through Zig's testing system: `zig build test` and `zig test`, comptime testing patterns, test filters, the test allocator for leak detection, and Zig's built-in fuzz testing.
 
 ## Triggers
 
@@ -80,20 +80,24 @@ pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
-    // Unit test step
-    const unit_tests = b.addTest(.{
-        .root_source_file = b.path("src/main.zig"),
+    const math_mod = b.createModule(.{
+        .root_source_file = b.path("src/math.zig"),
         .target = target,
         .optimize = optimize,
     });
 
+    // Unit test step
+    const unit_tests = b.addTest(.{ .root_module = math_mod });
     const run_unit_tests = b.addRunArtifact(unit_tests);
 
-    // Integration tests (separate executable)
+    // Integration tests (separate test binary that imports the module)
     const integration_tests = b.addTest(.{
-        .root_source_file = b.path("tests/integration.zig"),
-        .target = target,
-        .optimize = optimize,
+        .root_module = b.createModule(.{
+            .root_source_file = b.path("tests/integration.zig"),
+            .target = target,
+            .optimize = optimize,
+            .imports = &.{.{ .name = "math", .module = math_mod }},
+        }),
     });
     const run_integration = b.addRunArtifact(integration_tests);
 
@@ -110,33 +114,34 @@ pub fn build(b: *std.Build) void {
 
 ### 3. Test allocator — leak detection
 
-The `std.testing.allocator` wraps a `GeneralPurposeAllocator` in test mode and reports leaks at the end of each test:
+`std.testing.allocator` is a `std.heap.DebugAllocator` that reports leaks at the end of each test:
 
 ```zig
 const std = @import("std");
 const testing = std.testing;
 
 test "ArrayList: no leaks" {
-    // testing.allocator detects leaks and reports them
-    var list = std.ArrayList(u32).init(testing.allocator);
-    defer list.deinit();   // MUST defer to return memory
+    // std.ArrayList is unmanaged since 0.15: pass the allocator to each call
+    var list: std.ArrayList(u32) = .empty;
+    defer list.deinit(testing.allocator);   // MUST defer to return memory
 
-    try list.append(1);
-    try list.append(2);
-    try list.append(3);
+    try list.append(testing.allocator, 1);
+    try list.append(testing.allocator, 2);
+    try list.append(testing.allocator, 3);
 
     try testing.expectEqual(@as(usize, 3), list.items.len);
     // If you forget defer list.deinit(), test reports a leak
 }
 
 test "custom allocation" {
-    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    // DebugAllocator replaced GeneralPurposeAllocator
+    var da: std.heap.DebugAllocator(.{}) = .init;
     defer {
-        const leaked = gpa.deinit();
+        const leaked = da.deinit();
         // .ok means no leaks; .leak means memory was not freed
         testing.expect(leaked == .ok) catch @panic("memory leaked!");
     }
-    const allocator = gpa.allocator();
+    const allocator = da.allocator();
 
     const buf = try allocator.alloc(u8, 1024);
     defer allocator.free(buf);  // leak if forgotten
@@ -201,61 +206,57 @@ test "type properties" {
     comptime {
         try testing.expectEqual(8, @alignOf(u64));
         try testing.expectEqual(4, @sizeOf(u32));
-        try testing.expectEqual(true, @typeInfo(u8).Int.signedness == .unsigned);
+        try testing.expectEqual(true, @typeInfo(u8).int.signedness == .unsigned);
     }
 }
 ```
 
-### 6. Fuzz testing (Zig 0.14+)
+### 6. Fuzz testing
 
-Zig 0.14 introduced a built-in fuzzer using coverage-guided fuzzing:
+Zig has a built-in coverage-guided fuzzer, driven by `zig build test --fuzz`. Since 0.16 a fuzz
+test receives a `*std.testing.Smith`, which hands out fuzzer-chosen values, instead of a byte slice.
 
 ```zig
-// fuzz_target.zig
 const std = @import("std");
 
-// Fuzz entry point: receives arbitrary bytes
-export fn fuzz(input: []const u8) void {
-    // Call the function under test with fuzz input
-    parseInput(input) catch {};
-}
-
-fn parseInput(data: []const u8) !void {
+fn parseInput(data: []const u8) !u32 {
     if (data.len < 4) return error.TooShort;
     const magic = std.mem.readInt(u32, data[0..4], .little);
     if (magic != 0xDEADBEEF) return error.BadMagic;
-    // ... more parsing
+    return magic;
+}
+
+fn fuzzParse(_: void, smith: *std.testing.Smith) !void {
+    var buf: [256]u8 = undefined;
+    const len = smith.slice(&buf);   // fuzzer-chosen length and bytes
+    _ = parseInput(buf[0..len]) catch {};
+}
+
+test "fuzz parseInput" {
+    try std.testing.fuzz({}, fuzzParse, .{
+        // Corpus entries are Smith input streams, not raw parser bytes:
+        // slice() reads a 4-byte little-endian length, then that many bytes
+        .corpus = &.{
+            "\x04\x00\x00\x00\xef\xbe\xad\xde",  // slice = ef be ad de (the magic)
+            "\x03\x00\x00\x00abc",                // slice = "abc"
+        },
+    });
 }
 ```
 
 ```bash
-# Run the fuzzer
-zig build fuzz -Dfuzz=fuzz_target
+# Normal test run: each fuzz test runs once per corpus entry, plus once with empty input
+zig build test
 
-# With corpus directory
-zig build fuzz -Dfuzz=fuzz_target -- corpus/
-
-# The fuzzer generates and saves interesting inputs to corpus/
-# Crashes are saved as artifacts
-
-# Reproduce a specific crash
-zig build test-fuzz -- corpus/crash-xxxx
+# Fuzz until stopped (implies --webui, live coverage in the browser), or for N runs.
+# Zig 0.16.0's test runner fails to compile in Debug fuzz mode, so use a release mode.
+zig build test --fuzz -Doptimize=ReleaseSafe
+zig build test --fuzz=100K -Doptimize=ReleaseSafe
 ```
 
-For build.zig fuzz setup:
-
-```zig
-// build.zig addition
-const fuzz_exe = b.addExecutable(.{
-    .name = "fuzz",
-    .root_source_file = b.path("src/fuzz_target.zig"),
-    .target = target,
-    .optimize = .ReleaseSafe,
-});
-fuzz_exe.root_module.fuzz = true;   // enable fuzzing instrumentation
-const fuzz_step = b.step("fuzz", "Run fuzzer");
-fuzz_step.dependOn(&b.addRunArtifact(fuzz_exe).step);
-```
+Other `Smith` helpers: `value(T)`, `valueRangeAtMost(T, lo, hi)`, `bytes(buf)`, `eos()` (end of
+sequence, for loops). The crash message names the file holding a crashing input. Reproduce it by
+adding the input to `.corpus`, for example with `@embedFile`.
 
 ## Related skills
 

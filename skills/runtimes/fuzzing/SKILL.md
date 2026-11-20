@@ -274,17 +274,26 @@ python infra/helper.py run_fuzzer yourproject fuzz_target
 
 ### 13. Zig fuzz testing
 
-```bash
-# Zig 0.11+ built-in fuzzing
-zig build test --fuzz
+Zig (0.14+) has a built-in coverage-guided fuzzer. Fuzz tests are ordinary `test` blocks that
+call `std.testing.fuzz`. In 0.16 the callback takes a `*std.testing.Smith`:
 
-# fuzz target in build.zig
-# .root_module.fuzz_tests = &.{
-#     .{ .name = "parser", .path = "src/fuzz/parser.zig" },
-# };
+```zig
+fn fuzzParse(_: void, smith: *std.testing.Smith) !void {
+    var buf: [256]u8 = undefined;
+    _ = parse(buf[0..smith.slice(&buf)]) catch {};
+}
+
+test "fuzz parse" {
+    try std.testing.fuzz({}, fuzzParse, .{ .corpus = &.{"seed input"} });
+}
 ```
 
-Zig fuzz integrates with `zig test` and sanitizer builds for native targets.
+```bash
+# Fuzz all fuzz tests (ReleaseSafe works around a Debug-mode test runner bug in 0.16.0)
+zig build test --fuzz -Doptimize=ReleaseSafe
+```
+
+See `skills/zig/zig-testing` for the full workflow.
 
 ### 14. Dictionary files
 

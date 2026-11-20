@@ -107,7 +107,8 @@ fn printLength(thing: anytype) void {
 
 printLength("hello");                // string literal — works
 printLength([_]u8{1, 2, 3});        // array — works
-printLength(std.ArrayList(u32){});   // ArrayList — works
+printLength(list.items);            // slice (e.g. ArrayList items) — works
+// printLength(list) is a compile error: ArrayList has no .len field
 
 // anytype with comptime checks for better errors
 fn serialize(writer: anytype, value: anytype) !void {
@@ -118,15 +119,11 @@ fn serialize(writer: anytype, value: anytype) !void {
     try writer.write(std.mem.asBytes(&value));
 }
 
-// anytype in struct methods (used throughout std library)
-pub fn format(
-    self: MyType,
-    comptime fmt: []const u8,
-    options: std.fmt.FormatOptions,
-    writer: anytype,    // any writer: file, buffer, etc.
-) !void {
-    try writer.print("{} {}", .{self.x, self.y});
+// Custom formatting: since 0.15 format takes a *std.Io.Writer (no anytype writer)
+pub fn format(self: MyType, writer: *std.Io.Writer) std.Io.Writer.Error!void {
+    try writer.print("{d} {d}", .{ self.x, self.y });
 }
+// Use with the {f} specifier: std.debug.print("{f}\n", .{my_value});
 ```
 
 ### 4. Type reflection with @typeInfo
@@ -137,33 +134,33 @@ pub fn format(
 const std = @import("std");
 const TypeInfo = std.builtin.Type;
 
+// @typeInfo tags are lowercase since 0.14; keywords need @"..." (.@"struct", .@"enum")
 fn printTypeInfo(comptime T: type) void {
-    const info = @typeInfo(T);
-    switch (info) {
-        .Int => |i| std.debug.print("Int: {} bits, {s}\n",
-            .{i.bits, @tagName(i.signedness)}),
-        .Float => |f| std.debug.print("Float: {} bits\n", .{f.bits}),
-        .Struct => |s| {
-            std.debug.print("Struct with {} fields:\n", .{s.fields.len});
+    switch (@typeInfo(T)) {
+        .int => |i| std.debug.print("Int: {d} bits, {t}\n", .{ i.bits, i.signedness }),
+        .float => |f| std.debug.print("Float: {d} bits\n", .{f.bits}),
+        .@"struct" => |s| {
+            std.debug.print("Struct with {d} fields:\n", .{s.fields.len});
             inline for (s.fields) |field| {
-                std.debug.print("  {s}: {}\n", .{field.name, field.type});
+                std.debug.print("  {s}: {s}\n", .{ field.name, @typeName(field.type) });
             }
         },
-        .Enum => |e| {
-            std.debug.print("Enum with {} values:\n", .{e.fields.len});
+        .@"enum" => |e| {
+            std.debug.print("Enum with {d} values:\n", .{e.fields.len});
             inline for (e.fields) |field| {
-                std.debug.print("  {s} = {}\n", .{field.name, field.value});
+                std.debug.print("  {s} = {d}\n", .{ field.name, field.value });
             }
         },
-        .Optional => |o| std.debug.print("Optional({s})\n", .{@typeName(o.child)}),
-        .Array => |a| std.debug.print("[{}]{s}\n", .{a.len, @typeName(a.child)}),
+        .optional => |o| std.debug.print("Optional({s})\n", .{@typeName(o.child)}),
+        .array => |a| std.debug.print("[{d}]{s}\n", .{ a.len, @typeName(a.child) }),
         else => std.debug.print("Other type: {s}\n", .{@typeName(T)}),
     }
 }
 
-// Usage at comptime
-comptime { printTypeInfo(u32); }   // Int: 32 bits, unsigned
-comptime { printTypeInfo(f64); }   // Float: 64 bits
+// The switch is resolved at compile time; printing happens at run time.
+// (std.debug.print cannot run inside a comptime block — use @compileLog there.)
+printTypeInfo(u32);   // Int: 32 bits, unsigned
+printTypeInfo(f64);   // Float: 64 bits
 ```
 
 ### 5. Comptime-generated code patterns
@@ -175,7 +172,7 @@ const sin_table = blk: {
     var table: [N]f32 = undefined;
     @setEvalBranchQuota(10000);     // increase for expensive comptime eval
     for (0..N) |i| {
-        const angle = @as(f32, @floatFromInt(i)) * (2.0 * std.math.pi / N);
+        const angle = @as(f32, @floatFromInt(i)) * (2.0 * std.math.pi / @as(f32, N));
         table[i] = @sin(angle);
     }
     break :blk table;
@@ -222,7 +219,7 @@ fn area(shape: anytype) f64 {
 ```zig
 // Pattern: compile error for unsupported types
 fn serializeInt(comptime T: type, value: T) []const u8 {
-    if (@typeInfo(T) != .Int) {
+    if (@typeInfo(T) != .int) {
         @compileError("serializeInt requires an integer type, got: " ++ @typeName(T));
     }
     // ...

@@ -49,15 +49,18 @@ zig build-exe src/main.zig -target aarch64-macos-none
 | `x86_64-linux-musl` | Linux x86-64 (musl, static) |
 | `aarch64-linux-gnu` | ARM64 Linux (Pi 4, AWS Graviton) |
 | `aarch64-linux-musl` | ARM64 Linux static |
-| `armv7-linux-gnueabihf` | ARM 32-bit Linux (Pi 2/3) |
+| `arm-linux-gnueabihf` | ARM 32-bit Linux (Pi 2/3; add `-mcpu cortex_a7`) |
 | `x86_64-windows-gnu` | Windows x86-64 |
 | `aarch64-macos-none` | macOS Apple Silicon |
 | `x86_64-macos-none` | macOS Intel |
 | `wasm32-freestanding` | WASM (browser, no OS) |
 | `wasm32-wasi` | WASM with WASI |
-| `thumbv7m-freestanding-eabi` | Cortex-M3 bare metal |
-| `thumbv7em-freestanding-eabihf` | Cortex-M4/M7 with FPU |
+| `thumb-freestanding-eabi` | Cortex-M bare metal (pick the core with `-mcpu cortex_m3`) |
+| `thumb-freestanding-eabihf` | Cortex-M4F/M7/M33 with FPU (hard-float ABI) |
 | `riscv32-freestanding` | RISC-V 32-bit bare metal |
+
+Zig does not use LLVM/Rust arch names such as `thumbv7em`, `armv7`, `i386` or `riscv32imac`.
+Use the base arch (`thumb`, `arm`, `x86`, `riscv32`) and select the core or extensions with `-mcpu`.
 
 ### 3. CPU feature targeting
 
@@ -76,8 +79,8 @@ zig build-exe src/main.zig -target aarch64-linux-gnu -mcpu cortex_a72
 
 # Cortex-M4 with FPU
 zig build-exe src/main.zig \
-    -target thumbv7em-freestanding-eabihf \
-    -mcpu cortex_m4+vfp4
+    -target thumb-freestanding-eabihf \
+    -mcpu cortex_m4+vfp4d16sp   # M4F FPU is single-precision only
 
 # List CPU features for a target
 zig targets | python3 -c "
@@ -122,12 +125,14 @@ pub fn build(b: *std.Build) void {
     };
 
     for (targets) |t| {
-        const target = b.resolveTargetQuery(t);
         const exe = b.addExecutable(.{
-            .name = b.fmt("myapp-{s}", .{@tagName(t.cpu_arch.?)}),
-            .root_source_file = b.path("src/main.zig"),
-            .target = target,
-            .optimize = .ReleaseFast,
+            // include the OS: arch alone gives two "myapp-aarch64" artifacts
+            .name = b.fmt("myapp-{s}-{s}", .{ @tagName(t.cpu_arch.?), @tagName(t.os_tag.?) }),
+            .root_module = b.createModule(.{
+                .root_source_file = b.path("src/main.zig"),
+                .target = b.resolveTargetQuery(t),
+                .optimize = .ReleaseFast,
+            }),
         });
         b.installArtifact(exe);
     }
@@ -137,7 +142,8 @@ pub fn build(b: *std.Build) void {
 ```bash
 # Build all targets
 zig build
-# Creates: zig-out/bin/myapp-x86_64, myapp-aarch64, myapp-x86_64.exe, myapp-aarch64
+# Creates: zig-out/bin/myapp-x86_64-linux, myapp-aarch64-linux,
+#          myapp-x86_64-windows.exe, myapp-aarch64-macos
 ```
 
 ### 6. Embedded (bare-metal) targets
@@ -145,8 +151,8 @@ zig build
 ```bash
 # Cortex-M4 with FPU (STM32F4xx)
 zig build-exe src/main.zig \
-    -target thumbv7em-freestanding-eabihf \
-    -mcpu cortex_m4+vfp4 \
+    -target thumb-freestanding-eabihf \
+    -mcpu cortex_m4+vfp4d16sp \
     -O ReleaseSmall \
     --script linker.ld
 ```
@@ -155,18 +161,19 @@ zig build-exe src/main.zig \
 // src/main.zig — bare metal entry point
 const std = @import("std");
 
-// Custom panic handler for embedded (no OS)
-pub fn panic(msg: []const u8, _: ?*std.builtin.StackTrace, _: ?usize) noreturn {
-    // Toggle LED or halt
-    while (true) {}
-}
+// Custom panic handler for embedded (no OS): a namespace built with FullPanic
+pub const panic = std.debug.FullPanic(struct {
+    fn panic(msg: []const u8, first_trace_addr: ?usize) noreturn {
+        _ = msg;
+        _ = first_trace_addr;
+        while (true) {}  // toggle an LED or halt
+    }
+}.panic);
 
-// Entry point (matches linker script)
-export fn _start() void {
-    main() catch |err| {
-        _ = err;
-        while (true) {}
-    };
+// Entry point (name must match ENTRY() in the linker script)
+export fn _start() callconv(.c) noreturn {
+    main() catch {};
+    while (true) {}
 }
 
 fn main() !void {
