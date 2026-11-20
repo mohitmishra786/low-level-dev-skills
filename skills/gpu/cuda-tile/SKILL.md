@@ -46,10 +46,17 @@ New GPU kernel?
 ### 2. cuTile Python
 
 ```bash
-pip install cuda-tile               # with a CUDA Toolkit 13.1+ installed
+pip install cuda-tile               # with a CUDA Toolkit installed (see table below)
 pip install "cuda-tile[tileiras]"   # no toolkit: pulls tileiras, nvcc and NVVM wheels
+pip install cupy-cuda13x            # device arrays for the examples (not a cuda-tile dependency)
 # Needs driver r580+, Linux x86_64/aarch64 or Windows x86_64, Python 3.11+
 ```
+
+| GPU generation | Minimum toolkit / tileiras for Tile |
+|----------------|-------------------------------------|
+| Blackwell (`sm_100`, `sm_120`) | 13.1 |
+| Ampere, Ada (`sm_80`, `sm_86`, `sm_89`) | 13.2 (FP8 on Ada: 13.5) |
+| Hopper (`sm_90`) | 13.3 |
 
 ```python
 import cupy as cp
@@ -89,8 +96,9 @@ def matmul(A, B, C, tm: ct.Constant[int], tn: ct.Constant[int], tk: ct.Constant[
     bm, bn = ct.bid(0), ct.bid(1)                     # output tile coordinates
     acc = ct.full((tm, tn), 0, dtype=ct.float32)      # fp32 accumulator tile
     for k in range(ct.cdiv(A.shape[1], tk)):
-        a = ct.load(A, index=(bm, k), shape=(tm, tk))
-        b = ct.load(B, index=(k, bn), shape=(tk, tn))
+        # Zero-pad the partial last K tile so out-of-range elements add nothing
+        a = ct.load(A, index=(bm, k), shape=(tm, tk), padding_mode=ct.PaddingMode.ZERO)
+        b = ct.load(B, index=(k, bn), shape=(tk, tn), padding_mode=ct.PaddingMode.ZERO)
         acc = ct.mma(a, b, acc)                       # tensor-core multiply-accumulate
     ct.store(C, index=(bm, bn), tile=ct.astype(acc, C.dtype))
 
@@ -117,7 +125,8 @@ def f32_1d():
 sig = KernelSignature([f32_1d(), f32_1d(), f32_1d(), ConstantConstraint(1024)],
                       CallingConvention.cutile_python_v1())
 
-# Portable Tile IR bytecode, or a cubin for one GPU
+# Portable Tile IR bytecode (no gpu_code) needs bytecode version 13.3+, i.e. a 13.3+ toolkit;
+# with 13.1/13.2, export a cubin for a specific target instead
 export_kernel(vector_add, [sig], "vector_add.tilebc", output_format="tileir_bytecode")
 export_kernel(vector_add, [sig], "vector_add_sm100.cubin", gpu_code="sm_100", output_format="cubin")
 ```
@@ -170,12 +179,17 @@ int main()
     unsigned tiles = (n + 1023) / 1024;
     vectorAdd<<<tiles, 1>>>(a, b, out, n);   // tile kernels launch with a block size of 1
     cudaError_t err = cudaDeviceSynchronize();
-    printf("%s out[0]=%f\n", cudaGetErrorString(err), out[0]);
+    if (err != cudaSuccess) {
+        fprintf(stderr, "kernel failed: %s\n", cudaGetErrorString(err));
+        return 1;
+    }
+    printf("out[0]=%f\n", out[0]);
     return 0;
 }
 ```
 
 ```bash
+# Set -arch to your GPU: sm_80 (Ampere), sm_90 (Hopper), sm_100 / sm_120 (Blackwell)
 nvcc -std=c++20 --enable-tile -arch=sm_100 -o vadd vadd_tile.cu
 # Without --enable-tile: error: calling a __tile__ function ... from a __host__ function is not allowed
 ```

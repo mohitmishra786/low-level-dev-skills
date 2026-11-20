@@ -122,8 +122,10 @@ Pinned host memory (`cudaMallocHost`) enables true async DMA overlap with kernel
 
 CUDA 13 (current: 13.5) supports compute capability 7.5 and newer. Maxwell, Pascal and Volta
 (`sm_50`–`sm_72`) were removed: `nvcc -arch=sm_70` fails with `Unsupported gpu architecture 'sm_70'`.
-Keep a CUDA 12.x toolkit for those GPUs. CUDA 13.x needs driver 580+; from 13.4 on, the Linux
-toolkit no longer bundles the driver.
+Keep a CUDA 12.x toolkit for those GPUs. Drivers from the R580 branch run CUDA 13.x applications
+through minor version compatibility, with limits (for example PTX JIT of newer PTX can fail);
+CUDA 13.5 features and newly enabled platforms need an R620 or later driver. From 13.4 on, the
+Linux toolkit no longer bundles the driver.
 
 | Compute capability | GPUs | nvcc target |
 |--------------------|------|-------------|
@@ -139,13 +141,16 @@ architecture-specific instructions (runs only on that exact architecture), `sm_1
 family (forward compatible within it).
 
 ```bash
-# Single architecture (local GPU); -arch=native picks the installed GPU
+# Build for the GPU in this machine
+nvcc -O3 -arch=native -o prog vector_add.cu
+# or name it: sm_80 (A100), sm_90 (H100), sm_100 (B200), sm_120 (RTX 50)
 nvcc -O3 -arch=sm_90 -o prog vector_add.cu
 
 # Fat binary: SASS for each target plus PTX for future GPUs (JIT-compiled by the driver)
 nvcc -O3 \
   -gencode arch=compute_80,code=sm_80 \
   -gencode arch=compute_90,code=sm_90 \
+  -gencode arch=compute_100,code=sm_100 \
   -gencode arch=compute_120,code=[sm_120,compute_120] \
   -o prog vector_add.cu
 
