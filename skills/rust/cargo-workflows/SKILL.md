@@ -307,13 +307,17 @@ edition at a time: `cargo fix --edition` only prepares for the *next* edition, s
 #    Cover every feature and platform you support: code behind a disabled
 #    feature or another target's cfg is not seen.
 cargo fix --edition --all-targets --all-features
-cargo fix --edition --all-targets --target aarch64-unknown-linux-gnu   # per extra target
+cargo fix --edition --all-targets --all-features --target aarch64-unknown-linux-gnu  # per extra target
 
 # 2. Bump the edition in that crate's Cargo.toml (resolver = "3" in a virtual workspace)
 
 # 3. Build and fix what cargo fix could not, for the same feature/target matrix
 cargo check --all-targets --all-features
+cargo check --all-targets --all-features --target aarch64-unknown-linux-gnu
 ```
+
+If some features are mutually exclusive, replace `--all-features` with each supported
+`--features` combination.
 
 If members inherit `edition.workspace = true`, changing `[workspace.package] edition` moves all of
 them at once. During the migration set `edition = "2024"` per member as each is fixed, then switch
