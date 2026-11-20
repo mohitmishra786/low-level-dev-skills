@@ -9,7 +9,7 @@ description: Protocol analysis skill for serial bus debugging. Use when decoding
 
 Guide agents through software-side serial bus analysis: logic analyzer workflow, sigrok/PulseView decoding, correlating captures with firmware drivers, and Python-based parsing — bridging `skills/baremetal/spi-i2c-baremetal` and hardware bring-up.
 
-## When to Use
+## Triggers
 
 - Sensor not responding — verify clock and data on bus
 - Compare kernel driver transactions vs datasheet
@@ -20,7 +20,7 @@ Guide agents through software-side serial bus analysis: logic analyzer workflow,
 
 ### 1. Capture stack
 
-```
+```text
 Physical probe → logic analyzer hardware (or GPIO bit-bang)
 ├── sigrok-cli / PulseView GUI
 ├── Protocol decoder (i2c, spi, uart)
@@ -74,7 +74,7 @@ with open("capture.csv") as f:
 
 ### 7. Correlate with firmware
 
-```
+```text
 Logic capture timestamp
 ├── Match driver reg write sequence
 ├── Compare inter-byte delay vs datasheet max
@@ -83,7 +83,7 @@ Logic capture timestamp
 
 ### 8. Agent usage
 
-```
+```text
 /protocol-analysis Decode this I2C capture — device NACKs after register 0x0F write
 ```
 
@@ -97,7 +97,7 @@ Logic capture timestamp
 | UART framing errors | Baud drift | Measure actual bit time |
 | No decoder | Missing sigrok build | Install `sigrok-cli` + decoders |
 
-## Related Skills
+## Related skills
 
 - `skills/baremetal/spi-i2c-baremetal` — firmware-side protocol
 - `skills/baremetal/uart-serial-baremetal` — UART config

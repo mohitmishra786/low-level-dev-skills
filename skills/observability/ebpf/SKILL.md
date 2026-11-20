@@ -22,7 +22,7 @@ Guide agents through writing, loading, and debugging eBPF programs using libbpf,
 
 ### 1. Choose the right tool
 
-```
+```text
 Goal?
 ├── One-liner kernel tracing / scripting → bpftrace
 ├── Production eBPF program with userspace → libbpf (C) or aya (Rust)

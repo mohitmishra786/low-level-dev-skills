@@ -1,12 +1,12 @@
 # RISC-V psABI Reference
 
-Source: https://github.com/riscv-non-isa/riscv-elf-psabi-doc
+Source: <https://github.com/riscv-non-isa/riscv-elf-psabi-doc>
 
 ## Integer Calling Convention
 
 ### Register Usage
 
-```
+```text
 Integer registers:
  x0 / zero — constant 0 (cannot write)
  x1 / ra   — return address (caller-saved)
@@ -24,7 +24,7 @@ Integer registers:
 
 ### Function Call Sequence
 
-```
+```text
 Caller responsibilities:
 1. Place args in a0-a7 (up to 8 integer args)
    - Args > 64 bits: passed by reference to caller-allocated memory
@@ -43,7 +43,7 @@ Callee responsibilities:
 
 ### Stack Frame Layout
 
-```
+```text
 High address
 +------------------+
 | incoming args    |  (if > 8 args)
@@ -58,7 +58,7 @@ Low address
 
 ## Floating-Point Calling Convention
 
-```
+```text
 Floating-point registers (F/D extensions):
  f0-f7 / ft0-ft7   — temporaries (caller-saved)
  f8-f9 / fs0-fs1   — saved registers (callee-saved)
@@ -69,6 +69,7 @@ Floating-point registers (F/D extensions):
 ```
 
 ABI variants:
+
 - `ilp32` — 32-bit, no hardware float
 - `ilp32f` — 32-bit + single-precision FP in float regs
 - `ilp32d` — 32-bit + double-precision FP in float regs

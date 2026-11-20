@@ -9,7 +9,7 @@ description: QEMU/KVM skill for virtualization and kernel development. Use when 
 
 Guide agents through QEMU system emulation and KVM acceleration: key `qemu-system-x86_64` flags, virtio devices, VFIO device passthrough, QMP monitor protocol, libvirt/virsh management, and QEMU for kernel development with `-kernel -initrd -append`.
 
-## When to Use
+## Triggers
 
 - Running Linux VMs with hardware acceleration
 - Testing custom kernels without bare metal
@@ -194,7 +194,7 @@ qemu-img info disk.qcow2
 | Kernel panic on boot | Wrong root= or missing driver | Add virtio drivers to initrd |
 | QMP connection refused | Socket not ready | Wait for QEMU start; check path |
 
-## Related Skills
+## Related skills
 
 - `skills/virtualization/hypervisor-internals` — VT-x/SVM theory under KVM
 - `skills/kernel/kernel-testing` — boot test kernels in QEMU

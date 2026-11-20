@@ -9,7 +9,7 @@ description: Embedded bootloader skill for firmware update and app handoff. Use 
 
 Guide agents through embedded bootloader fundamentals: vector table relocation, safe handoff from bootloader to application, flash partitioning, and basic firmware-update patterns (UART, USB DFU, or custom protocol) on Cortex-M and similar MCUs.
 
-## When to Use
+## Triggers
 
 - Application must run at non-zero flash offset (e.g. `0x08010000`)
 - Implementing OTA or USB DFU without vendor HAL
@@ -31,7 +31,7 @@ Linker script for app must set `FLASH ORIGIN` to app base; vector table must liv
 
 Before jump, verify:
 
-```
+```text
 App vector[0] (initial SP) points into RAM region
 App vector[1] (Reset) points into flash region and has Thumb bit set (LSB=1)
 Optional: CRC or magic word in app metadata section
@@ -86,7 +86,7 @@ Application must set `SCB->VTOR = APP_BASE` early in `Reset_Handler` if startup 
 
 ### 4. Bootloader responsibilities
 
-```
+```text
 Power-on
 ├── Init minimal clock + UART/USB for update
 ├── Check update flag in RTC backup / GPIO strap
@@ -107,7 +107,7 @@ STM32 chips expose USB DFU in system memory when BOOT0=1. Custom bootloaders are
 
 ### 7. Agent usage
 
-```
+```text
 /bootloaders-embedded Write STM32F4 jump-to-app at 0x08010000 with VTOR setup
 ```
 
@@ -121,7 +121,7 @@ STM32 chips expose USB DFU in system memory when BOOT0=1. Custom bootloaders are
 | UART garbage after jump | BL left UART running | De-init or reset peripherals |
 | Brick after OTA | Power loss mid-erase | Dual-bank or metadata rollback |
 
-## Related Skills
+## Related skills
 
 - `skills/baremetal/baremetal-startup` — vector table and Reset_Handler
 - `skills/baremetal/stm32-baremetal` — flash map and CMSIS

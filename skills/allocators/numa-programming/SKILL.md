@@ -9,7 +9,7 @@ description: NUMA programming skill for multi-socket memory locality. Use when d
 
 Guide agents through NUMA-aware programming: topology detection with `numactl` and sysfs, libnuma API (`numa_alloc_onnode`, `mbind`, `set_mempolicy`), process binding with `numactl`, NUMA-aware data structures, remote access diagnosis with `perf stat`, and `lstopo` visualization.
 
-## When to Use
+## Triggers
 
 - Multi-socket server shows poor scaling despite low CPU utilization
 - Memory bandwidth saturation on one NUMA node
@@ -37,7 +37,7 @@ cat /sys/devices/system/node/node0/cpulist
 
 Typical output:
 
-```
+```text
 available: 2 nodes (0-1)
 node 0 cpus: 0-15
 node 0 size: 65536 MB
@@ -195,7 +195,7 @@ Shows: NUMA nodes, cores, caches, PCI devices — essential for DPDK NIC placeme
 
 ### 9. Decision tree
 
-```
+```text
 Poor scaling on multi-socket?
 ├── Check numactl --hardware
 ├── Verify thread and memory on same node
@@ -217,7 +217,7 @@ Poor scaling on multi-socket?
 | libnuma not found | Package not installed | `apt install libnuma-dev` |
 | First-touch policy surprise | Alloc on node 0, run on node 1 | Allocate from bound thread |
 
-## Related Skills
+## Related skills
 
 - `skills/allocators/custom-allocators` — per-node pool allocators
 - `skills/async-io/dpdk` — `rte_malloc_socket`, NIC NUMA locality

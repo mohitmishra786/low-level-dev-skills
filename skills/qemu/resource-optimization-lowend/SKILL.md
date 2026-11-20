@@ -9,7 +9,7 @@ description: Resource optimization skill for constrained embedded targets. Use w
 
 Guide agents through flash and RAM optimization on constrained devices: compiler size flags, linker map analysis, stack usage measurement, dead code elimination, and size-vs-speed tradeoffs — for bare-metal and small RTOS images.
 
-## When to Use
+## Triggers
 
 - Firmware exceeds flash budget
 - Stack overflow in production only
@@ -86,7 +86,7 @@ Runtime: fill stack with pattern (`0xDEADBEEF`), run tests, scan high-water mark
 
 ### 6. Size vs speed decision
 
-```
+```text
 Hot path in ISR or 1 kHz loop?
 ├── Yes → -O2 for that file (#pragma GCC optimize)
 └── No  → -Os globally
@@ -94,7 +94,7 @@ Hot path in ISR or 1 kHz loop?
 
 ### 7. Agent usage
 
-```
+```text
 /resource-optimization-lowend Find top 10 flash consumers in firmware.map and suggest -gc-sections fixes
 ```
 
@@ -108,7 +108,7 @@ Hot path in ISR or 1 kHz loop?
 | RAM zero but big ELF | `.data` not loaded | Check VMA/LMA |
 | LTO link fail | Mixed compiler versions | Same GCC for all objects |
 
-## Related Skills
+## Related skills
 
 - `skills/embedded/linker-scripts` — MEMORY/Sections layout
 - `skills/baremetal/baremetal-startup` — stack symbol

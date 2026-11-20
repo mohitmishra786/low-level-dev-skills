@@ -9,7 +9,7 @@ description: Linux kernel testing skill for KUnit, kselftest, syzkaller, and LTP
 
 Guide agents through testing the Linux kernel: KUnit in-kernel unit tests, the kselftest harness, syzkaller fuzzing with kcov coverage, Linux Test Project (LTP) syscall regression, and KernelCI integration for continuous testing.
 
-## When to Use
+## Triggers
 
 - Writing unit tests for kernel library code or driver helpers
 - Adding regression tests to `tools/testing/selftests/`
@@ -82,7 +82,7 @@ make run_tests
 
 Adding a new selftest:
 
-```
+```text
 tools/testing/selftests/mytest/
 ├── Makefile
 ├── mytest.c
@@ -186,13 +186,13 @@ LTP categories: syscalls, FS, network, IPC, controllers, security.
 
 Typical CI pipeline:
 
-```
+```text
 Patch → build (allmodconfig) → boot test (QEMU) → kselftest → LTP subset
 ```
 
 ### 7. Testing decision tree
 
-```
+```text
 What to test?
 ├── Pure kernel function logic → KUnit
 ├── Userspace-visible behavior (syscall, ioctl) → kselftest
@@ -203,7 +203,7 @@ What to test?
 
 ### 8. Debug-friendly test kernel config
 
-```
+```text
 CONFIG_KUNIT=y
 CONFIG_KCOV=y
 CONFIG_KASAN=y
@@ -229,7 +229,7 @@ make olddefconfig
 | LTP massive failures | Wrong environment | Run as root; check prerequisites in README |
 | kunit.py hangs | UML vs hardware mismatch | Specify `--arch` and cross-compile |
 
-## Related Skills
+## Related skills
 
 - `skills/low-level-programming/linux-kernel-modules` — modules under test
 - `skills/kernel/device-drivers` — driver logic to unit test

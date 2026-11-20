@@ -9,7 +9,7 @@ description: Branch prediction and speculation skill for CPU security and perfor
 
 Explain how modern CPUs predict branches, execute speculatively, recover on mispredict, and why speculation created side channels (Spectre/Meltdown) — linking performance tuning with security-aware low-level coding.
 
-## When to Use
+## Triggers
 
 - Hot loop branchy code underperforms expectations
 - Evaluating `likely`/`unlikely` or branchless refactors
@@ -20,7 +20,7 @@ Explain how modern CPUs predict branches, execute speculatively, recover on misp
 
 ### 1. Branch predictor basics
 
-```
+```text
 Fetch sees conditional branch
 ├── Predict direction (taken / not-taken)
 ├── Speculatively execute predicted path
@@ -84,7 +84,7 @@ High `branch-misses` ratio → investigate hot branches.
 
 ### 6. Agent usage
 
-```
+```text
 /branch-prediction-and-speculation Make this comparison function constant-time against Spectre-style leakage
 ```
 
@@ -98,7 +98,7 @@ High `branch-misses` ratio → investigate hot branches.
 | Mitigation regression | KPTI/retpoline overhead | Accept or isolate secrets |
 | "Branchless" slower | CMOV still executes both | Benchmark on target CPU |
 
-## Related Skills
+## Related skills
 
 - `skills/computer-architecture/cpu-pipelines-and-hazards` — control hazards
 - `skills/security/kernel-security` — KPTI, CET, speculation mitigations

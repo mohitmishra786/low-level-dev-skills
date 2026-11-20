@@ -22,7 +22,7 @@ Guide agents through debugging code compiled with optimization: choosing the rig
 
 ### 1. Choose the right build configuration
 
-```
+```text
 Goal?
 ├── Full debuggability, no optimization
 │   → -O0 -g                        (slowest, all vars visible)
@@ -54,6 +54,7 @@ $1 = <optimized out>
 ```
 
 This means the compiler decided the variable's value doesn't need to be stored at this point — it might be:
+
 - Kept only in a register (not the one GDB is looking at)
 - Folded into a constant by constant propagation
 - Eliminated because it's not used after this point

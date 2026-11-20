@@ -9,7 +9,7 @@ description: ABI and calling conventions skill for cross-language boundaries. Us
 
 Document application binary interface (ABI) rules: register roles, stack alignment, argument passing, return values, and variadic conventions across System V AMD64, ARM AAPCS, and RISC-V — essential for assembly, FFI, and debugging.
 
-## When to Use
+## Triggers
 
 - Writing assembly thunks or inline asm clobbers
 - Debugging corrupted stack in mixed C/asm
@@ -65,7 +65,7 @@ See `skills/low-level-programming/assembly-riscv`.
 
 ### 4. Stack frame layout (conceptual)
 
-```
+```text
 high addresses
 ├── return address
 ├── saved frame pointer
@@ -88,7 +88,7 @@ objdump -d -M intel ./a.out
 
 ### 7. Agent usage
 
-```
+```text
 /abi-and-calling-conventions Which registers hold args 5–8 in AArch64 for my C function?
 ```
 
@@ -102,7 +102,7 @@ objdump -d -M intel ./a.out
 | FFI garbage | Windows vs SysV mix | Match toolchain ABI |
 | Variadic UB | Wrong type to `va_arg` | Cast to promoted type |
 
-## Related Skills
+## Related skills
 
 - `skills/low-level-programming/assembly-x86` — x86-64 asm
 - `skills/low-level-programming/assembly-arm` — AAPCS examples

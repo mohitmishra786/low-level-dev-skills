@@ -1,6 +1,6 @@
 # ccache Configuration Reference
 
-Source: https://ccache.dev/manual/latest.html
+Source: <https://ccache.dev/manual/latest.html>
 
 ## Table of Contents
 
@@ -12,6 +12,7 @@ Source: https://ccache.dev/manual/latest.html
 ## Configuration File Locations
 
 ccache reads config in order (later overrides earlier):
+
 1. `/etc/ccache.conf` — system-wide
 2. `$CCACHE_CONFIGPATH` — override path
 3. `~/.config/ccache/ccache.conf` — user config

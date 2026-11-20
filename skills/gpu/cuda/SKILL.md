@@ -9,7 +9,7 @@ description: CUDA C/C++ skill for NVIDIA GPU kernel programming. Use when writin
 
 Guide agents through NVIDIA CUDA C/C++ development: kernel launch configuration, the memory hierarchy from registers through global memory, asynchronous execution with streams, nvcc compilation flags, Thrust library usage, and diagnosing common performance pitfalls like warp divergence and uncoalesced memory access.
 
-## When to Use
+## Triggers
 
 - Writing or optimizing a CUDA kernel for matrix multiply, reduction, or stencil operations
 - Choosing block/grid dimensions and estimating occupancy
@@ -24,7 +24,7 @@ Guide agents through NVIDIA CUDA C/C++ development: kernel launch configuration,
 
 CUDA organizes work as threads grouped into blocks, blocks grouped into a grid.
 
-```
+```text
 Thread hierarchy
 ├── grid (1D/2D/3D)
 │   └── block (1D/2D/3D, max 1024 threads)
@@ -159,7 +159,7 @@ Common flags:
 
 Decision tree:
 
-```
+```text
 Kernel slow?
 ├── Low occupancy (< 25%) → reduce registers, shared mem, or block size
 ├── Memory-bound → check coalescing, use shared memory tiling
@@ -214,7 +214,7 @@ float val = data[blockIdx.x * blockDim.x + threadIdx.x];
 | `no kernel image available` | Wrong `-arch=sm_XX` | Match GPU compute capability: `nvidia-smi --query-gpu=compute_cap` |
 | Slow H2D/D2H copies | Pageable host memory | Use `cudaMallocHost` for pinned buffers |
 
-## Related Skills
+## Related skills
 
 - `skills/gpu/cuda-profiling` — Nsight Systems/Compute for kernel performance diagnosis
 - `skills/gpu/cuda-debugging` — cuda-gdb and compute-sanitizer for correctness

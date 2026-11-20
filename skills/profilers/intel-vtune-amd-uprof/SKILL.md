@@ -71,6 +71,7 @@ vtune -report hotspots -r hotspots_result -format csv | head -20
 ```
 
 Build with debug info for meaningful symbols:
+
 ```bash
 gcc -O2 -g ./prog.c -o prog     # symbols visible in VTune
 gcc -O2 -g -gsplit-dwarf -fno-omit-frame-pointer ./prog.c -o prog  # better stacks
@@ -95,7 +96,7 @@ Key metrics to examine:
 | Retiring | Useful work fraction | > 70% ideal |
 | Memory Bound | % cycles waiting for memory | < 20% |
 
-```
+```text
 Pipeline Analysis (Top-Down Methodology):
 ├── Retiring (good, useful work)
 ├── Bad Speculation (branch mispredictions)
@@ -125,7 +126,8 @@ vtune -collect memory-access -r mem_result ./prog
 ```
 
 Reading DRAM bandwidth:
-```
+
+```text
 DRAM Bandwidth: 18.4 GB/s
 Peak Theoretical: 51.2 GB/s
 Utilization: 36% — likely not DRAM-bound
@@ -152,6 +154,7 @@ AMDuProf &
 ```
 
 AMD uProf metrics map to VTune equivalents:
+
 - `Retired Instructions` → IPC analysis
 - `Branch Mispredictions` → Bad Speculation
 - `L1/L2/L3 Cache Misses` → Memory Bound levels
@@ -161,7 +164,7 @@ AMD uProf metrics map to VTune equivalents:
 
 The roofline model shows whether code is compute-bound or memory-bound by comparing achieved performance against hardware limits:
 
-```
+```text
 Performance (GFLOPS/s)
      |                    _______________
 Peak |                 /

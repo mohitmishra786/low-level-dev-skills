@@ -1,6 +1,6 @@
 # Kbuild System Reference
 
-Source: https://docs.kernel.org/kbuild/modules.html
+Source: <https://docs.kernel.org/kbuild/modules.html>
 
 ## Table of Contents
 

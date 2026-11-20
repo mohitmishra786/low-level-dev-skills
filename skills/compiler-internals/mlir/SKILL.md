@@ -9,7 +9,7 @@ description: MLIR skill for multi-level intermediate representation. Use when wr
 
 Guide agents through MLIR (Multi-Level IR): ops, regions, blocks, and values; built-in dialects (arith, func, memref, affine, linalg); writing custom dialects with ODS; lowering passes with `ConversionPattern`; `mlir-opt` CLI; and ML compiler use cases (Torch-MLIR, IREE).
 
-## When to Use
+## Triggers
 
 - Building a domain-specific compiler IR (graphics, ML, hardware DSL)
 - Lowering high-level ops to LLVM or GPU dialects
@@ -22,7 +22,7 @@ Guide agents through MLIR (Multi-Level IR): ops, regions, blocks, and values; bu
 
 ### 1. MLIR structure
 
-```
+```text
 Module
 └── func.func @main()
     └── region
@@ -31,6 +31,7 @@ Module
 ```
 
 Key concepts:
+
 - **Operation** — instruction-like node (`arith.addi`, `memref.load`)
 - **Region** — container of blocks (functions, control flow)
 - **Block** — CFG node with ordered ops
@@ -193,7 +194,7 @@ iree-run-module --module=model.vmfb --function=main
 | mlir-opt crash | Invalid IR | Run `-verify-each` |
 | Empty function after lowering | All ops illegal, none converted | Add missing patterns |
 
-## Related Skills
+## Related skills
 
 - `skills/compiler-internals/llvm-passes` — LLVM pass equivalents
 - `skills/compiler-internals/compiler-frontend` — AST to MLIR import

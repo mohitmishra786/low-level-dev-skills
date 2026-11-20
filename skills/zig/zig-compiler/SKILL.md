@@ -59,6 +59,7 @@ zig build-exe src/main.zig -O ReleaseSmall # embedded/WASM
 ```
 
 Safety checks in `Debug` and `ReleaseSafe`:
+
 - Integer overflow → detected and panics with source location
 - Array bounds checking → panics on OOB
 - Null pointer dereference → panic (not crash)
@@ -120,6 +121,7 @@ CC="zig cc" make
 ```
 
 `zig cc` advantages over gcc/clang:
+
 - No system toolchain required (fully hermetic)
 - Built-in cross-compilation for any supported target
 - Always ships with a recent clang version
@@ -159,11 +161,12 @@ zig tokenize src/main.zig
 ### 7. Reading Zig error messages
 
 Zig error messages include:
+
 - Source file and line
 - Column indicator with arrow
 - Note messages for context
 
-```
+```text
 src/main.zig:10:5: error: expected type 'u32', found 'i32'
     x: i32 = 5,
     ^
@@ -173,6 +176,7 @@ src/main.zig:7:5: note: struct field 'x' declared here
 ```
 
 Key error patterns:
+
 | Error | Meaning |
 |-------|---------|
 | `error: expected type 'X', found 'Y'` | Type mismatch |
@@ -183,6 +187,7 @@ Key error patterns:
 | `error: unused function parameter 'x'` | Use `_ = x;` to suppress |
 
 Suppress "unused" errors:
+
 ```zig
 _ = unused_variable;  // explicitly discard
 ```

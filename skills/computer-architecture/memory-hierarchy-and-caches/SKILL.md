@@ -9,7 +9,7 @@ description: Memory hierarchy skill for caches, coherence, and locality. Use whe
 
 Teach CPU memory hierarchy: cache levels, associativity, line size, coherence protocols, false sharing, and prefetch behavior — architectural depth complementing optimization practice in `skills/low-level-programming/cpu-cache-opt`.
 
-## When to Use
+## Triggers
 
 - Explaining why padding fixes scalability
 - Choosing struct layout for multicore
@@ -20,7 +20,7 @@ Teach CPU memory hierarchy: cache levels, associativity, line size, coherence pr
 
 ### 1. Hierarchy (typical desktop/ server)
 
-```
+```text
 Registers
 ├── L1d / L1i (per core, ~32 KiB, ~4 cycles)
 ├── L2 (per core, ~256 KiB – 1 MiB)
@@ -79,7 +79,7 @@ perf stat -e cache-references,cache-misses,L1-dcache-load-misses ./app
 
 ### 7. Agent usage
 
-```
+```text
 /memory-hierarchy-and-caches Diagnose false sharing in this per-thread stats array
 ```
 
@@ -93,7 +93,7 @@ perf stat -e cache-references,cache-misses,L1-dcache-load-misses ./app
 | Prefetch hurt | irregular access | Remove manual prefetch |
 | Huge struct copies | AoS cold lines | SoA layout — see cpu-cache-opt |
 
-## Related Skills
+## Related skills
 
 - `skills/low-level-programming/cpu-cache-opt` — practical optimization
 - `skills/computer-architecture/cpu-pipelines-and-hazards` — load-use stalls

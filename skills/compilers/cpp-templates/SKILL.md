@@ -37,6 +37,7 @@ prog.cpp:25:5: note: 'MyType' is not a valid type for this template
 ```
 
 Rules for reading:
+
 1. Find the first error line (top of output) — that's your code
 2. Skip all the `note:` lines until you find "required from here" or "in instantiation of"
 3. The bottom of the stack shows the type that failed substitution

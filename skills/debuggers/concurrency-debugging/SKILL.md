@@ -55,6 +55,7 @@ SUMMARY: ThreadSanitizer: data race /src/counter.c:8:5 in increment
 ```
 
 How to read:
+
 1. Line 1: type of access (write/read) and address
 2. Stack under "Write of size": the thread that performed the write
 3. Stack under "Previous read/write": the conflicting thread
@@ -91,6 +92,7 @@ valgrind --tool=helgrind --log-file=helgrind.log ./prog
 ```
 
 Lock-order violation = potential deadlock:
+
 - Thread T1 acquires M1, then tries M2
 - Thread T2 acquires M2, then tries M1
 - Both can deadlock if they race
@@ -169,7 +171,7 @@ shared_data = 42;
 
 In C++, happens-before is established by:
 
-```
+```text
 Sequenced-before (within a thread):
   Statement A comes before B in code → A happens-before B
 

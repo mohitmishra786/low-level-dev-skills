@@ -9,7 +9,7 @@ description: RISC-V privileged architecture skill for M/S/U modes and traps. Use
 
 Guide agents through the RISC-V privileged specification: M/S/U privilege modes, CSR registers, trap handling, PLIC and CLINT interrupt controllers, OpenSBI firmware integration, Sv39/Sv48 page tables, and QEMU `virt` machine testing.
 
-## When to Use
+## Triggers
 
 - Writing an OS kernel or hypervisor for RISC-V
 - Implementing trap handlers and context switch
@@ -22,7 +22,7 @@ Guide agents through the RISC-V privileged specification: M/S/U privilege modes,
 
 ### 1. Privilege levels
 
-```
+```text
 RISC-V privilege stack
 ├── M-mode (Machine) — firmware, OpenSBI, most privileged
 ├── S-mode (Supervisor) — OS kernel
@@ -41,7 +41,7 @@ Embedded (no S-mode): M + U only
 | `mcause` / `scause` | M/S | Trap cause code |
 | `mtval` / `stval` | M/S | Faulting address/instruction |
 | `satp` | S | Page table root (mode + PPN) |
-| ` mie` / `sie` | M/S | Interrupt enable bits |
+| `mie` / `sie` | M/S | Interrupt enable bits |
 | `mip` / `sip` | M/S | Interrupt pending bits |
 
 ```c
@@ -60,7 +60,7 @@ static inline void write_csr_stvec(void *handler) {
 
 ### 3. Trap handling
 
-```
+```text
 Trap types
 ├── Synchronous exceptions — ecall, page fault, illegal insn
 └── Asynchronous interrupts — timer, external, software
@@ -121,7 +121,7 @@ write_csr_stvec(trap_entry);
 
 ### 5. CLINT and PLIC
 
-```
+```text
 QEMU virt interrupt map
 ├── CLINT — timer and software interrupts (per-hart)
 │   ├── mtime / mtimecmp — machine timer
@@ -162,7 +162,7 @@ Common SBI extensions: Base, Timer, IPI, RFENCE, HSM.
 
 ### 7. Page tables — Sv39
 
-```
+```text
 Sv39: 39-bit virtual addresses, 3 levels
 VPN[2] → L2 PTE → L1 PTE → L0 PTE → physical page
 
@@ -230,7 +230,7 @@ make qemu
 | OpenSBI hang | Wrong payload offset | Match `FW_PAYLOAD_OFFSET` to link addr |
 | Illegal instruction | Compressed insn not supported | Enable C extension in CPU config |
 
-## Related Skills
+## Related skills
 
 - `skills/low-level-programming/assembly-riscv` — RV32/RV64 ISA and psABI
 - `skills/kernel/os-dev-scratch` — OS dev concepts (x86 parallel)

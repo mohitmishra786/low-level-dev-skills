@@ -9,7 +9,7 @@ description: Linux containers internals skill for namespaces, cgroups, and OCI. 
 
 Guide agents through Linux container internals: namespaces (`clone`, `unshare`, `nsenter`), cgroups v2 resource limits, overlayfs storage, runc and the OCI runtime spec, seccomp-bpf filtering, Linux capabilities for privilege dropping, and container escape mitigations.
 
-## When to Use
+## Triggers
 
 - Understanding how Docker/Podman isolate processes under the hood
 - Debugging container resource limits (OOM, CPU throttling)
@@ -92,7 +92,7 @@ cat /sys/fs/cgroup/mycontainer/memory.events
 
 ### 3. overlayfs
 
-```
+```text
 overlayfs layers
 ├── lowerdir (read-only image layers)
 ├── upperdir (container writes)
@@ -201,7 +201,7 @@ Rootless limits: cannot mount most filesystems, no `CAP_SYS_ADMIN`.
 
 ### 8. Escape mitigations
 
-```
+```text
 Defense layers
 ├── User namespace (rootless)
 ├── seccomp (block dangerous syscalls)
@@ -230,7 +230,7 @@ Known escape vectors: mounted docker.sock, privileged mode, kernel CVEs, `/proc`
 | overlay mount fail | workdir not empty | Clean workdir; check permissions |
 | Rootless mount fail | User namespace limits | Use volume mounts from host |
 
-## Related Skills
+## Related skills
 
 - `skills/virtualization/qemu-kvm` — VM isolation vs containers
 - `skills/security/kernel-security` — SELinux, AppArmor, seccomp depth

@@ -70,7 +70,7 @@ cargo flamegraph -o /tmp/fg.svg --bin myapp && xdg-open /tmp/fg.svg
 
 ### Reading Flamegraphs
 
-```
+```text
 Wide frames  = more CPU time
 Tall stacks  = deep call chains
 Plateau tops = actual CPU time spent there
@@ -80,6 +80,7 @@ y-axis: call stack depth (bottom = first called)
 ```
 
 Look for:
+
 - Wide frames near the top (hot leaves — where CPU actually spends time)
 - Unexpected std/alloc frames (excessive allocation)
 - Many thin `<closure>` frames (closure overhead in tight loops)
@@ -158,7 +159,8 @@ cargo bench -- --baseline main-branch
 ```
 
 Output shows:
-```
+
+```text
 process/1024            time:   [12.345 µs 12.456 µs 12.567 µs]
                         change: [-5.2312% -4.8956% -4.5600%] (p = 0.00 < 0.05)
                         Performance has improved.

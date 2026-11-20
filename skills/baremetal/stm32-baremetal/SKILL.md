@@ -9,7 +9,7 @@ description: STM32 bare-metal skill for CMSIS-only MCU projects. Use when scaffo
 
 Guide agents through a minimal STM32 bare-metal project using CMSIS device headers and startup code only — no STM32 HAL — covering clock setup, linker script integration, peripheral register access, and a reproducible build layout for STM32F/G/H/L families.
 
-## When to Use
+## Triggers
 
 - Starting STM32 firmware without Cube HAL dependency
 - Porting vendor examples to register-level drivers
@@ -21,7 +21,7 @@ Guide agents through a minimal STM32 bare-metal project using CMSIS device heade
 
 ### 1. Minimal project layout
 
-```
+```text
 stm32-bare/
 ├── startup_stm32f407xx.s   # vector table + Reset_Handler
 ├── system_stm32f4xx.c      # SystemInit(), SystemCoreClockUpdate()
@@ -101,7 +101,7 @@ QEMU STM32 machines (`stm32vldiscovery`, `netduinoplus2`, etc.) use **different*
 
 ### 7. Agent usage
 
-```
+```text
 /stm32-baremetal Scaffold CMSIS-only STM32F407 project with USART2 printf
 ```
 
@@ -115,7 +115,7 @@ QEMU STM32 machines (`stm32vldiscovery`, `netduinoplus2`, etc.) use **different*
 | Wrong baud rate | `SystemCoreClock` stale | Call `SystemCoreClockUpdate()` after PLL |
 | DMA fails from CCM | CCM not on AHB matrix path | Place DMA buffers in SRAM1 |
 
-## Related Skills
+## Related skills
 
 - `skills/baremetal/baremetal-startup` — vector table and `.data`/`.bss`
 - `skills/baremetal/mmio-and-bit-manipulation` — register access patterns

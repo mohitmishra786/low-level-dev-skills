@@ -79,6 +79,7 @@ RUSTFLAGS="-C opt-level=3 -C codegen-units=1 -C lto=on" cargo build --release
 ```
 
 Persistent in `.cargo/config.toml`:
+
 ```toml
 [build]
 rustflags = ["-C", "target-cpu=native"]
@@ -114,6 +115,7 @@ find target/ -name "*.s"
 ### 5. Understand monomorphization
 
 Rust generics are monomorphized — each concrete type instantiation produces separate code. This causes:
+
 - Binary size bloat
 - Longer compile times
 - Potential i-cache pressure
@@ -127,6 +129,7 @@ cargo llvm-lines --release | head -30
 ```
 
 Mitigation strategies:
+
 ```rust
 // 1. Type erasure with dyn Trait (trades monomorphization for dispatch)
 fn process(iter: &mut dyn Iterator<Item = i32>) { ... }

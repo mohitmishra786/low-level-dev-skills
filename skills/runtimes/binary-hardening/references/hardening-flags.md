@@ -1,6 +1,6 @@
 # Binary Hardening Flags Reference
 
-Source: https://best.openssf.org/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C++
+Source: <https://best.openssf.org/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C++>
 
 ## Complete Hardened Build Commands
 
@@ -87,6 +87,7 @@ gcc ${CFLAGS} ${LDFLAGS} -o libfoo.so foo.c
 | Arch Linux | PIE, RELRO, canary, FORTIFY=2 |
 
 Check what your distro uses:
+
 ```bash
 dpkg-buildflags --query   # Debian/Ubuntu
 rpm --eval "%{build_cflags}"  # Fedora/RHEL

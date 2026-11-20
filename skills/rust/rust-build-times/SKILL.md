@@ -100,6 +100,7 @@ cargo +nightly build
 ```
 
 Cranelift vs LLVM trade-off:
+
 - Dev builds: 20–40% faster compilation with Cranelift
 - Runtime performance: LLVM-compiled code is faster (Cranelift skips many optimizations)
 - Release builds: always use LLVM
@@ -134,6 +135,7 @@ cargo build -j$(nproc) --timings    # maximize parallelism
 ```
 
 Rules for effective workspace splitting:
+
 - Break circular dependencies first
 - Separate proc-macros into their own crate (they block everything)
 - Keep frequently-changed code isolated (less invalidation)
@@ -194,6 +196,7 @@ rustflags = ["-C", "link-arg=-fuse-ld=/usr/local/bin/zld"]
 ```
 
 Linker speed comparison (large project, typical):
+
 - GNU ld: baseline
 - lld: ~2× faster
 - mold: ~5–10× faster

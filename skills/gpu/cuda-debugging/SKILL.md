@@ -9,7 +9,7 @@ description: CUDA debugging skill for GPU program correctness. Use when debuggin
 
 Guide agents through debugging CUDA programs with cuda-gdb for interactive GPU thread inspection, NVIDIA Compute Sanitizer for automated memory and race detection, GPU core dump analysis, device-side `printf`, and triaging common CUDA runtime error codes.
 
-## When to Use
+## Triggers
 
 - `cudaErrorIllegalAddress` (700) or segmentation fault on device
 - Intermittent correctness failures in multi-threaded GPU code
@@ -53,7 +53,7 @@ compute-sanitizer --tool memcheck --show-reachable=yes --log-file san.log ./app_
 
 Typical memcheck output:
 
-```
+```text
 ======== Invalid __global__ write of size 4
 ========     at 0x1a0 in vector_add(vector_add.cu:12)
 ========     by thread (0,0,0) in block (0,0,0)
@@ -154,7 +154,7 @@ cuda-gdb ./app_san /tmp/cuda_coredump_hostname.pid
 
 ### 7. Debugging decision tree
 
-```
+```text
 Crash or wrong results?
 ├── Consistent wrong values → logic bug; use printf or cuda-gdb
 ├── Intermittent / depends on size → OOB or race
@@ -187,7 +187,7 @@ nvidia-smi -L
 | Attach fails | Process not in CUDA context | Break after first `cudaMalloc` |
 | TDR timeout on Windows | Long-running kernel | Split kernel; `cudaDeviceSetLimit` or regedit TDR |
 
-## Related Skills
+## Related skills
 
 - `skills/gpu/cuda` — kernel patterns, memory hierarchy, launch config
 - `skills/gpu/cuda-profiling` — performance after correctness is verified

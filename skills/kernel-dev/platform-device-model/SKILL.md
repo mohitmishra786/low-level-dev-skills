@@ -9,7 +9,7 @@ description: Platform device model skill for Linux driver binding. Use when impl
 
 Explain the Linux driver model for platform (and similar) buses: `struct device`, `device_driver`, `probe`/`remove`, resource acquisition, sysfs, and deferred probe — the glue between device tree and driver code.
 
-## When to Use
+## Triggers
 
 - Implementing or debugging `platform_driver` lifecycle
 - Exposing driver state via sysfs
@@ -20,7 +20,7 @@ Explain the Linux driver model for platform (and similar) buses: `struct device`
 
 ### 1. Object hierarchy
 
-```
+```text
 bus_type (platform, amba, pci, i2c, spi)
 ├── struct device        — hardware instance
 └── struct device_driver — driver logic
@@ -101,7 +101,7 @@ udevadm monitor
 
 ### 7. Agent usage
 
-```
+```text
 /platform-device-model Convert legacy board file driver to DT platform_driver with devm_ioremap
 ```
 
@@ -115,7 +115,7 @@ udevadm monitor
 | Remove crash | Manual free vs devm mismatch | Use devm consistently |
 | Name mismatch | `.name` vs `compatible` | OF uses `of_match_table` |
 
-## Related Skills
+## Related skills
 
 - `skills/kernel-dev/device-tree` — hardware description
 - `skills/kernel/device-drivers` — IRQ, DMA, regmap depth

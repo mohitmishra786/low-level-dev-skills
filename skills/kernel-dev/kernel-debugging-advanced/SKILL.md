@@ -9,7 +9,7 @@ description: Advanced kernel debugging skill for ftrace, trace-cmd, perf, kprobe
 
 Extend `skills/kernel/kernel-debugging` with production-grade tracing: `ftrace`, `trace-cmd`, kernel `perf`, `kprobes`/`kretprobes`, `kgdb`, crash dump analysis, and `printk` discipline. **Not merged** with `kernel-debugging` — that skill covers baseline kgdb/dyndbg; this one focuses on trace-cmd, function_graph, and live/post-mortem production workflows.
 
-## When to Use
+## Triggers
 
 - Latency spikes in kernel driver without obvious bug
 - Tracing function call graph in kernel
@@ -96,7 +96,7 @@ crash> dev -s
 
 ### 8. Agent usage
 
-```
+```text
 /kernel-debugging-advanced Trace my_driver_ioctl latency with ftrace function_graph
 ```
 
@@ -110,7 +110,7 @@ crash> dev -s
 | kgdb no connect | Wrong `kgdboc` tty | Match serial/USB gadget |
 | crash no symbols | Missing debuginfo | Install `linux-image-dbg` / vmlinux |
 
-## Related Skills
+## Related skills
 
 - `skills/kernel/kernel-debugging` — baseline kgdb, dyndbg
 - `skills/profilers/linux-perf` — perf record/report

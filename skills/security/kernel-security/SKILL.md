@@ -9,7 +9,7 @@ description: Linux kernel security skill for LSM, hardening, and exploit mitigat
 
 Guide agents through Linux kernel security: LSM frameworks (SELinux, AppArmor), seccomp-bpf with libseccomp, KASLR and bypass mitigations, Intel CET (Shadow Stack + IBT), ARM PAC and BTI, kernel sanitizers (KASAN, KMSAN), and CVE triage for kernel vulnerabilities.
 
-## When to Use
+## Triggers
 
 - Writing SELinux or AppArmor policies for confined services
 - Sandboxing processes with seccomp-bpf filters
@@ -22,7 +22,7 @@ Guide agents through Linux kernel security: LSM frameworks (SELinux, AppArmor), 
 
 ### 1. LSM framework overview
 
-```
+```text
 Application syscall
     → DAC (uid/gid, file mode)
     → LSM hook (SELinux/AppArmor/Yama/...)
@@ -147,6 +147,7 @@ grep kaslr /proc/cmdline
 ```
 
 Mitigations against KASLR leaks:
+
 - No `/proc/<pid>/maps` to untrusted
 - Pointer hashing in `%pK` printk
 - eBPF restricted on unprivileged
@@ -222,6 +223,7 @@ zgrep -l CVE-2024-XXXX /usr/share/doc/linux-*/changelog.Debian.gz
 ```
 
 Triage checklist:
+
 1. Affected subsystem (net, fs, drivers)?
 2. Local or remote exploit?
 3. Fixed in your kernel version?
@@ -238,7 +240,7 @@ Triage checklist:
 | KASAN kernel slow | 2-5x overhead | Use only in test VMs |
 | False sense of security | LSM bypass via kernel bug | Defense in depth; keep kernel updated |
 
-## Related Skills
+## Related skills
 
 - `skills/virtualization/containers-internals` — container seccomp and caps
 - `skills/runtimes/binary-hardening` — userspace CET, RELRO, PIE

@@ -9,7 +9,7 @@ description: Kernel concurrency skill for Linux locking and synchronization. Use
 
 Guide agents through synchronization in the Linux kernel: spinlocks, mutexes, semaphores, RCU, seqlocks, completions, and memory ordering rules — critical for correct drivers and subsystem patches.
 
-## When to Use
+## Triggers
 
 - IRQ handler shares data with process context
 - Read-mostly data structures needing RCU
@@ -20,7 +20,7 @@ Guide agents through synchronization in the Linux kernel: spinlocks, mutexes, se
 
 ### 1. Lock selection tree
 
-```
+```text
 Context can sleep?
 ├── No (IRQ, spinlock held, preempt disabled)
 │   └── spin_lock_irqsave() / atomic_t
@@ -100,7 +100,7 @@ Kernel provides `smp_mb()`, `smp_wmb()`, `smp_rmb()`. Device MMIO uses `readl`/`
 
 ### 8. Agent usage
 
-```
+```text
 /kernel-concurrency Protect shared ring buffer between IRQ and read() syscall
 ```
 
@@ -114,7 +114,7 @@ Kernel provides `smp_mb()`, `smp_wmb()`, `smp_rmb()`. Device MMIO uses `readl`/`
 | Lost wake | `complete` before `wait` | Use `INIT_COMPLETION` each cycle |
 | Corrupt counter | Non-atomic RMW in IRQ | `atomic_t` or lock |
 
-## Related Skills
+## Related skills
 
 - `skills/kernel/device-drivers` — threaded IRQ pattern
 - `skills/low-level-programming/memory-model` — C11 atomics vs kernel

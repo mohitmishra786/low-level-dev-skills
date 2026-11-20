@@ -1,6 +1,6 @@
 # eBPF Map Types Reference
 
-Source: https://docs.kernel.org/bpf/maps.html
+Source: <https://docs.kernel.org/bpf/maps.html>
 
 ## Table of Contents
 

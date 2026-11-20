@@ -9,7 +9,7 @@ description: OS development from scratch skill for bootloader through context sw
 
 Guide agents through building a minimal operating system from scratch: bootloader stages (BIOS/GRUB vs UEFI/limine), 64-bit long mode setup with GDT and page tables, IDT and interrupt handlers, PIC/APIC configuration, basic keyboard and serial drivers, physical and virtual memory managers, context switching, with xv6-RISC-V as a reference architecture.
 
-## When to Use
+## Triggers
 
 - Learning how an OS boots from power-on to `main()`
 - Implementing protected/long mode transitions on x86-64
@@ -22,7 +22,7 @@ Guide agents through building a minimal operating system from scratch: bootloade
 
 ### 1. Boot stages overview
 
-```
+```text
 BIOS path (legacy)
 ├── BIOS POST
 ├── MBR (512 bytes) → boot sector loads stage2
@@ -87,7 +87,7 @@ qemu-system-x86_64 \
 
 ### 4. Long mode setup
 
-```
+```text
 Protected mode (32-bit) → enable PAE → setup 4-level page tables → enable long mode
 ```
 
@@ -240,7 +240,7 @@ cd xv6-riscv && make qemu
 | Timer doesn't tick | LAPIC not initialized | Parse ACPI; calibrate LAPIC timer |
 | Linker relocation error | Wrong load address | Match `linker.ld` with bootloader expectation |
 
-## Related Skills
+## Related skills
 
 - `skills/low-level-programming/assembly-x86` — x86-64 assembly for ISR stubs
 - `skills/low-level-programming/assembly-riscv` — xv6-RISC-V reference ISA

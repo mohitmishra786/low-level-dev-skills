@@ -9,7 +9,7 @@ description: Datasheet and reference manual reading skill for embedded engineers
 
 Teach agents a systematic methodology for reading MCU datasheets and reference manuals: which sections matter for firmware, how to cross-reference pin tables with register maps, and how to avoid documentation pitfalls (errata, footnotes, conditional fields). **Not merged** with `skills/baremetal/peripherals-from-datasheet` — this skill covers **how to read docs**; that skill covers **how to write drivers** from them.
 
-## When to Use
+## Triggers
 
 - Starting driver work on unfamiliar silicon
 - Resolving ambiguous register bit behavior
@@ -32,7 +32,7 @@ Read the datasheet for **what exists**; read the RM for **how to program it**.
 
 ### 2. First-pass reading order (RM)
 
-```
+```text
 1. Memory and bus architecture (address map)
 2. Reset and clock control (RCC / CGU)
 3. GPIO / pin multiplexing
@@ -63,7 +63,7 @@ For each register:
 
 ### 4. Pin / signal cross-reference
 
-```
+```text
 Schematic net → Datasheet pin table (AF number)
              → RM GPIO chapter (MODER, AFR)
              → Peripheral chapter (USART_TX on PA2 = AF7)
@@ -80,7 +80,7 @@ Always confirm **default state after reset** (analog mode, pull, JTAG pins).
 
 ### 6. Errata workflow
 
-```
+```text
 Symptom matches errata?
 ├── Yes → apply documented workaround in driver
 └── No  → verify silicon revision (DBGMCU_IDCODE / UID)
@@ -88,7 +88,7 @@ Symptom matches errata?
 
 ### 7. Agent usage
 
-```
+```text
 /datasheet-and-refmanual-reading Find STM32F4 USART baud rate formula and required clock source
 ```
 
@@ -101,7 +101,7 @@ Symptom matches errata?
 | Intermittent DMA | Missed footnote on buffer alignment | RM DMA chapter notes |
 | Clock mismatch | Used max frequency from DS banner, not voltage range table | Use operating conditions table |
 
-## Related Skills
+## Related skills
 
 - `skills/baremetal/peripherals-from-datasheet` — driver implementation workflow
 - `skills/baremetal/mmio-and-bit-manipulation` — safe register access

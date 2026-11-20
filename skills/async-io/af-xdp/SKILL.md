@@ -9,7 +9,7 @@ description: AF_XDP skill for high-performance XDP sockets. Use when creating AF
 
 Guide agents through AF_XDP sockets for high-performance packet I/O: socket creation, UMEM setup, fill/completion/RX/TX rings, XDP programs with `XDP_REDIRECT` to XSK, copy vs zero-copy modes, libbpf helpers, performance comparison with DPDK, and production use cases.
 
-## When to Use
+## Triggers
 
 - Building a userspace packet processor with lower overhead than raw sockets
 - Redirecting XDP-filtered traffic to userspace without DPDK complexity
@@ -22,13 +22,14 @@ Guide agents through AF_XDP sockets for high-performance packet I/O: socket crea
 
 ### 1. Architecture overview
 
-```
+```text
 NIC → XDP program (BPF) → XDP_REDIRECT → AF_XDP socket → userspace
                 ↓
            XDP_DROP/PASS/TX
 ```
 
 Components:
+
 - **UMEM** — shared memory region for frames
 - **Fill ring** — userspace provides empty frame addresses to kernel
 - **Completion ring** — kernel returns completed TX frames
@@ -186,6 +187,7 @@ pkg-config --libs libbpf
 ```
 
 Key functions:
+
 - `xsk_umem__create` / `xsk_umem__delete`
 - `xsk_socket__create` / `xsk_socket__delete`
 - `xsk_umem__get_data` — pointer from frame address
@@ -203,7 +205,7 @@ Key functions:
 
 ### 9. Production patterns
 
-```
+```text
 Common deployments
 ├── CDN edge cache — XDP_DROP junk, redirect cacheable to XSK
 ├── DDoS mitigation — XDP_DROP attack patterns
@@ -227,7 +229,7 @@ taskset -c 2 ./xsk_app --queue 2
 | TX not working | Completion ring not polled | Process comp ring to recycle frames |
 | Permission denied | CAP_NET_RAW needed | Run with appropriate capabilities |
 
-## Related Skills
+## Related skills
 
 - `skills/observability/ebpf` — XDP/BPF program development
 - `skills/async-io/dpdk` — full kernel bypass alternative

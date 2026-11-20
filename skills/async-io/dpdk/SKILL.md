@@ -9,7 +9,7 @@ description: DPDK skill for userspace packet I/O. Use when initializing EAL, con
 
 Guide agents through DPDK (Data Plane Development Kit): EAL initialization, poll-mode driver (PMD) concepts, `rte_eth_rx_burst`/`tx_burst`, mbuf mempools, `rte_ring` queues, huge page setup, RSS configuration, testpmd validation, QEMU virtio testing, and pipeline vs run-to-completion models.
 
-## When to Use
+## Triggers
 
 - Building a userspace packet forwarder bypassing the kernel network stack
 - Achieving line-rate on 10/25/100 GbE NICs
@@ -193,7 +193,7 @@ Inside VM: bind virtio PCI to `vfio-pci` or use `vhost-user` for higher perf.
 
 ### 9. Pipeline vs run-to-completion
 
-```
+```text
 Run-to-completion (simple)
 ├── One core: RX → process → TX
 └── Good for low latency, simple logic
@@ -216,7 +216,7 @@ Pipeline (scaled)
 | VFIO permission error | No IOMMU group access | `chmod`/`chown` vfio group; enable IOMMU |
 | Poor multi-core scaling | RSS not distributing | Enable RSS; multiple RX queues |
 
-## Related Skills
+## Related skills
 
 - `skills/async-io/af-xdp` — lighter-weight XDP alternative
 - `skills/async-io/io-uring` — kernel async I/O comparison

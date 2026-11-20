@@ -9,7 +9,7 @@ description: Carbon language skill for C++ interop and toolchain. Use when evalu
 
 Guide agents through the Carbon programming language: syntax fundamentals, bidirectional C++ interoperability via `Carbon.h`, building from source with `carbon-toolchain`, the experimental memory safety model (checked borrows), current pre-1.0 limitations, and when to evaluate Carbon versus staying on C++.
 
-## When to Use
+## Triggers
 
 - Evaluating Carbon for a greenfield project with heavy C++ dependencies
 - Calling C++ libraries from Carbon or exposing Carbon to C++
@@ -22,7 +22,7 @@ Guide agents through the Carbon programming language: syntax fundamentals, bidir
 
 ### 1. Project status awareness
 
-```
+```text
 Carbon (2026 state)
 ├── Experimental — no 1.0 release
 ├── Focus: C++ interoperability and migration
@@ -148,7 +148,7 @@ Carbon aims for memory safety without garbage collection — checked pointers an
 
 ### 8. Carbon vs C++ decision tree
 
-```
+```text
 Choose Carbon exploration when
 ├── Large C++ codebase to gradually migrate
 ├── Team wants improved syntax with C++ interop
@@ -186,7 +186,7 @@ carbon compile --phase=check sample.carbon
 | Explorer differs from CLI | Different versions | Use same commit for both |
 | Link error with C++ | ABI mismatch | Use Carbon toolchain link driver |
 
-## Related Skills
+## Related skills
 
 - `skills/compilers/cpp-templates` — C++ being migrated from
 - `skills/compilers/cpp-modules` — C++20 modules comparison

@@ -9,7 +9,7 @@ description: Linux kernel debugging skill for kgdb, kdb, ftrace, kprobes, and cr
 
 Guide agents through debugging the Linux kernel: kgdb over serial or USB, kdb built-in debugger commands, ftrace and `trace-cmd`, kprobes and kretprobes, dynamic debug (`dyndbg`), crash dump analysis with crash and makedumpfile, dmesg log levels, and `/proc/sys` runtime tuning for debugging.
 
-## When to Use
+## Triggers
 
 - Kernel panic or oops with unclear stack trace
 - Live debugging a kernel module or driver with kgdb
@@ -87,7 +87,7 @@ USB variant: `CONFIG_KGDB_KDB` with `kgdboc=usb` on supported hardware.
 
 When `CONFIG_KGDB_KDB` enabled, kdb provides in-kernel shell:
 
-```
+```text
 kdb commands (at SysRq break)
 ├── bt          — stack backtrace
 ├── lsmod       — loaded modules
@@ -220,7 +220,7 @@ sysctl kernel.nmi_watchdog=1
 
 ### 9. Debugging decision tree
 
-```
+```text
 Kernel issue type?
 ├── Panic/oops → dmesg; crash vmcore; CONFIG_DEBUG_INFO_BTF
 ├── Logic bug in driver → dyndbg; ftrace function_graph
@@ -240,7 +240,7 @@ Kernel issue type?
 | crash can't read vmcore | Wrong vmlinux debug symbols | Install `linux-image-$(uname -r)-dbg` |
 | SysRq doesn't work | `kernel.sysrq` disabled | `echo 1 > /proc/sys/kernel/sysrq` |
 
-## Related Skills
+## Related skills
 
 - `skills/low-level-programming/linux-kernel-modules` — module development being debugged
 - `skills/kernel/device-drivers` — driver-specific probe/IRQ issues

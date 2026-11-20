@@ -9,7 +9,7 @@ description: GPU memory model skill for SIMT execution and memory hierarchy. Use
 
 Explain the GPU execution and memory model for agents optimizing kernels: SIMT execution, warp (32) vs wavefront (64) divergence costs, global memory coalescing rules, shared memory bank conflicts, L1/L2 cache behavior, atomic memory ordering, and the occupancy-vs-latency-hiding tradeoff.
 
-## When to Use
+## Triggers
 
 - Diagnosing why a kernel is memory-bound despite high theoretical bandwidth
 - Understanding warp divergence from branching
@@ -22,7 +22,7 @@ Explain the GPU execution and memory model for agents optimizing kernels: SIMT e
 
 ### 1. SIMT execution model
 
-```
+```text
 GPU hardware
 ├── Device
 │   └── SM / CU (Streaming Multiprocessor / Compute Unit)
@@ -44,6 +44,7 @@ GPU hardware
 | AMD | 64 threads | Wavefront |
 
 Implications:
+
 - Reduction trees: NVIDIA halves at 16→8→4→2→1; AMD at 32→16→8→4→2→1
 - Block sizes: prefer multiples of 32 (NVIDIA) or 64 (AMD)
 - Occupancy counters report active warps/wavefronts per SM
@@ -65,6 +66,7 @@ result = expensive_a(data[idx]);
 ```
 
 Mitigations:
+
 - **Predication**: compute both, select with `?:` (trade compute for uniformity)
 - **Separate kernels** for different code paths
 - **Branch only on block-level** data (uniform within warp)
@@ -125,6 +127,7 @@ Detection: Nsight Compute `l1tex__data_bank_conflicts_pipe_lsu_mem_shared_op_ld.
 | Texture/L1 readonly | Per-SM | Cached read-only path for uniform access |
 
 Cache-friendly patterns:
+
 - **Spatial locality**: consecutive threads access consecutive memory
 - **Temporal locality**: reuse data in shared memory before re-fetching global
 - **Avoid random scatter**: atomic updates and pointer chasing defeat caches
@@ -164,7 +167,7 @@ __threadfence_system(); // visible to host (expensive)
 
 ### 8. Occupancy vs latency hiding
 
-```
+```text
 Occupancy tradeoff
 ├── High occupancy → more warps to hide memory latency
 │   └── Costs: fewer registers/SM, less shared mem per block
@@ -174,7 +177,7 @@ Occupancy tradeoff
 
 Decision tree:
 
-```
+```text
 Memory-bound kernel?
 ├── Yes → maximize active warps (occupancy), coalesce, tile with shared mem
 └── No (compute-bound) → may lower occupancy if registers enable more ILP
@@ -207,7 +210,7 @@ Rule of thumb: memory-bound kernels need occupancy ≥ 50%; compute-bound may ru
 | Atomics correct but slow | Global contention | Block-level reduce first |
 | High L2 hit but still slow | L2 bandwidth saturated | Reduce total bytes moved |
 
-## Related Skills
+## Related skills
 
 - `skills/gpu/cuda` — practical kernel patterns using this model
 - `skills/gpu/cuda-profiling` — metrics to validate coalescing and occupancy

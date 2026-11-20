@@ -76,6 +76,7 @@ The full include-list for main.cpp:
 ```
 
 Reading the output:
+
 - **should add**: headers providing symbols used but not yet included
 - **should remove**: headers included but whose symbols aren't used directly
 - **The full include-list**: what the final header list should look like

@@ -9,7 +9,7 @@ description: RDMA verbs skill for InfiniBand and RoCE programming. Use when usin
 
 Guide agents through RDMA programming with libibverbs: one-sided vs two-sided operations, RC/UC/UD transports, device setup (`ibv_get_device_list`, protection domains, memory registration, completion queues, queue pairs), work requests and completions, RoCE vs InfiniBand, perftest benchmarking, and Rust `rdma-sys` bindings.
 
-## When to Use
+## Triggers
 
 - Building ultra-low-latency storage or database networking
 - Bypassing CPU for remote memory access (one-sided RDMA)
@@ -22,7 +22,7 @@ Guide agents through RDMA programming with libibverbs: one-sided vs two-sided op
 
 ### 1. RDMA concepts
 
-```
+```text
 RDMA stack
 ├── Application (libibverbs)
 ├── Kernel RDMA driver (mlx5, rdma_rxe)
@@ -229,7 +229,7 @@ Wrap libibverbs with safe abstractions or use `async-rdma` crate for higher-leve
 | Low bandwidth | Small message size | Increase MTU; use larger WRs |
 | Device not found | Driver not loaded | `modprobe mlx5_ib`; check `ibv_devices` |
 
-## Related Skills
+## Related skills
 
 - `skills/hpc/mpi` — MPI often uses RDMA under UCX/IB verbs
 - `skills/async-io/dpdk` — alternative userspace networking

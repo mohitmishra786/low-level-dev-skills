@@ -9,7 +9,7 @@ description: OpenMP skill for shared-memory parallel programming. Use when writi
 
 Guide agents through OpenMP shared-memory parallelism: `#pragma omp parallel for` with scheduling clauses, reductions, data-sharing attributes, SIMD hints, task parallelism, OpenMP 5.x GPU `target` offloading, common pitfalls (false sharing, data races), environment tuning, and profiling with Score-P or TAU.
 
-## When to Use
+## Triggers
 
 - Parallelizing C/C++/Fortran loops on multicore CPUs
 - Implementing reductions (sum, max, custom)
@@ -207,7 +207,7 @@ export OMP_NESTED=true   # deprecated; use MAX_ACTIVE_LEVELS
 | Threads not bound | Default spread | `OMP_PROC_BIND=close` |
 | Nested deadlock | Oversubscription | Limit `OMP_NUM_THREADS` per level |
 
-## Related Skills
+## Related skills
 
 - `skills/hpc/mpi` — distributed memory complement
 - `skills/low-level-programming/cpu-cache-opt` — false sharing deep dive

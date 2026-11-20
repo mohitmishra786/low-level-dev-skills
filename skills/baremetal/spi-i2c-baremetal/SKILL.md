@@ -9,7 +9,7 @@ description: Bare-metal SPI and I2C skill for serial peripheral buses. Use when 
 
 Implement SPI and I2C master drivers for sensor and memory chips: clock configuration, phase/polarity (SPI), START/ACK sequences (I2C), and common register-oriented transaction patterns.
 
-## When to Use
+## Triggers
 
 - Reading an I2C sensor (WHO_AM_I register)
 - SPI flash or display bring-up
@@ -73,7 +73,7 @@ Poll `SB`, `ADDR`, `TXE`, `RXNE`, `BTF` per reference manual.
 
 ### 4. Agent usage
 
-```
+```text
 /spi-i2c-baremetal I2C read of register 0x0F from device 0x68
 ```
 
@@ -86,7 +86,7 @@ Poll `SB`, `ADDR`, `TXE`, `RXNE`, `BTF` per reference manual.
 | Bus stuck SCL low | Slave clock stretch / fault | Bus recovery (clock pulses) |
 | CS glitch | CS timing vs clock | Assert CS before first SCK |
 
-## Related Skills
+## Related skills
 
 - `skills/baremetal/gpio-baremetal` — CS, SDA, SCL pins
 - `skills/baremetal/peripherals-from-datasheet` — timing requirements

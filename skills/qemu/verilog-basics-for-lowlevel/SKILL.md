@@ -9,7 +9,7 @@ description: Verilog basics skill for firmware and kernel engineers. Use when re
 
 Give firmware and kernel engineers enough Verilog/SystemVerilog literacy to read RTL: modules, clocks/resets, combinational vs sequential logic, bus interfaces, and why hardware behavior explains driver bugs — not a replacement for HDL design courses.
 
-## When to Use
+## Triggers
 
 - Reference manual unclear — RTL clarifies register behavior
 - Understanding CDC (clock domain crossing) bugs
@@ -84,7 +84,7 @@ QEMU/peripheral models may not match RTL edge cases.
 
 ### 7. Agent usage
 
-```
+```text
 /verilog-basics-for-lowlevel Explain this APB register block and when STATUS bit updates relative to WRITE
 ```
 
@@ -98,7 +98,7 @@ QEMU/peripheral models may not match RTL edge cases.
 | IRQ stuck | Level vs pulse in RTL | Match handler ACK sequence |
 | Verilog vs VHDL | Mixed SoC docs | Focus on interface signals table |
 
-## Related Skills
+## Related skills
 
 - `skills/baremetal/mmio-and-bit-manipulation` — register access from C
 - `skills/baremetal/peripherals-from-datasheet` — RM ↔ RTL

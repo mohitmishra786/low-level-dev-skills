@@ -9,7 +9,7 @@ description: Bare-metal interrupt and exception skill for Cortex-M NVIC. Use whe
 
 Guide agents through bare-metal interrupt handling on ARM Cortex-M: NVIC configuration, ISR writing rules, exception handlers (HardFault, BusFault), priority grouping, nesting, tail-chaining, and latency considerations.
 
-## When to Use
+## Triggers
 
 - Configuring peripheral IRQ priorities
 - Writing ISRs that must not block
@@ -21,7 +21,7 @@ Guide agents through bare-metal interrupt handling on ARM Cortex-M: NVIC configu
 
 ### 1. NVIC overview (Cortex-M)
 
-```
+```text
 Exception / IRQ flow
 ├── NVIC receives IRQ (priority compare with BASEPRI/PRIMask)
 ├── Stacking: automatic save r0-r3, r12, lr, pc, psr
@@ -58,6 +58,7 @@ void USART2_IRQHandler(void) {
 ```
 
 ISR rules:
+
 - No blocking calls (`printf`, `malloc`, long loops)
 - Minimize work — defer to main via flag/ring buffer
 - Clear interrupt flags per datasheet (read-to-clear vs write-1-clear)
@@ -116,7 +117,7 @@ Measure with GPIO toggle + scope, or DWT cycle counter (`DWT->CYCCNT`).
 
 ### 7. Agent usage examples
 
-```
+```text
 /interrupts-and-exceptions-baremetal Configure NVIC priority for UART vs SysTick
 /interrupts-and-exceptions-baremetal Decode HardFault stacked PC with GDB
 ```
@@ -131,7 +132,7 @@ Measure with GPIO toggle + scope, or DWT cycle counter (`DWT->CYCCNT`).
 | Lost bytes | ISR too slow | Ring buffer + higher IRQ priority |
 | Priority inversion | Long critical section | Shorten `__disable_irq` window |
 
-## Related Skills
+## Related skills
 
 - `skills/baremetal/baremetal-startup` — vector table entries
 - `skills/baremetal/uart-serial-baremetal` — UART IRQ handlers

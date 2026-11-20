@@ -9,7 +9,7 @@ description: Bare-metal timer and PWM skill. Use when configuring general-purpos
 
 Configure MCU timers for PWM output, input capture, and periodic scheduling: prescaler/ARR setup, compare channels, and SysTick as a simple tick source.
 
-## When to Use
+## Triggers
 
 - Motor/LED dimming via PWM
 - Measuring pulse width (input capture)
@@ -20,7 +20,7 @@ Configure MCU timers for PWM output, input capture, and periodic scheduling: pre
 
 ### 1. PWM on TIM2 CH1 (STM32)
 
-```
+```text
 f_pwm = f_timer_clk / ((PSC+1) * (ARR+1))
 duty = (CCR / (ARR+1)) * 100%
 ```
@@ -58,7 +58,7 @@ Configure channel in `CCMR` as input, set `CCER` polarity, read `CCR` on interru
 
 ### 4. Agent usage
 
-```
+```text
 /timers-pwm-baremetal 1 kHz 25% duty PWM on TIM2 channel 1
 ```
 
@@ -70,7 +70,7 @@ Configure channel in `CCMR` as input, set `CCER` polarity, read `CCR` on interru
 | No PWM output | CCER/CCMR not enabled | Enable channel output |
 | Jittery tick | SysTick overridden | One owner for SysTick |
 
-## Related Skills
+## Related skills
 
 - `skills/baremetal/gpio-baremetal` — timer pin AF
 - `skills/embedded/freertos` — replace SysTick with RTOS tick

@@ -9,7 +9,7 @@ description: CUDA profiling skill for NVIDIA GPU performance analysis. Use when 
 
 Guide agents through profiling CUDA applications with Nsight Systems (timeline-level) and Nsight Compute (kernel-level metrics), using the NCU CLI for automated metric collection, interpreting roofline models, and diagnosing whether kernels are memory-bound or compute-bound.
 
-## When to Use
+## Triggers
 
 - A CUDA kernel is slower than expected and you need bottleneck identification
 - Comparing kernel variants (tiling strategies, block sizes)
@@ -22,7 +22,7 @@ Guide agents through profiling CUDA applications with Nsight Systems (timeline-l
 
 ### 1. Choose profiling tool
 
-```
+```text
 What do you need?
 ├── System-wide timeline (CPU+GPU+CUDA API) → Nsight Systems (nsys)
 ├── Per-kernel deep metrics (occupancy, memory) → Nsight Compute (ncu)
@@ -43,6 +43,7 @@ nsys stats report.nsys-rep
 ```
 
 What to look for in the timeline:
+
 - Gaps between kernel launches (CPU bottleneck or sync points)
 - `cudaDeviceSynchronize` stalls
 - Overlap between H2D copies and kernel execution across streams
@@ -89,6 +90,7 @@ ncu-ui kernel_report.ncu-rep
 ```
 
 Key sections in NCU report:
+
 - **Speed of Light**: SM throughput vs memory throughput vs peak
 - **Occupancy**: Active warps vs hardware limit
 - **Memory Workload Analysis**: L1/L2 hit rates, coalescing efficiency
@@ -115,7 +117,7 @@ ncu --kernel-replay-mode application ./my_cuda_app
 
 ### 6. Memory-bound vs compute-bound diagnosis
 
-```
+```text
 Roofline interpretation
 ├── dram__throughput near peak AND sm__throughput low → memory-bound
 │   └── Fix: coalescing, shared mem tiling, reduce traffic
@@ -126,7 +128,7 @@ Roofline interpretation
 
 Roofline model (conceptual):
 
-```
+```text
 Performance (GFLOP/s)
     |     /\  compute roof
     |    /  \
@@ -181,7 +183,7 @@ ncu --csv --metrics sm__throughput.avg.pct_of_peak_sustained_elapsed ./app_v2 > 
 | Timeline shows no overlap | Single default stream | Create multiple streams; use async copies |
 | Occupancy looks fine but kernel slow | Memory latency not hidden | Check memory coalescing; increase active warps |
 
-## Related Skills
+## Related skills
 
 - `skills/gpu/cuda` — kernel writing, occupancy tuning, nvcc flags
 - `skills/gpu/gpu-memory-model` — coalescing, bank conflicts, SIMT model

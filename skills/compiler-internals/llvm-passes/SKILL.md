@@ -9,7 +9,7 @@ description: LLVM passes skill for writing compiler optimizations. Use when writ
 
 Guide agents through writing LLVM optimization passes with the New Pass Manager: `FunctionPass` and `ModulePass` structure, `PassPluginLibraryInfo` registration, running via `opt -load-pass-plugin`, common analysis utilities (`DominatorTree`, `LoopInfo`, `AliasAnalysis`), IR modification patterns, `llvm-lit` testing, and debugging with `opt -print-after-all`.
 
-## When to Use
+## Triggers
 
 - Adding a custom optimization to an LLVM-based compiler
 - Writing an IR transformation pass (inlining, DCE, custom lowering)
@@ -22,7 +22,7 @@ Guide agents through writing LLVM optimization passes with the New Pass Manager:
 
 ### 1. New Pass Manager architecture
 
-```
+```text
 opt / clang
 ├── ModulePassManager
 │   └── FunctionPassManager (per function)
@@ -183,13 +183,13 @@ Always update SSA and invalidate analyses after structural changes.
 
 ### 7. llvm-lit testing
 
-```
+```text
 test/
 ├── lit.cfg.py
 └── my-pass.test
 ```
 
-```
+```text
 # my-pass.test
 # RUN: opt -load-pass-plugin %shlibdir/MyPass.so -passes=my-pass -S %s | FileCheck %s
 
@@ -230,7 +230,7 @@ OPT_DEBUG=1 opt -passes=my-pass input.ll -o /dev/null
 | Empty opt output | Forgot `-S` | Add `-S` for textual IR |
 | lit test FAIL | CHECK line mismatch | `opt -S` and compare manually |
 
-## Related Skills
+## Related skills
 
 - `skills/compilers/llvm` — LLVM IR inspection and opt pipeline as user
 - `skills/compiler-internals/compiler-frontend` — IR generation feeding passes

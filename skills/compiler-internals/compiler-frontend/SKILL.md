@@ -9,7 +9,7 @@ description: Compiler frontend skill for lexing, parsing, and type checking. Use
 
 Guide agents through building a compiler frontend: lexers (hand-written DFA vs flex), Pratt parsing for expressions, recursive-descent for statements, AST design, symbol tables with scoped hash maps, type checking basics, error recovery strategies, and LLVM IR generation via the C API or `llvm-sys`.
 
-## When to Use
+## Triggers
 
 - Implementing a new programming language or DSL
 - Adding expression parsing to an interpreter or config language
@@ -22,7 +22,7 @@ Guide agents through building a compiler frontend: lexers (hand-written DFA vs f
 
 ### 1. Pipeline overview
 
-```
+```text
 Source → Lexer (tokens) → Parser (AST) → Type checker → IR generator → LLVM IR
 ```
 
@@ -264,7 +264,7 @@ Rust: use `inkwell` or `llvm-sys` crates for safer bindings.
 | flex token clash | Overlapping patterns | Longest match; order rules |
 | Error cascade | No synchronization | Implement panic mode recovery |
 
-## Related Skills
+## Related skills
 
 - `skills/compiler-internals/llvm-passes` — optimize generated IR
 - `skills/compiler-internals/jit-compilation` — execute generated IR

@@ -9,7 +9,7 @@ description: LLVM IR and passes skill for reading compiler IR. Use when analyzin
 
 Teach agents to read and reason about LLVM IR (SSA, types, terminators), navigate the standard pass pipeline, and use `opt`/`llvm-dis` for inspection. Complements `skills/compilers/llvm` (toolchain) and `skills/compiler-internals/llvm-passes` (writing plugins) — not merged.
 
-## When to Use
+## Triggers
 
 - Understanding what `-O2` changed in generated IR
 - Triaging miscompiles between Clang versions
@@ -43,7 +43,7 @@ llvm-dis foo.bc -o foo.ll
 
 Clang `-O2` roughly runs:
 
-```
+```text
 SimplifyCFG → InstCombine → GVN → LICM → LoopVectorize → ...
 ```
 
@@ -83,7 +83,7 @@ opt -passes='instcombine,simplifycfg' -S foo.ll -o - | diff -u foo.ll -
 
 ### 7. Agent usage
 
-```
+```text
 /llvm-ir-and-passes Explain this PHI node and which pass likely created it
 ```
 
@@ -97,7 +97,7 @@ opt -passes='instcombine,simplifycfg' -S foo.ll -o - | diff -u foo.ll -
 | Huge IR | Inlined headers | `-fno-discard-value-names` off; filter function |
 | Wrong pipeline | Legacy vs NPM | Use `-passes=` syntax |
 
-## Related Skills
+## Related skills
 
 - `skills/compilers/llvm` — toolchain overview
 - `skills/compiler-internals/llvm-passes` — writing PassPlugins

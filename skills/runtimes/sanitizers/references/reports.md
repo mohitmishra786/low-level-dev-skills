@@ -81,6 +81,7 @@ freed here (2nd time / current):
 ```text
 src/main.c:15:12: runtime error: signed integer overflow: 2147483647 + 1 cannot be represented in type 'int'
 ```
+
 Fix: use `int64_t` or check for overflow before the operation.
 
 ### null pointer dereference
@@ -88,6 +89,7 @@ Fix: use `int64_t` or check for overflow before the operation.
 ```text
 src/main.c:20:3: runtime error: member access within null pointer of type 'struct Foo'
 ```
+
 Fix: check pointer != NULL before deref.
 
 ### shift exponent too large
@@ -95,6 +97,7 @@ Fix: check pointer != NULL before deref.
 ```text
 src/main.c:8:14: runtime error: shift exponent 32 is too large for 32-bit type 'int'
 ```
+
 Fix: cast to `uint64_t` before shifting, or use `__builtin_expect`.
 
 ### misaligned access
@@ -102,6 +105,7 @@ Fix: cast to `uint64_t` before shifting, or use `__builtin_expect`.
 ```text
 src/main.c:12:10: runtime error: load of misaligned address 0x... for type 'int', which requires 4-byte alignment
 ```
+
 Fix: use `memcpy` to read unaligned data; or ensure pointer is correctly aligned.
 
 ---
@@ -129,6 +133,7 @@ WARNING: ThreadSanitizer: lock-order-inversion (potential deadlock)
   Mutex M1 acquired here while holding M2:
   Mutex M2 acquired here while holding M1:
 ```
+
 Fix: establish a global lock ordering; always acquire M1 before M2.
 
 ---

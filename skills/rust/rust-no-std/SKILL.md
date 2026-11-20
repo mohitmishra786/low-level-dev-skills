@@ -1,6 +1,6 @@
 ---
 name: rust-no-std
-description: "Guide no_std Rust development for embedded and bare-metal targets. Use when writing #![no_std] crates, understanding core vs alloc vs std, implementing custom global allocators, selecting panic handlers for embedded, or testing no_std crates on the host without hardware."
+description: "Guide no_std Rust development for embedded and bare-metal targets. Use when writing #![no_std] crates, understanding core vs alloc vs std, implementing custom global allocators, selecting panic handlers for embedded, or testing no_std crates on the host without hardware. Activates on queries about no_std, #![no_std], core vs alloc, #[global_allocator], #[panic_handler], or embedded Rust without std."
 user-invocable: true
 triggers:
   - write a no_std Rust crate
@@ -18,7 +18,7 @@ triggers:
 
 Guide agents through `#![no_std]` Rust development: what `core` and `alloc` provide vs `std`, implementing custom global allocators, panic handler selection for embedded targets, and strategies for testing `no_std` crates on the host machine.
 
-## When to Use
+## Triggers
 
 Use this skill when writing or debugging `#![no_std]` Rust code — library crates for embedded targets, or bare-metal firmware that cannot link against `std`. For the full embedded development workflow (probe-rs flashing, defmt logging, RTIC), use `skills/embedded/embedded-rust`. For cross-compilation target setup, use `skills/rust/rust-cross`. This skill focuses specifically on the `no_std` / `core` / `alloc` boundary and panic handler selection.
 
@@ -73,6 +73,7 @@ alloc = []       # opt-in to heap allocation
 `std` re-exports everything in `core` and `alloc`, so `use std::fmt` and `use core::fmt` are equivalent when `std` is available.
 
 What's available in `core` only (no heap, no OS):
+
 ```rust
 // These work in no_std:
 core::fmt::Write           // trait for write! macro
@@ -132,6 +133,7 @@ v.push(42);
 ```
 
 Common embedded allocator crates:
+
 - `linked-list-allocator`: general purpose, `no_std`
 - `buddy-alloc`: power-of-two buddy system
 - `dlmalloc`: port of Doug Lea's malloc

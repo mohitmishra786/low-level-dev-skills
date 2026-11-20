@@ -9,7 +9,7 @@ description: Apple Silicon skill for M-series development and profiling. Use whe
 
 Guide agents through Apple Silicon (M-series) development: unified memory architecture, AMX matrix coprocessor access via Accelerate, Metal Performance Shaders for GPU compute, `sysctl` hardware queries, Instruments profiling, command-line leak tools, Rosetta 2 translation behavior, and 16KB page size implications.
 
-## When to Use
+## Triggers
 
 - Optimizing native ARM64 apps on macOS for M1/M2/M3/M4
 - Using GPU/NPU compute without discrete GPU PCIe transfers
@@ -22,7 +22,7 @@ Guide agents through Apple Silicon (M-series) development: unified memory archit
 
 ### 1. Unified memory architecture
 
-```
+```text
 Apple Silicon SoC
 ├── CPU cores (P + E cores)
 ├── GPU cores
@@ -31,6 +31,7 @@ Apple Silicon SoC
 ```
 
 Implications:
+
 - `cudaMemcpy` equivalent is unnecessary for CPU↔GPU on Metal
 - Memory bandwidth shared across agents — profile holistically
 - Process memory includes all unified allocations
@@ -68,6 +69,7 @@ mmap(NULL, size, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0);
 ```
 
 Impact:
+
 - `posix_memalign` minimum alignment often 16KB for large allocs
 - JVM/Go runtimes auto-tune; custom allocators must adapt
 - Test on device — x86 CI may use 4KB pages
@@ -202,7 +204,7 @@ clang -arch arm64 -O3 -mcpu=apple-m1 -o app app.c
 | Instruments empty trace | Sandbox/permissions | Run from Xcode or sign app |
 | sysctl not found | Wrong key name | `sysctl -a | grep -i feat` |
 
-## Related Skills
+## Related skills
 
 - `skills/low-level-programming/assembly-arm` — Darwin ABI, AArch64
 - `skills/platform/arm-sve` — SVE2 on M4+

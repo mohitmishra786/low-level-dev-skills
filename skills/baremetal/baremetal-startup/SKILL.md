@@ -9,7 +9,7 @@ description: Bare-metal startup skill for reset-to-main bring-up. Use when writi
 
 Guide agents through bare-metal startup from reset to `main()`: reset and exception vectors, `.data`/`.bss` initialization, stack and heap setup, C runtime integration with linker scripts, and common Cortex-M and RISC-V bring-up bugs.
 
-## When to Use
+## Triggers
 
 - Firmware hangs before reaching `main()`
 - Porting to a new MCU without vendor HAL
@@ -21,7 +21,7 @@ Guide agents through bare-metal startup from reset to `main()`: reset and except
 
 ### 1. Boot sequence mental model
 
-```
+```text
 Power-on / reset
 ├── CPU loads SP from vector[0]
 ├── CPU branches to Reset_Handler from vector[1]
@@ -148,7 +148,7 @@ Cross-link `skills/embedded/linker-scripts` for MEMORY/SECTIONS layout.
 
 ### 7. Agent usage examples
 
-```
+```text
 /baremetal-startup My STM32 never reaches main — what should Reset_Handler do?
 /baremetal-startup How do I relocate the vector table after bootloader jump?
 ```
@@ -164,7 +164,7 @@ Cross-link `skills/embedded/linker-scripts` for MEMORY/SECTIONS layout.
 | `main` returns into garbage | No loop after main | `while(1)` or `WFI` loop |
 | C++ static init crash | Constructors before clocks | Call `SystemInit` first |
 
-## Related Skills
+## Related skills
 
 - `skills/embedded/linker-scripts` — `_estack`, LMA/VMA, section placement
 - `skills/baremetal/interrupts-and-exceptions-baremetal` — vector table IRQ entries

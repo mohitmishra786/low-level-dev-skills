@@ -9,7 +9,7 @@ description: Custom allocator skill for memory allocation strategies. Use when i
 
 Guide agents through memory allocator design and tuning: pool/slab/arena/buddy taxonomy, jemalloc internals and `MALLOC_CONF`, mimalloc design, tcmalloc thread-caching, writing a simple pool allocator in C, Rust `GlobalAlloc` trait, fragmentation metrics, and benchmarking.
 
-## When to Use
+## Triggers
 
 - Replacing malloc for latency-sensitive or embedded workloads
 - Tuning jemalloc/mimalloc for server heap behavior
@@ -22,7 +22,7 @@ Guide agents through memory allocator design and tuning: pool/slab/arena/buddy t
 
 ### 1. Allocator taxonomy
 
-```
+```text
 Allocator types
 ├── Pool/fixed-size — O(1) alloc/free, fixed block sizes
 ├── Slab — kernel-style, cache-friendly size classes
@@ -117,6 +117,7 @@ export MALLOC_CONF="prof:true,prof_active:true,lg_prof_sample:19"
 ```
 
 jemalloc concepts:
+
 - **Size classes** — rounded allocation sizes
 - **tcache** — per-thread cache for hot sizes
 - **arenas** — reduce contention across threads
@@ -228,7 +229,7 @@ Compare: single-thread alloc/free, multi-thread contention, mixed size distribut
 | Worse perf with mimalloc | Wrong workload fit | Benchmark; try jemalloc |
 | High external fragmentation | Long-lived mixed sizes | Segregate by lifetime; pools |
 
-## Related Skills
+## Related skills
 
 - `skills/allocators/numa-programming` — NUMA-aware allocation
 - `skills/rust/rust-no-std` — custom allocators in embedded Rust

@@ -100,7 +100,8 @@ include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 ### 3. sys crate pattern
 
 Structure:
-```
+
+```text
 mylib-sys/
 ├── Cargo.toml
 ├── build.rs        # links the library

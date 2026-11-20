@@ -9,7 +9,7 @@ description: JIT compilation skill for runtime code generation. Use when buildin
 
 Guide agents through just-in-time compilation: LLVM ORC JIT v2 (`ExecutionSession`, `IRLayer`, `ObjectLayer`), LLJIT for simpler use cases, Cranelift JIT, inline caches for dynamic dispatch, trampolines for lazy compilation, security considerations (W^X, code signing), and Rust `dynasm` for x86 codegen.
 
-## When to Use
+## Triggers
 
 - Building an interpreter with a JIT hot-path
 - Implementing lazy function compilation on first call
@@ -22,7 +22,7 @@ Guide agents through just-in-time compilation: LLVM ORC JIT v2 (`ExecutionSessio
 
 ### 1. JIT architecture overview
 
-```
+```text
 Source/AST/Bytecode
     → IR (LLVM IR or Cranelift CLIF)
     → Object file (in memory)
@@ -95,13 +95,14 @@ auto Sym = ES.lookup({&MainJD}, "my_func");
 ```
 
 Layers:
+
 - **IRLayer** — compiles LLVM IR to object
 - **ObjectLayer** — links relocatable objects
 - **ExecutionSession** — symbol lookup and JITDylib management
 
 ### 4. Lazy compilation with trampolines
 
-```
+```text
 First call → trampoline → compile function → patch trampoline → direct call
 ```
 
@@ -163,7 +164,7 @@ Cranelift: faster compile times than LLVM, good for embeddable JITs.
 
 ### 7. Security — W^X policy
 
-```
+```text
 W^X (Write XOR Execute)
 ├── Memory page is writable OR executable, never both
 ├── JIT: allocate RW → write code → mprotect(RX)
@@ -202,7 +203,7 @@ Use for lightweight asm snippets without LLVM dependency.
 
 ### 9. Decision tree
 
-```
+```text
 JIT backend choice?
 ├── Need LLVM optimizations → ORC JIT / LLJIT
 ├── Fast compile, embeddable → Cranelift
@@ -221,7 +222,7 @@ JIT backend choice?
 | LLVM JIT slow compile | `-O2` in JIT | Use `-O0` for JIT; optimize hot paths only |
 | Cranelift verify error | Invalid CLIF | Enable `cranelift_codegen::verify_function` |
 
-## Related Skills
+## Related skills
 
 - `skills/compiler-internals/llvm-passes` — optimize before JIT
 - `skills/compiler-internals/compiler-frontend` — AST to IR for JIT input
