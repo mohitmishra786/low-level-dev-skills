@@ -44,8 +44,10 @@ void SystemInit(void)
     RCC->CR |= RCC_CR_HSEON;
     while (!(RCC->CR & RCC_CR_HSERDY)) {}
 
+    /* M=8, N=336, P=2, Q=7: VCO 336 MHz, SYSCLK 168 MHz, USB/SDIO 48 MHz */
     RCC->PLLCFGR = RCC_PLLCFGR_PLLSRC_HSE | (8 << 0) | (336 << 6) | (0 << 16) | (7 << 24);
-    RCC->CFGR   |= RCC_CFGR_PPRE1_DIV2 | RCC_CFGR_PPRE2_DIV1 | RCC_CFGR_HPRE_DIV1;
+    /* AHB 168 MHz, APB1 42 MHz (max 42), APB2 84 MHz (max 84) */
+    RCC->CFGR   |= RCC_CFGR_HPRE_DIV1 | RCC_CFGR_PPRE1_DIV4 | RCC_CFGR_PPRE2_DIV2;
     RCC->CR     |= RCC_CR_PLLON;
     while (!(RCC->CR & RCC_CR_PLLRDY)) {}
 
@@ -58,6 +60,10 @@ void SystemInit(void)
 ```
 
 Always match `FLASH_ACR` wait states to voltage scale and SYSCLK per reference manual table.
+Check the APB prescalers against the bus limits in the datasheet (STM32F405/407: APB1 42 MHz,
+APB2 84 MHz). On F405/407, timers on a divided APB bus run at twice the APB clock, so APB1 timers
+get 84 MHz here. F42x/F43x add `RCC_DCKCFGR.TIMPRE`, which changes the multiplier to x4 for some
+prescalers; check the timer clock table in the reference manual for other parts.
 
 ### 3. Enable peripheral clock before MMIO
 
