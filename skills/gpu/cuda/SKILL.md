@@ -15,7 +15,7 @@ Guide agents through NVIDIA CUDA C/C++ development: kernel launch configuration,
 - Choosing block/grid dimensions and estimating occupancy
 - Debugging slow kernels due to memory access patterns or low occupancy
 - Setting up multi-stream pipelines with async `cudaMemcpyAsync`
-- Compiling with nvcc and selecting architecture flags (`-gencode`)
+- Compiling with nvcc and selecting architecture flags for CUDA 13 (`-gencode`, `sm_100a`)
 - Using Thrust for parallel primitives instead of hand-written kernels
 
 ## Workflow
@@ -120,22 +120,44 @@ Pinned host memory (`cudaMallocHost`) enables true async DMA overlap with kernel
 
 ### 4. nvcc compilation
 
-```bash
-# Single architecture (local GPU)
-nvcc -O3 -arch=sm_80 -o prog vector_add.cu
+CUDA 13 (current: 13.5) supports compute capability 7.5 and newer. Maxwell, Pascal and Volta
+(`sm_50`–`sm_72`) were removed: `nvcc -arch=sm_70` fails with `Unsupported gpu architecture 'sm_70'`.
+Keep a CUDA 12.x toolkit for those GPUs. CUDA 13.x needs driver 580+; from 13.4 on, the Linux
+toolkit no longer bundles the driver.
 
-# Fat binary for multiple GPUs
+| Compute capability | GPUs | nvcc target |
+|--------------------|------|-------------|
+| 7.5 | Turing (T4, RTX 20) | `sm_75` |
+| 8.0 / 8.6 / 8.7 / 8.9 | Ampere (A100, RTX 30, Orin), Ada (L4, RTX 40) | `sm_80`, `sm_86`, `sm_87`, `sm_89` |
+| 9.0 | Hopper (H100/H200) | `sm_90` (`sm_90a` for `wgmma`) |
+| 10.0 / 10.3 / 11.0 | Blackwell datacenter (B200, B300), Thor | `sm_100`, `sm_103`, `sm_110` |
+| 10.7 | Rubin | `compute_107` (listed by nvcc 13.5) |
+| 12.0 / 12.1 | Blackwell consumer (RTX 50, RTX PRO), DGX Spark | `sm_120`, `sm_121` |
+
+`nvcc --list-gpu-arch` prints what the installed toolkit accepts. Suffixes: `sm_100a` uses
+architecture-specific instructions (runs only on that exact architecture), `sm_100f` targets the
+family (forward compatible within it).
+
+```bash
+# Single architecture (local GPU); -arch=native picks the installed GPU
+nvcc -O3 -arch=sm_90 -o prog vector_add.cu
+
+# Fat binary: SASS for each target plus PTX for future GPUs (JIT-compiled by the driver)
 nvcc -O3 \
   -gencode arch=compute_80,code=sm_80 \
   -gencode arch=compute_90,code=sm_90 \
+  -gencode arch=compute_120,code=[sm_120,compute_120] \
   -o prog vector_add.cu
 
+# Every major architecture the toolkit supports (13.5: sm_75 sm_80 sm_90 sm_100 sm_110 sm_120)
+nvcc -O3 -arch=all-major -o prog vector_add.cu
+
 # Debug symbols for cuda-gdb
-nvcc -G -g -O0 -arch=sm_80 -o prog_debug vector_add.cu
+nvcc -G -g -O0 -arch=sm_90 -o prog_debug vector_add.cu
 
 # Show PTX/SASS
-nvcc -arch=sm_80 -ptx vector_add.cu
-nvcc -arch=sm_80 -cubin vector_add.cu
+nvcc -arch=sm_90 -ptx vector_add.cu
+nvcc -arch=sm_90 -cubin vector_add.cu
 cuobjdump -sass prog
 ```
 
@@ -222,3 +244,4 @@ float val = data[blockIdx.x * blockDim.x + threadIdx.x];
 - `skills/gpu/hip-rocm` — porting CUDA kernels to AMD HIP
 - `skills/gpu/triton-lang` — Python DSL alternative for custom kernels
 - `skills/hpc/openmp` — host-side parallelism alongside CUDA
+- `skills/gpu/cuda-tile` — tile-based kernels (cuTile Python, CUDA Tile C++) for Ampere and newer

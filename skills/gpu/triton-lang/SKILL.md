@@ -231,3 +231,4 @@ Compare against PyTorch reference on small inputs before scaling up.
 - `skills/gpu/gpu-memory-model` — coalescing and occupancy theory
 - `skills/gpu/hip-rocm` — AMD GPU path (Triton supports ROCm)
 - `skills/hpc/openmp` — CPU parallelism alongside GPU kernels
+- Use `skills/gpu/cuda-tile` for NVIDIA's tile DSL (cuTile) and Tile IR
