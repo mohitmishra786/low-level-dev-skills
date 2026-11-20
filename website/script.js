@@ -157,6 +157,7 @@ const skills = [
   { name: "rustc-basics", category: "rust", desc: "Guide agents through Rust compiler invocation: RUSTFLAGS, Cargo profile configuration, build modes, MIR and assembly inspection, monomorp..." },
   // security
   { name: "kernel-security", category: "security", desc: "Guide agents through Linux kernel security: LSM frameworks (SELinux, AppArmor), seccomp-bpf with libseccomp, KASLR and bypass mitigations..." },
+  { name: "memory-safe-c-cpp", category: "security", desc: "Guide agents through making existing C and C++ safer: -fhardened and FORTIFY, counted_by bounds checks, library hardening, Arm MTE,..." },
   { name: "reverse-engineering", category: "security", desc: "Guide agents through reverse engineering binaries: Ghidra project setup and decompilation, radare2 analysis workflow, Binary Ninja script..." },
   // virtualization
   { name: "containers-internals", category: "virtualization", desc: "Guide agents through Linux container internals: namespaces (clone, unshare, nsenter), cgroups v2 resource limits, overlayfs storage, runc..." },
@@ -300,7 +301,7 @@ const tagInstalls = [
       { label: 'Virtualization', skills: ['qemu-kvm', 'hypervisor-internals', 'containers-internals'] },
       { label: 'Async I/O', skills: ['io-uring', 'dpdk', 'af-xdp'] },
       { label: 'Allocators & NUMA', skills: ['custom-allocators', 'numa-programming'] },
-      { label: 'Security', skills: ['reverse-engineering', 'kernel-security'] },
+      { label: 'Security', skills: ['reverse-engineering', 'kernel-security', 'memory-safe-c-cpp'] },
       { label: 'Platform', skills: ['arm-sve', 'riscv-privileged', 'apple-silicon'] },
     ],
   },
@@ -333,7 +334,7 @@ const steps = [
 const treeStructure = `<span class="dir">low-level-dev-skills/</span>
 ├── <span class="file">README.md</span>
 ├── <span class="file">AGENTS.md</span>
-└── <span class="dir">skills/</span>    <span class="comment"># 146 skills across 25 categories</span>
+└── <span class="dir">skills/</span>    <span class="comment"># 147 skills across 25 categories</span>
     ├── <span class="dir">allocators/</span>  <span class="comment"># custom-allocators numa-programming</span>
     ├── <span class="dir">async-io/</span>  <span class="comment"># af-xdp dpdk io-uring</span>
     ├── <span class="dir">baremetal/</span>  <span class="comment"># adc-dac-baremetal baremetal-startup bootloaders-embedded datasheet-and-refmanual-reading dma-baremetal gpio-baremetal +8 more</span>
@@ -356,7 +357,7 @@ const treeStructure = `<span class="dir">low-level-dev-skills/</span>
     ├── <span class="dir">qemu/</span>  <span class="comment"># protocol-analysis qemu-embedded-simulation resource-optimization-lowend verilog-basics-for-lowlevel</span>
     ├── <span class="dir">runtimes/</span>  <span class="comment"># binary-hardening formal-verification fuzzing sanitizers wasm-emscripten wasm-wasmtime</span>
     ├── <span class="dir">rust/</span>  <span class="comment"># cargo-workflows rust-async-internals rust-build-times rust-cross rust-debugging rust-ffi +6 more</span>
-    ├── <span class="dir">security/</span>  <span class="comment"># kernel-security reverse-engineering</span>
+    ├── <span class="dir">security/</span>  <span class="comment"># kernel-security memory-safe-c-cpp reverse-engineering</span>
     ├── <span class="dir">virtualization/</span>  <span class="comment"># containers-internals hypervisor-internals qemu-kvm</span>
     └── <span class="dir">zig/</span>  <span class="comment"># zig-build-system zig-cinterop zig-compiler zig-comptime zig-cross zig-debugging +1 more</span>`;
 

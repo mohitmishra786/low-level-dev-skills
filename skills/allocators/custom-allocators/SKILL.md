@@ -237,3 +237,4 @@ Compare: single-thread alloc/free, multi-thread contention, mixed size distribut
 - `skills/profilers/valgrind` — heap leak detection
 - `skills/low-level-programming/cpu-cache-opt` — allocator alignment and false sharing
 - `skills/kernel/kernel-internals` — SLUB/buddy kernel allocators
+- Use `skills/security/memory-safe-c-cpp` for hardened allocators (Scudo, hardened_malloc, GWP-ASan)

@@ -262,3 +262,4 @@ For report interpretation examples, see [references/reports.md](references/repor
 - Use `skills/profilers/valgrind` for Memcheck when ASan is unavailable
 - Use `skills/runtimes/fuzzing` to auto-generate inputs that trigger sanitizer errors
 - Use `skills/compilers/gcc` or `skills/compilers/clang` for build flag context
+- Use `skills/security/memory-safe-c-cpp` for mitigations that stay enabled in production builds
