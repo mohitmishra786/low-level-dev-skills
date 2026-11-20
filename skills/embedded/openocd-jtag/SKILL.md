@@ -60,7 +60,7 @@ adapter speed 4000              ;# kHz
 ```tcl
 # openocd.cfg — SEGGER J-Link
 source [find interface/jlink.cfg]
-adapter serial 123456789        ;# optional: select probe by serial number
+# adapter serial 123456789     ;# optional: uncomment with your probe's serial to pick one probe
 transport select swd
 source [find target/nrf52.cfg]
 adapter speed 8000
@@ -185,8 +185,8 @@ monitor flash write_bank 0 firmware.bin 0
 ```tcl
 # openocd.cfg for J-Link
 source [find interface/jlink.cfg]
-jlink usb 0          # use first J-Link found
-transport select swd  # or jtag
+jlink usb 0          ;# use first J-Link found
+transport select swd  ;# or jtag
 adapter speed 4000
 
 source [find target/stm32l4x.cfg]
