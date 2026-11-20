@@ -207,7 +207,7 @@ sudo "$KOUT/build/bin/scx_mini"
 ```
 
 Rust user space: the scx repository's schedulers generate the libbpf-rs skeleton in `build.rs`
-(`scx_utils::BpfBuilder`) and drive it with `scx_utils` macros. The calls in
+(`scx_cargo::BpfBuilder`) and drive it with `scx_utils` macros. The calls in
 `scheds/rust/scx_cosmos/src/main.rs` at v1.1.4, in order:
 
 ```rust
