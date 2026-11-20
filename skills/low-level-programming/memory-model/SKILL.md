@@ -1,6 +1,6 @@
 ---
 name: memory-model
-description: C++ and Rust memory model skill for concurrent programming. Use when understanding memory ordering, writing lock-free data structures, using std::atomic or Rust atomics, diagnosing data races, or selecting the correct memory order for atomic operations. Activates on queries about memory ordering, acquire-release, seq_cst, relaxed atomics, happens-before, memory barriers, std::atomic, or Rust atomic ordering.
+description: C++ and Rust memory model skill for concurrent programming. Use when understanding memory ordering, writing lock-free data structures, using std::atomic or Rust atomics, diagnosing data races, or selecting the correct memory order for atomic operations. Also covers futexes (futex_waitv, futex2) and rseq. Activates on queries about memory ordering, acquire-release, seq_cst, relaxed atomics, happens-before, memory barriers, std::atomic, Rust atomic ordering, futex, futex_waitv, or rseq.
 ---
 
 # Memory Model
@@ -184,6 +184,92 @@ sentinel.store(true, std::memory_order_relaxed);
 | Assuming sequential consistency without SeqCst | Each platform has different default consistency |
 
 For memory ordering rules and happens-before reference, see [references/cpp-memory-ordering.md](references/cpp-memory-ordering.md).
+
+### 9. Futexes and rseq
+
+Futexes are the kernel half of every mutex and condition variable: user space spins or uses
+atomics, and calls into the kernel only to sleep or wake. Two newer interfaces matter for
+custom synchronization:
+
+```c
+/* waitv.c — futex_waitv (Linux 5.16+): sleep on two futexes, wake on either */
+#define _GNU_SOURCE
+#include <linux/futex.h>
+#include <pthread.h>
+#include <stdatomic.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <sys/syscall.h>
+#include <time.h>
+#include <unistd.h>
+
+static _Atomic uint32_t f1, f2;
+
+static long futex_waitv(struct futex_waitv *w, unsigned n, unsigned flags,
+                        struct timespec *timeout, clockid_t clock)
+{
+    return syscall(SYS_futex_waitv, w, n, flags, timeout, clock);
+}
+
+static void *waker(void *arg)
+{
+    (void)arg;
+    usleep(100 * 1000);
+    atomic_store(&f2, 1);                                   /* change the value first */
+    syscall(SYS_futex, &f2, FUTEX_WAKE_PRIVATE, 1, NULL, NULL, 0);
+    return NULL;
+}
+
+int main(void)
+{
+    struct futex_waitv w[2] = {
+        { .uaddr = (uintptr_t)&f1, .val = 0, .flags = FUTEX2_SIZE_U32 | FUTEX2_PRIVATE },
+        { .uaddr = (uintptr_t)&f2, .val = 0, .flags = FUTEX2_SIZE_U32 | FUTEX2_PRIVATE },
+    };
+    pthread_t t;
+    pthread_create(&t, NULL, waker, NULL);
+    long idx = futex_waitv(w, 2, 0, NULL, CLOCK_MONOTONIC); /* returns index of the woken futex */
+    printf("woken by futex %ld (f2=%u)\n", idx, atomic_load(&f2));   /* woken by futex 1 */
+    pthread_join(t, NULL);
+    return 0;
+}
+```
+
+```c
+/* futex2 single-futex calls (Linux 6.7+): explicit size flags and a bitset mask */
+syscall(SYS_futex_wait, &word, 0UL /* expected */, 0xffffffffUL /* mask */,
+        FUTEX2_SIZE_U32 | FUTEX2_PRIVATE, NULL, CLOCK_MONOTONIC);
+syscall(SYS_futex_wake, &word, 0xffffffffUL, 1 /* waiters */, FUTEX2_SIZE_U32 | FUTEX2_PRIVATE);
+```
+
+The mask must fit the futex size: `~0UL` with `FUTEX2_SIZE_U32` fails with `EINVAL`. Always
+re-check the value after waking; the kernel only promises the value was different or a wake happened.
+
+Restartable sequences (rseq) give each thread a kernel-updated area with its current CPU. glibc
+2.35+ registers it for every thread, which enables per-CPU data structures without atomics on
+the fast path (tcmalloc uses this):
+
+```c
+/* rseq.c — read the current CPU from the rseq area glibc registers (glibc 2.35+) */
+#define _GNU_SOURCE
+#include <sched.h>
+#include <stdio.h>
+#include <sys/rseq.h>
+
+int main(void)
+{
+    if (__rseq_size == 0) {                       /* registration disabled or unsupported */
+        puts("rseq not registered");
+        return 1;
+    }
+    struct rseq *rs = (struct rseq *)((char *)__builtin_thread_pointer() + __rseq_offset);
+    printf("rseq cpu_id=%u sched_getcpu=%d size=%u\n", rs->cpu_id, sched_getcpu(), __rseq_size);
+    return 0;
+}
+```
+
+`GLIBC_TUNABLES=glibc.pthread.rseq=0` disables glibc's registration (the program above then
+prints `rseq not registered`), which is needed when a library registers its own rseq area.
 
 ## Related skills
 
