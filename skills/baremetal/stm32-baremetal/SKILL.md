@@ -61,7 +61,9 @@ void SystemInit(void)
 
 Always match `FLASH_ACR` wait states to voltage scale and SYSCLK per reference manual table.
 Check the APB prescalers against the bus limits in the datasheet (STM32F405/407: APB1 42 MHz,
-APB2 84 MHz). Timers on a divided APB bus run at twice the APB clock, so APB1 timers get 84 MHz here.
+APB2 84 MHz). On F405/407, timers on a divided APB bus run at twice the APB clock, so APB1 timers
+get 84 MHz here. F42x/F43x add `RCC_DCKCFGR.TIMPRE`, which changes the multiplier to x4 for some
+prescalers; check the timer clock table in the reference manual for other parts.
 
 ### 3. Enable peripheral clock before MMIO
 
