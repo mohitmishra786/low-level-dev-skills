@@ -96,7 +96,7 @@ npx skills add mohitmishra786/low-level-dev-skills --skill qemu-kvm hypervisor-i
 npx skills add mohitmishra786/low-level-dev-skills --skill openmp mpi rdma-verbs
 
 # Security and reverse engineering
-npx skills add mohitmishra786/low-level-dev-skills --skill reverse-engineering kernel-security
+npx skills add mohitmishra786/low-level-dev-skills --skill reverse-engineering kernel-security memory-safe-c-cpp
 
 # Platform-specific (ARM SVE, RISC-V privileged, Apple Silicon)
 npx skills add mohitmishra786/low-level-dev-skills --skill arm-sve riscv-privileged apple-silicon
@@ -479,12 +479,13 @@ After installation, invoke skills in your AI agent:
 | `hypervisor-internals` | VT-x/SVM, VMCS/VMCB, EPT/NPT, APIC virtualization |
 | `containers-internals` | namespaces, cgroups v2, overlayfs, runc, seccomp |
 
-### Security (2 skills)
+### Security (3 skills)
 
 | Skill | Purpose |
 |-------|---------|
 | `reverse-engineering` | Ghidra, radare2, Binary Ninja, stripped binary triage |
 | `kernel-security` | SELinux, AppArmor, seccomp, KASLR, CET, PAC/BTI, KASAN |
+| `memory-safe-c-cpp` | -fhardened, FORTIFY, counted_by, auto-var-init, MTE, hardened allocators, Fil-C, CHERI |
 
 ### HPC (3 skills)
 
@@ -509,7 +510,7 @@ After installation, invoke skills in your AI agent:
 | `carbon-lang` | Carbon syntax, C++ interop, carbon-toolchain, migration |
 | `hare-lang` | hare build/test, stdlib, C FFI, tagged union errors |
 
-**Total: 146 skills**
+**Total: 147 skills**
 
 ## Design
 

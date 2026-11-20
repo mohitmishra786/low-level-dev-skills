@@ -248,3 +248,4 @@ For the full hardening flags reference, see [references/hardening-flags.md](refe
 - Use `skills/observability/ebpf` for seccomp-bpf program writing with libbpf
 - Use `skills/rust/rust-security` for Rust's memory-safety hardening approach
 - Use `skills/binaries/elf-inspection` to verify mitigations in ELF binaries
+- Use `skills/security/memory-safe-c-cpp` for `-fhardened`, MTE, hardened allocators and Fil-C
