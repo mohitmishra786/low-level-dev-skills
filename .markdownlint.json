@@ -7,7 +7,11 @@
     "headings": false
   },
   "MD010": {
-    "ignore_code_languages": ["makefile", "make"]
+    "ignore_code_languages": [
+      "makefile",
+      "make",
+      "hare"
+    ]
   },
   "MD060": false,
   "MD036": false,

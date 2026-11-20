@@ -57,6 +57,7 @@ gdb ./myapp
 ```
 
 Break on Zig panics:
+
 ```gdb
 (gdb) break __zig_panic_start
 (gdb) break std.builtin.default_panic
@@ -84,7 +85,7 @@ lldb ./myapp
 
 Zig panics include the source location and reason:
 
-```
+```text
 thread 'main' panic: index out of bounds: index 5, len 3
 /home/user/src/main.zig:15:14
 /home/user/src/main.zig:42:9
@@ -92,6 +93,7 @@ thread 'main' panic: index out of bounds: index 5, len 3
 ```
 
 Common panic messages:
+
 | Panic | Cause |
 |-------|-------|
 | `index out of bounds: index N, len M` | Slice/array OOB access |
@@ -106,7 +108,7 @@ Common panic messages:
 
 Zig tracks where errors propagate with error return traces:
 
-```
+```text
 error: FileNotFound
 /home/user/src/main.zig:30:20: 0x10a3b in openConfig (main)
     const f = try std.fs.openFileAbsolute(path, .{});
@@ -122,6 +124,7 @@ error: FileNotFound
 The trace shows the exact `try` chain where the error propagated. Read bottom-up: `main → run → openConfig`.
 
 Enable in release builds:
+
 ```zig
 // build.zig
 const exe = b.addExecutable(.{
@@ -191,6 +194,7 @@ fn logFn(
 Install the `zig.vscode-zig` extension and CodeLLDB.
 
 `.vscode/launch.json`:
+
 ```json
 {
     "version": "0.2.0",
@@ -209,6 +213,7 @@ Install the `zig.vscode-zig` extension and CodeLLDB.
 ```
 
 `.vscode/tasks.json`:
+
 ```json
 {
     "version": "2.0.0",

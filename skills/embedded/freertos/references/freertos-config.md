@@ -1,6 +1,6 @@
 # FreeRTOS Configuration Reference
 
-Source: https://www.freertos.org/a00110.html
+Source: <https://www.freertos.org/a00110.html>
 
 ## Table of Contents
 

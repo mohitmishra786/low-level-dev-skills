@@ -1,6 +1,6 @@
 # Embedded Rust Target Reference
 
-Source: https://docs.rust-embedded.org/book/
+Source: <https://docs.rust-embedded.org/book/>
 
 ## Target Triples
 

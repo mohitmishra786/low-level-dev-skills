@@ -65,6 +65,7 @@ let slice: &[u32] = unsafe {
 ```
 
 Rules for sound raw pointer dereference:
+
 - Pointer must be non-null
 - Pointer must be aligned for `T`
 - Memory must be initialized for `T`
@@ -175,6 +176,7 @@ let n = u32::from_ne_bytes(bytes); // instead of transmute for byte arrays
 ```
 
 Common transmute pitfalls:
+
 - Wrong sizes (compile error, but check for generic types)
 - Creating invalid enum values
 - Creating references with wrong lifetimes
@@ -223,7 +225,7 @@ When reviewing an `unsafe` block:
 
 ### 8. When to use unsafe
 
-```
+```text
 Before reaching for unsafe, check:
 ├── Does std have a safe API? (Vec, Box, Arc — usually yes)
 ├── Does a crate handle it? (memmap2, nix, windows-sys)

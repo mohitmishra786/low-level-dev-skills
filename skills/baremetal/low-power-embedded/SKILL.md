@@ -9,7 +9,7 @@ description: Low-power embedded skill for sleep modes and energy optimization. U
 
 Guide agents through MCU low-power modes: sleep vs deep sleep (stop/standby), peripheral and bus clock gating, wake-up source configuration, and practical current measurement — with Cortex-M `WFI`/`WFE` and vendor PWR examples (STM32-focused patterns apply broadly).
 
-## When to Use
+## Triggers
 
 - Battery-powered firmware missing power budget
 - Wake-up latency vs consumption tradeoffs
@@ -67,7 +67,7 @@ After Stop, re-init clocks and peripherals that lost their registers.
 
 ### 4. Clock gating checklist
 
-```
+```text
 Before sleep
 ├── Disable unused peripheral clocks (RCC xENR)
 ├── Disable ADC/DAC continuous modes
@@ -97,7 +97,7 @@ FreeRTOS `configUSE_TICKLESS_IDLE` maps to WFI/Stop — coordinate with `skills/
 
 ### 8. Agent usage
 
-```
+```text
 /low-power-embedded Configure STM32 Stop mode with EXTI0 wake and PLL restore
 ```
 
@@ -111,7 +111,7 @@ FreeRTOS `configUSE_TICKLESS_IDLE` maps to WFI/Stop — coordinate with `skills/
 | UART dead after wake | Clock tree not restored | Call `SystemInit()` path |
 | Higher than datasheet uA | Floating GPIO | Set unused pins analog or pull |
 
-## Related Skills
+## Related skills
 
 - `skills/baremetal/interrupts-and-exceptions-baremetal` — EXTI wake IRQs
 - `skills/baremetal/gpio-baremetal` — pin mode for leakage control

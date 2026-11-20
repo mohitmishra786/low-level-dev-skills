@@ -1,6 +1,6 @@
 # Emscripten Linker Flags Reference
 
-Source: https://emscripten.org/docs/tools_reference/settings_reference.html
+Source: <https://emscripten.org/docs/tools_reference/settings_reference.html>
 
 ## Key Settings
 

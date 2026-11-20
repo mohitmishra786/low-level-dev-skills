@@ -9,7 +9,7 @@ description: Hardware virtualization internals skill for Intel VT-x and AMD-V. U
 
 Explain hardware virtualization internals for agents: Intel VT-x (VMXON, VMCS, VMLAUNCH/VMRESUME, VMEXIT reasons), AMD SVM (VMCB, #VMEXIT), Extended/Nested Page Tables (EPT/NPT), APIC virtualization, MSR bitmaps, virtual interrupt injection, and references for building minimal type-1 hypervisors.
 
-## When to Use
+## Triggers
 
 - Understanding how KVM, Hyper-V, or VMware map to hardware features
 - Debugging VMEXIT storms or EPT violations
@@ -22,7 +22,7 @@ Explain hardware virtualization internals for agents: Intel VT-x (VMXON, VMCS, V
 
 ### 1. Virtualization types
 
-```
+```text
 Type 1 (bare metal)     Type 2 (hosted)
 ├── Hyper-V             ├── KVM + QEMU
 ├── Xen                 ├── VirtualBox
@@ -32,7 +32,7 @@ Type 1 (bare metal)     Type 2 (hosted)
 
 ### 2. Intel VT-x overview
 
-```
+```text
 VMX operation
 ├── VMXON — enter VMX root mode
 ├── VMCS setup — guest/host state fields
@@ -42,6 +42,7 @@ VMX operation
 ```
 
 Key structures:
+
 - **VMCS** (Virtual Machine Control Structure) — guest/host state, control fields
 - **VMEXIT** — forced exit to hypervisor (I/O, MSR, EPT fault, interrupt)
 
@@ -63,7 +64,7 @@ if (boot_cpu_has(X86_FEATURE_VMX))
 
 VMEXIT reasons (common):
 
-```
+```text
 Exit reason codes (Intel)
 ├── 10 — CPUID
 ├── 28 — CR access
@@ -75,7 +76,7 @@ Exit reason codes (Intel)
 
 ### 4. AMD SVM (AMD-V)
 
-```
+```text
 SVM operation
 ├── EFER.SVME = 1
 ├── VMCB setup — guest save area + control area
@@ -95,7 +96,7 @@ VMCB control area: intercept vectors (CPUID, MSR, IO), nested paging enable, ASI
 
 ### 5. EPT / NPT — second-level paging
 
-```
+```text
 Guest virtual (GVA) → Guest physical (GPA) [guest page tables]
 GPA → Host physical (HPA) [EPT/NPT, managed by hypervisor]
 ```
@@ -111,7 +112,7 @@ Mitigations for side channels: flush L1D on VMEXIT (MDS), cache partitioning.
 
 ### 6. MSR and I/O bitmaps
 
-```
+```text
 MSR bitmap (4KB)
 ├── Per-MSR read/write intercept control
 └── Avoid VMEXIT on common MSRs for performance
@@ -125,7 +126,7 @@ Hypervisors intercept `MSR_IA32_FEATURE_CONTROL`, `MSR_IA32_EFER`, etc.
 
 ### 7. APIC virtualization
 
-```
+```text
 APIC virtualization
 ├── Virtual interrupt delivery — reduce VMEXIT on EOI
 ├── Posted interrupts — hardware-assisted injection
@@ -139,7 +140,7 @@ Reduces overhead for interrupt-heavy guests (network I/O).
 Intel: inject via VM-entry interruption-information field.
 AMD: V_IRQ, V_INTR_PRIO in VMCB.
 
-```
+```text
 Device interrupt → host IRQ handler → hypervisor
     → inject virtual IRQ to guest IDT
     → guest ISR runs
@@ -155,6 +156,7 @@ Device interrupt → host IRQ handler → hypervisor
 | barevisor | x86_64 | Rust/ASM educational |
 
 Study path:
+
 1. CPUID detection and VMX enable
 2. Allocate VMCS, set host/guest state
 3. Handle VMEXIT for CPUID and HLT
@@ -182,7 +184,7 @@ ioctl(vcpu, KVM_RUN, 0);  // runs until VMEXIT
 | Guest triple fault | Bad IDT or unhandled exception | Check guest interrupt setup |
 | I/O intercept overhead | All ports trapped | Shrink I/O bitmap |
 
-## Related Skills
+## Related skills
 
 - `skills/virtualization/qemu-kvm` — practical KVM/QEMU usage
 - `skills/virtualization/containers-internals` — lighter isolation without full VM

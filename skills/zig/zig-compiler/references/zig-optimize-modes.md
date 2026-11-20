@@ -52,7 +52,7 @@ fn get(x: u8) u8 {
 
 ### When to use each mode
 
-```
+```text
 Debug:       Development, always. Fast compile + all checks.
 ReleaseSafe: Staging/production where safety matters (servers, critical code).
              Same behavior as Debug on errors — panics instead of UB.

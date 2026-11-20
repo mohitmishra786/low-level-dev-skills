@@ -9,7 +9,7 @@ description: Reverse engineering skill for binary analysis. Use when decompiling
 
 Guide agents through reverse engineering binaries: Ghidra project setup and decompilation, radare2 analysis workflow, Binary Ninja scripting, initial triage with `strings`/`file`/`xxd`, identifying C++ patterns (vtables, RAII), analyzing stripped binaries, and diffing with Diaphora or BinDiff.
 
-## When to Use
+## Triggers
 
 - Analyzing an unknown binary without source code
 - Recovering algorithm logic from compiled executables
@@ -54,6 +54,7 @@ analyzeHeadless /tmp/ghidra_projects MyProject \
 ```
 
 Key steps:
+
 1. **Auto-analysis** — let Ghidra complete disassembly
 2. **Define functions** — `F` at entry points if missed
 3. **Decompiler** — Window → Decompiler (C-like output)
@@ -85,7 +86,7 @@ for f in fm.getFunctions(True):
 r2 suspicious_binary
 ```
 
-```
+```text
 [0x00001000]> aaa          # analyze all
 [0x00001000]> afl          # list functions
 [0x00001000]> pdf @ main   # disassemble function
@@ -96,7 +97,7 @@ r2 suspicious_binary
 
 Patching:
 
-```
+```text
 [0x00001000]> wx 9090 @ 0x401234   # write NOPs
 [0x00001000]> wci 0x401234         # insert instruction
 [0x00001000]> wt modified_binary
@@ -157,6 +158,7 @@ readelf -s binary | grep -E 'main|start'
 ```
 
 Strategies:
+
 - Identify `main` via libc init or entry point
 - Find syscalls (`syscall` insn on Linux)
 - String xref to locate error handlers
@@ -180,7 +182,7 @@ Use diffing to find patched vulnerability functions after updates.
 
 ### 8. RE decision tree
 
-```
+```text
 Binary type?
 ├── ELF/Linux → Ghidra + r2 + readelf
 ├── PE/Windows → Ghidra + PE-bear + x64dbg reference
@@ -199,7 +201,7 @@ Binary type?
 | Packed binary | UPX/etc. | `upx -d` or manual unpack |
 | No xrefs to string | PIE/RELRO | Follow GOT; runtime analysis |
 
-## Related Skills
+## Related skills
 
 - `skills/binaries/elf-inspection` — ELF structure analysis
 - `skills/debuggers/gdb` — dynamic analysis complement

@@ -36,6 +36,7 @@ pub enum Poll<T> {
 ```
 
 Execution model:
+
 1. Calling `.await` calls `poll()` on the future
 2. If `Pending`: current task registers its waker and yields to the runtime
 3. When the waker is triggered (I/O ready, timer fired), the runtime re-polls

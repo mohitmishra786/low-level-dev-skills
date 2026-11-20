@@ -9,7 +9,7 @@ description: Bare-metal UART skill for serial console and debug. Use when config
 
 Implement UART/USART for debug console and device communication: baud rate calculation, 8N1 framing, polling and interrupt-driven I/O, overrun handling, and optional DMA basics.
 
-## When to Use
+## Triggers
 
 - First `printf`/log output on new hardware
 - Serial protocol to sensor/module
@@ -20,7 +20,7 @@ Implement UART/USART for debug console and device communication: baud rate calcu
 
 ### 1. Baud rate (STM32)
 
-```
+```text
 BRR = pclk / (16 * baud)   /* oversampling by 16 — check RM for USART */
 ```
 
@@ -81,7 +81,7 @@ Link with `--specs=nosys.specs` or provide full syscalls.
 
 ### 5. Agent usage
 
-```
+```text
 /uart-serial-baremetal Calculate USART BRR for 115200 at 84 MHz PCLK
 ```
 
@@ -94,7 +94,7 @@ Link with `--specs=nosys.specs` or provide full syscalls.
 | No output | TX pin not AF | GPIO alternate function |
 | `printf` hangs | `_write` missing | Implement retarget |
 
-## Related Skills
+## Related skills
 
 - `skills/baremetal/gpio-baremetal` — TX/RX pin mux
 - `skills/baremetal/interrupts-and-exceptions-baremetal` — USART IRQ

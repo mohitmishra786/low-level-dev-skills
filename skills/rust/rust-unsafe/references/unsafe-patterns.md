@@ -156,6 +156,7 @@ cargo +nightly miri test test_my_unsafe_fn
 ```
 
 Pattern for testable unsafe:
+
 ```rust
 #[cfg(test)]
 mod tests {
@@ -191,6 +192,7 @@ cargo clippy -- -W clippy::undocumented-unsafe-blocks \
 4. Raw pointer access: tag must still be on the stack at time of access
 
 Violation example:
+
 ```rust
 let mut x = 5u32;
 let raw = &mut x as *mut u32;

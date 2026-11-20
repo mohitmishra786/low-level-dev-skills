@@ -24,7 +24,10 @@ Each skill has a `SKILL.md` file and optional `references/` for detailed content
 ## Validation Commands
 
 ```bash
-# Validate markdown formatting (requires markdownlint-cli)
+# Check frontmatter, required sections, cross-references and code-block tags (runs in CI)
+python3 scripts/check-skills.py
+
+# Validate markdown formatting (requires markdownlint-cli; CI disables MD013 for now)
 markdownlint skills/**/*.md
 
 # Check skill frontmatter is valid YAML

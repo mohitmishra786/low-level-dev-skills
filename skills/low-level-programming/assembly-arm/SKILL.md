@@ -209,7 +209,7 @@ Code assuming `PAGE_SIZE == 4096` may misalign buffers or fail `mmap` on macOS.
 
 ### 11. NEON → SVE2 migration hints
 
-```
+```text
 Porting checklist
 ├── Replace 128-bit fixed loops with svcnt*() strides on SVE hardware
 ├── Use predicates (svwhilelt) for tails instead of scalar epilogues

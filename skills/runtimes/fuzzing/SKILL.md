@@ -249,7 +249,7 @@ Produces traces showing which input bytes influenced branches — guides diction
 
 ### 12. OSS-Fuzz integration
 
-```
+```text
 OSS-Fuzz workflow
 ├── Add project/ in google/oss-fuzz repo (Dockerfile + build.sh)
 ├── Fuzz targets linked with -fsanitize=fuzzer,address

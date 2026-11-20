@@ -113,12 +113,14 @@ MIRIFLAGS="-Zmiri-ignore-leaks -Zmiri-disable-isolation" \
 ## Miri Limitations
 
 Miri cannot run:
+
 - Code using FFI/`extern "C"` functions not supported by Miri's shims
 - Assembly (`asm!`) blocks
 - Platform-specific syscalls not implemented in Miri
 - Very long-running programs (interpreter overhead ~100x)
 
 Workarounds:
+
 ```rust
 // Mock FFI functions for Miri testing
 #[cfg(not(miri))]

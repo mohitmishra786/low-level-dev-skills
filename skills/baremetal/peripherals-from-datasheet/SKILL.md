@@ -9,7 +9,7 @@ description: Peripheral driver methodology skill from MCU reference manuals. Use
 
 Guide agents through a repeatable methodology for writing peripheral drivers from MCU reference manuals: locating register maps, interpreting bit definitions, following init sequences, respecting timing constraints, and producing maintainable register-level code. Pair with `skills/baremetal/datasheet-and-refmanual-reading` for doc-navigation methodology (kept as separate skills).
 
-## When to Use
+## Triggers
 
 - Starting a driver without vendor HAL
 - Porting a peripheral between MCU families
@@ -20,7 +20,7 @@ Guide agents through a repeatable methodology for writing peripheral drivers fro
 
 ### 1. Reference manual navigation
 
-```
+```text
 Typical RM structure
 ├── Memory map (peripheral base addresses)
 ├── Peripheral chapter (UART, SPI, GPIO, ...)
@@ -52,7 +52,7 @@ Verify offset column matches struct layout (padding for reserved words).
 
 ### 3. Init sequence checklist
 
-```
+```text
 Peripheral bring-up order
 ├── 1. Enable bus clock (RCC/APB/AHB register)
 ├── 2. Reset peripheral (if RM requires)
@@ -111,7 +111,7 @@ void usart2_init(uint32_t baud) {
 
 ### 7. Agent usage examples
 
-```
+```text
 /peripherals-from-datasheet Walk me through USART init from STM32 RM
 /peripherals-from-datasheet What sections of the ref manual matter for SPI timing?
 ```
@@ -126,7 +126,7 @@ void usart2_init(uint32_t baud) {
 | IRQ stuck | Status flag clear sequence wrong | RM "clearing flags" subsection |
 | Silent data corruption | Endian or width mismatch | Match register access size |
 
-## Related Skills
+## Related skills
 
 - `skills/baremetal/datasheet-and-refmanual-reading` — fast RM navigation
 - `skills/baremetal/mmio-and-bit-manipulation` — register access patterns

@@ -2,7 +2,7 @@
 
 ## Triple Format
 
-```
+```text
 <cpu_arch>-<os>-<abi>
 ```
 

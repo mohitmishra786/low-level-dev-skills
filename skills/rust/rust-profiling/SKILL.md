@@ -60,6 +60,7 @@ cargo flamegraph --bench mybench -- --bench
 ```
 
 Custom flamegraph options:
+
 ```bash
 # More samples
 cargo flamegraph --freq 1000 --bin myapp
@@ -95,7 +96,8 @@ diff before.txt after.txt
 ```
 
 Typical output:
-```
+
+```text
  File  .text    Size    Crate Name
  2.4%   3.0% 47.0KiB      std <std macros>
  1.8%   2.3% 35.5KiB   myapp myapp::heavy_module::process
@@ -116,7 +118,8 @@ cargo llvm-lines --release | grep '^myapp'
 ```
 
 Typical output:
-```
+
+```text
    Lines      Copies  Function name
    85330           1  [LLVM passes]
     7761          92  core::fmt::write
@@ -125,6 +128,7 @@ Typical output:
 ```
 
 High `Copies` count = monomorphization expansion. Fix:
+
 ```rust
 // Before: generic, gets monomorphized for every T
 fn process<T: AsRef<[u8]>>(data: T) -> usize {
@@ -218,6 +222,7 @@ perf stat ./target/release/myapp args
 ```
 
 Rust-specific perf tips:
+
 - Build with `debug = 1` (line tables only) for faster builds with line-level attribution
 - Use `RUSTFLAGS="-C force-frame-pointers=yes"` for better call graphs without DWARF unwinding
 - Disable ASLR for reproducible addresses: `setarch $(uname -m) -R ./myapp`

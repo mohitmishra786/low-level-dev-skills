@@ -1,0 +1,23 @@
+name: Lint skills
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check skill structure (AGENTS.md rules)
+        run: python3 scripts/check-skills.py
+
+      - name: markdownlint
+        # MD013 (line length) is disabled here until the existing long lines are wrapped
+        run: npx --yes markdownlint-cli@0.45.0 --disable MD013 -- "skills/**/*.md"

@@ -9,7 +9,7 @@ description: MPI skill for distributed-memory parallel programming. Use when wri
 
 Guide agents through MPI (Message Passing Interface) programming: point-to-point and collective communication, non-blocking operations, subcommunicators, MPI+OpenMP hybrid patterns, process launching with `mpirun`, debugging techniques, MPI-IO, and common performance issues.
 
-## When to Use
+## Triggers
 
 - Parallelizing across multiple nodes or sockets
 - Implementing distributed algorithms (matrix decompose, FFT)
@@ -186,7 +186,7 @@ MPI_File_write_at_all(fh, offset, buf, count, MPI_DOUBLE, MPI_STATUS_IGNORE);
 
 ### 9. Performance issues
 
-```
+```text
 Common bottlenecks
 ├── Load imbalance → dynamic scheduling (OpenMP) or redistribute MPI chunks
 ├── Serialization at rank 0 → tree-based reduce, parallel I/O
@@ -212,7 +212,7 @@ mpiP  # lightweight profiler
 | `MPI_ERR_TRUNCATE` | Receive buffer too small | Match send/recv counts |
 | Hybrid oversubscription | Too many threads×ranks | `OMP_NUM_THREADS = cores/ranks` |
 
-## Related Skills
+## Related skills
 
 - `skills/hpc/openmp` — thread-level parallelism within MPI ranks
 - `skills/hpc/rdma-verbs` — low-latency interconnect under MPI

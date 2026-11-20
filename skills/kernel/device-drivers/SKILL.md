@@ -9,7 +9,7 @@ description: Linux device driver skill for kernel driver development. Use when w
 
 Guide agents through Linux kernel device driver development: the driver model (`platform_driver`, `i2c_driver`, `spi_driver`), character device lifecycle, IRQ handling including threaded IRQs, DMA engine API, regmap for register abstraction, runtime power management, and udev rules for userspace device nodes.
 
-## When to Use
+## Triggers
 
 - Writing a platform driver for memory-mapped hardware
 - Implementing a character device with read/write/ioctl
@@ -22,7 +22,7 @@ Guide agents through Linux kernel device driver development: the driver model (`
 
 ### 1. Driver model overview
 
-```
+```text
 Device tree / ACPI → bus (platform, i2c, spi, pci)
     → struct device → struct device_driver
         → probe() / remove()
@@ -267,7 +267,7 @@ module_i2c_driver(my_i2c_driver);
 | `copy_to_user` fault | Invalid userspace pointer | Validate with `access_ok` |
 | Runtime PM hang | Missing `pm_runtime_put` | Balance get/put; use `devm_pm_runtime_enable` |
 
-## Related Skills
+## Related skills
 
 - `skills/kernel/kernel-internals` — VFS, memory allocators underlying drivers
 - `skills/low-level-programming/linux-kernel-modules` — Kbuild, module loading, signing

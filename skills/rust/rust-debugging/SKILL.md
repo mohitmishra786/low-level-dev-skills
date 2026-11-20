@@ -51,6 +51,7 @@ rust-gdb target/debug/myapp
 ```
 
 Common GDB session for Rust:
+
 ```gdb
 # Basic
 (gdb) break main
@@ -87,6 +88,7 @@ lldb target/debug/myapp
 ```
 
 Common LLDB session:
+
 ```lldb
 (lldb) b main::main
 (lldb) r arg1 arg2
@@ -118,6 +120,7 @@ eprintln!("{bt}");
 ```
 
 For release binaries, keep debug symbols in a separate file:
+
 ```bash
 # Build release with debug info
 cargo build --release
@@ -141,6 +144,7 @@ panic::set_hook(Box::new(|info| {
 ```
 
 Common panic patterns:
+
 | Panic message | Likely cause |
 |---------------|-------------|
 | `index out of bounds: the len is N but the index is M` | Array/vec OOB access |

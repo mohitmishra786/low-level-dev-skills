@@ -9,7 +9,7 @@ description: Hare language skill for simple systems programming. Use when buildi
 
 Guide agents through the Hare programming language: design philosophy (simple, stable, compiled), `hare build`/`test`/`run` workflows, stdlib overview, C FFI with `@extern`, the type system (tagged unions, slices), error handling with `(T | error!)`, and comparison with C and Zig for systems utilities.
 
-## When to Use
+## Triggers
 
 - Writing small system utilities with C-like control and modern safety
 - Building CLI tools or daemons with minimal dependencies
@@ -205,7 +205,7 @@ hare test -v
 
 ### 9. Use cases
 
-```
+```text
 Good Hare fits
 ├── CLI utilities (grep-like, init tools)
 ├── Build tools and scripts replacing shell
@@ -229,11 +229,11 @@ Consider C/Zig instead when
 | Test not found | Missing `@test` | Name fn with `@test` attribute |
 | Platform syscall missing | Hare stdlib gap | Use `@extern` to libc |
 
-## Related Skills
+## Related skills
 
 - `skills/zig/zig-compiler` — Zig as alternative systems language
 - `skills/zig/zig-cinterop` — Zig C interop comparison
 - `skills/compilers/gcc` — C toolchain alongside Hare
 - `skills/languages/carbon-lang` — other emerging systems languages
 - `skills/build-systems/make` — integrating Hare into Makefiles
-- `skills/runtime-safety/sanitizers` — C interop safety testing
+- `skills/runtimes/sanitizers` — C interop safety testing

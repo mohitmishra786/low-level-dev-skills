@@ -9,7 +9,7 @@ description: Bare-metal GPIO skill for pin configuration and interrupts. Use whe
 
 Configure and use GPIO without HAL: input/output modes, alternate function mapping, pull-up/down, speed/slew, and pin-change interrupts for LEDs, buttons, and peripheral pin mux.
 
-## When to Use
+## Triggers
 
 - Blink LED or read button before bringing up UART/SPI
 - Mux pins to USART/SPI alternate functions
@@ -76,7 +76,7 @@ Always enable peripheral clock / power domain before pin config.
 
 ### 5. Agent usage
 
-```
+```text
 /gpio-baremetal Configure PA2 as USART2 TX alternate function on STM32F4
 ```
 
@@ -89,7 +89,7 @@ Always enable peripheral clock / power domain before pin config.
 | AF mismatch | Wrong AFR nibble | Pin-specific AF table in RM |
 | No toggle visible | Wrong port bit / LED active low | Check schematic |
 
-## Related Skills
+## Related skills
 
 - `skills/baremetal/mmio-and-bit-manipulation` — BSRR/MODER masks
 - `skills/baremetal/peripherals-from-datasheet` — RM pinout tables

@@ -1,6 +1,6 @@
 # Linker Script Anatomy Reference
 
-Source: https://sourceware.org/binutils/docs/ld/Scripts.html
+Source: <https://sourceware.org/binutils/docs/ld/Scripts.html>
 
 ## Table of Contents
 

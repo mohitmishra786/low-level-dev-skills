@@ -158,6 +158,7 @@ rustc --print sysroot
 ### CodeLLDB extension (recommended for Rust)
 
 `.vscode/launch.json`:
+
 ```json
 {
     "version": "0.2.0",

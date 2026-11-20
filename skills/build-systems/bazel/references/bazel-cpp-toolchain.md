@@ -1,6 +1,6 @@
 # Bazel C++ Toolchain Reference
 
-Source: https://bazel.build/docs/cc-toolchain-config-reference
+Source: <https://bazel.build/docs/cc-toolchain-config-reference>
 
 ## Minimal Custom Toolchain
 

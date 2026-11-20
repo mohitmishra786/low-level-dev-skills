@@ -9,7 +9,7 @@ description: Bare-metal ADC and DAC skill. Use when configuring analog sampling,
 
 Configure ADC and DAC peripherals: channel selection, sampling times, calibration sequences, DMA circular buffers, and DAC static/dynamic output.
 
-## When to Use
+## Triggers
 
 - Reading analog sensors (temperature, voltage)
 - Audio or control voltage output via DAC
@@ -57,7 +57,7 @@ DAC->DHR12R1 = 2048;  /* mid-scale 3.3V reference */
 
 ### 4. Agent usage
 
-```
+```text
 /adc-dac-baremetal Set up ADC1 channel 0 with DMA circular buffer
 ```
 
@@ -70,7 +70,7 @@ DAC->DHR12R1 = 2048;  /* mid-scale 3.3V reference */
 | Wrong voltage | Vref not 3.3V | Measure VDDA; calibrate |
 | DMA corrupt | Buffer alignment | Use `uint16_t` aligned buffer |
 
-## Related Skills
+## Related skills
 
 - `skills/baremetal/dma-baremetal` — ADC DMA streams
 - `skills/baremetal/timers-pwm-baremetal` — ADC external trigger

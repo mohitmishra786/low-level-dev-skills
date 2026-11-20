@@ -203,6 +203,7 @@ export const VERSION: c_int = 42;
 ```
 
 Generate a C header (manual or with tools):
+
 ```c
 /* mylib.h */
 #ifndef MYLIB_H

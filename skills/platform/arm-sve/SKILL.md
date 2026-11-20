@@ -9,7 +9,7 @@ description: ARM SVE skill for scalable vector extension programming. Use when w
 
 Guide agents through ARM Scalable Vector Extension (SVE/SVE2) programming: vector-length agnostic (VLA) code, predicate registers, SVE intrinsics via `<arm_sve.h>`, runtime vector length with `svcnt`, compiler flags, platform differences (Graviton3, Apple M4), and GDB debugging of SVE registers.
 
-## When to Use
+## Triggers
 
 - Writing high-performance SIMD on AArch64 servers (AWS Graviton3/4)
 - Porting fixed-width NEON code to length-agnostic SVE
@@ -31,7 +31,7 @@ Guide agents through ARM Scalable Vector Extension (SVE/SVE2) programming: vecto
 
 ### 2. Predicate and VLA concepts
 
-```
+```text
 SVE registers
 ├── Z0–Z31  — scalable vector data registers
 └── P0–P15  — predicate (mask) registers
@@ -157,7 +157,7 @@ Requires GDB 10+ with SVE support and SVE-capable hardware.
 
 ### 10. NEON → SVE2 migration
 
-```
+```text
 Migration checklist
 ├── Replace fixed loops (i += 4) with svcntw() strides
 ├── Add svwhilelt predicates for tails
@@ -181,7 +181,7 @@ qemu-aarch64 -cpu max ./saxpy
 | Apple M3 build fails | No SVE on M3 | Guard with `__ARM_FEATURE_SVE` |
 | GDB can't print Z regs | Old GDB | Upgrade GDB; run on SVE hardware |
 
-## Related Skills
+## Related skills
 
 - `skills/low-level-programming/assembly-arm` — AArch64 assembly and NEON
 - `skills/low-level-programming/simd-intrinsics` — general SIMD concepts

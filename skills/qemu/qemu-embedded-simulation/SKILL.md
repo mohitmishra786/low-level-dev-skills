@@ -9,7 +9,7 @@ description: QEMU embedded simulation skill for bare-metal MCU testing. Use when
 
 Guide agents through QEMU for bare-metal and RTOS firmware: machine selection, loading ELF images, semihosting, peripheral models, and GDB debug — distinct from Linux-focused `skills/virtualization/qemu-kvm` and `skills/kernel-dev/qemu-for-kernel-development`.
 
-## When to Use
+## Triggers
 
 - Test Cortex-M firmware without board
 - CI smoke test for linker script / startup
@@ -96,7 +96,7 @@ Validate on hardware before production sign-off.
 
 ### 7. Agent usage
 
-```
+```text
 /qemu-embedded-simulation Run STM32VL discovery firmware in QEMU with GDB on port 3333
 ```
 
@@ -110,7 +110,7 @@ Validate on hardware before production sign-off.
 | GDB can't connect | Forgot `-S` | Add `-S -gdb tcp::3333` |
 | HardFault in QEMU | Stack/vector invalid | Fix startup — see baremetal-startup |
 
-## Related Skills
+## Related skills
 
 - `skills/baremetal/baremetal-startup` — vectors and linker script
 - `skills/baremetal/stm32-baremetal` — STM32 layout

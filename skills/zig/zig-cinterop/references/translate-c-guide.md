@@ -25,6 +25,7 @@ zig translate-c \
 ### What translate-c produces
 
 Given C:
+
 ```c
 typedef struct {
     int x;
@@ -38,6 +39,7 @@ int process(Vec3 *v, size_t count, const char *name);
 ```
 
 translate-c generates:
+
 ```zig
 pub const Vec3 = extern struct {
     x: c_int = @import("std").mem.zeroes(c_int),

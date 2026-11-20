@@ -9,7 +9,7 @@ description: Device tree skill for Linux hardware description. Use when writing 
 
 Guide agents through Linux device tree source (DTS): syntax, bindings, phandles, overlays, and how the kernel OF (Open Firmware) layer parses hardware description into `platform_device` instances.
 
-## When to Use
+## Triggers
 
 - Platform driver not probing — DT mismatch
 - Adding a new board `.dts` or fragment overlay
@@ -65,7 +65,7 @@ serial@... {
 
 ### 4. Kernel parsing
 
-```
+```text
 OF core reads DTB at boot
 ├── of_platform_populate() creates platform_devices
 └── driver `.of_match_table` matches `compatible`
@@ -99,7 +99,7 @@ cat my-overlay.dtbo > /config/device-tree/overlays/my-overlay/dtbo
 
 ### 7. Agent usage
 
-```
+```text
 /device-tree Write DTS fragment for I2C sensor on i2c1 with interrupt on GPIO5
 ```
 
@@ -113,7 +113,7 @@ cat my-overlay.dtbo > /config/device-tree/overlays/my-overlay/dtbo
 | Probe defer loop | Clock/regulator missing | `-EPROBE_DEFER` supplier in DT |
 | Overlay fails | Symbol unresolved | `__fixups__` / label exports |
 
-## Related Skills
+## Related skills
 
 - `skills/kernel-dev/platform-device-model` — probe and sysfs
 - `skills/kernel/device-drivers` — `devm_of_iomap`

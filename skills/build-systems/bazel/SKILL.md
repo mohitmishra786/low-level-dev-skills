@@ -22,7 +22,7 @@ Guide agents through Bazel for C/C++ projects: writing BUILD files, cc_library/c
 
 ### 1. Workspace structure
 
-```
+```text
 my-project/
 ├── MODULE.bazel         # Bzlmod dependency file (Bazel ≥6)
 ├── WORKSPACE            # legacy (still needed for some features)

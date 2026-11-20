@@ -9,7 +9,7 @@ description: MMIO and register access skill for bare-metal firmware. Use when ac
 
 Guide agents through safe memory-mapped I/O: `volatile` semantics, read-modify-write patterns, bitfield pitfalls, alignment and endianness, and portable register access macros for bare-metal drivers.
 
-## When to Use
+## Triggers
 
 - Writing peripheral register drivers without HAL
 - Fixing intermittent register corruption or stale reads
@@ -112,7 +112,7 @@ Use CMSIS barriers (`core_cm4.h`) on Cortex-M.
 
 ### 6. Agent usage examples
 
-```
+```text
 /mmio-and-bit-manipulation Safe pattern to set bit 3 without affecting other bits in ISR context
 /mmio-and-bit-manipulation Why must peripheral pointers be volatile?
 ```
@@ -127,7 +127,7 @@ Use CMSIS barriers (`core_cm4.h`) on Cortex-M.
 | Optimized-away read | Missing `volatile` | Use `volatile uint32_t` |
 | Bitfield wrong value | Compiler packs unexpectedly | Use shift/mask macros |
 
-## Related Skills
+## Related skills
 
 - `skills/baremetal/peripherals-from-datasheet` — extracting register maps
 - `skills/baremetal/gpio-baremetal` — GPIO register patterns

@@ -133,6 +133,7 @@ RISC-V extensions are combined as a string after the base ISA:
 | Ztso | TSO | Total Store Ordering memory model |
 
 Common targets:
+
 - Embedded: `rv32imac` — no floating point, with atomics and compressed
 - Linux app: `rv64gc` — full general + compressed
 - High performance: `rv64gcv` — + vector
@@ -177,6 +178,7 @@ uint64_t mstatus = csr_read(mstatus);
 ### 6. Compressed instructions (RVC)
 
 RVC replaces common 32-bit instructions with 16-bit versions when:
+
 - Register is in x8–x15 (for `c.` versions)
 - Immediate fits in smaller field
 - Specific instruction patterns match

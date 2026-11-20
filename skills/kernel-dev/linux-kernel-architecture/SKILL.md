@@ -9,7 +9,7 @@ description: Linux kernel architecture skill for subsystem overview. Use when na
 
 Provide a mental map of the Linux kernel: boot sequence, major subsystems, key data structures, and where to look in source — complementing `skills/kernel/kernel-internals` with architecture-level navigation for driver and subsystem work.
 
-## When to Use
+## Triggers
 
 - First time exploring `linux.git` for a feature or bug
 - Understanding how boot reaches `init` and driver `probe`
@@ -20,7 +20,7 @@ Provide a mental map of the Linux kernel: boot sequence, major subsystems, key d
 
 ### 1. Boot flow (x86/ARM64 simplified)
 
-```
+```text
 firmware/UEFI
 ├── arch/*/boot — decompress kernel, early setup
 ├── start_kernel() — mm, scheduler, timers, IRQ subsys
@@ -68,7 +68,7 @@ ls Documentation/admin-guide/
 
 ### 5. Agent usage
 
-```
+```text
 /linux-kernel-architecture Where does page fault handling live and what calls it?
 ```
 
@@ -81,7 +81,7 @@ ls Documentation/admin-guide/
 | Wrong subsystem | Similar names in `drivers/` | Follow `struct bus_type` |
 | Boot hang | Early printk disabled | `earlyprintk`, `initcall_debug` |
 
-## Related Skills
+## Related skills
 
 - `skills/kernel/kernel-internals` — scheduler, SLUB, VFS depth
 - `skills/kernel-dev/kernel-memory-management` — mm/ details

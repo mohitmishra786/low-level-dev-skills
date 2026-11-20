@@ -9,7 +9,7 @@ description: Linux kernel internals skill for scheduler, memory, and VFS subsyst
 
 Guide agents through Linux kernel internals: the CFS and EEVDF schedulers, runqueues and vruntime, the buddy allocator and SLUB, vmalloc vs kmalloc, VFS dentry/inode/file objects, page cache and readahead, memory zones, OOM killer heuristics, and `/proc/meminfo` interpretation.
 
-## When to Use
+## Triggers
 
 - Diagnosing scheduling latency or unfair CPU distribution
 - Understanding kmalloc failures vs vmalloc for large kernel allocations
@@ -24,7 +24,7 @@ Guide agents through Linux kernel internals: the CFS and EEVDF schedulers, runqu
 
 Linux uses **EEVDF** (Earliest Eligible Virtual Deadline First) for CFS-class scheduling. EEVDF was merged as an option in **6.6** (2023); the gradual CFS→EEVDF transition **completed in 6.12** (Nov 2024). On older 6.6–6.11 kernels, verify which scheduler is active. Core concepts (runqueues, vruntime/lag) carry over:
 
-```
+```text
 Per-CPU runqueue (struct rq)
 ├── cfs_rq — fair-class tasks sorted by vruntime/deadline
 ├── rt_rq  — real-time tasks (FIFO/RR)
@@ -71,7 +71,7 @@ uname -r
 
 Physical pages allocated in power-of-two order (order 0 = 4KB, order 1 = 8KB, ...).
 
-```
+```text
 ZONE_DMA / ZONE_DMA32 / ZONE_NORMAL / ZONE_MOVABLE
 └── free_area[MAX_ORDER] — buddy lists per order
 ```
@@ -121,7 +121,7 @@ grep -i highmem /proc/zoneinfo
 
 ### 6. VFS layer
 
-```
+```text
 Path lookup: /home/user/file.txt
 ├── dentry cache (dcache) — directory entry tree
 ├── inode — metadata (permissions, size, ops)
@@ -175,7 +175,7 @@ cat /proc/meminfo
 | `SReclaimable` | Reclaimable slab |
 | `SUnreclaim` | Kernel structures (not easily reclaimed) |
 
-```
+```text
 Memory pressure diagnosis
 ├── MemAvailable low + Cached high → page cache reclaim candidate
 ├── AnonPages high + SwapFree low → OOM risk
@@ -213,7 +213,7 @@ echo -1000 | sudo tee /proc/<pid>/oom_score_adj
 | SLUB corruption | Use-after-free in module | Enable KASAN; audit with `slub_debug` |
 | Slow file reads | Readahead too small | Increase readahead; check backing device |
 
-## Related Skills
+## Related skills
 
 - `skills/kernel/device-drivers` — char/platform drivers using these subsystems
 - `skills/kernel/kernel-debugging` — ftrace, kgdb for internals investigation

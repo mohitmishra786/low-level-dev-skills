@@ -1,6 +1,6 @@
 # C++20 Modules CMake Support Reference
 
-Source: https://cmake.org/cmake/help/latest/manual/cmake-cxxmodules.7.html
+Source: <https://cmake.org/cmake/help/latest/manual/cmake-cxxmodules.7.html>
 
 ## Table of Contents
 

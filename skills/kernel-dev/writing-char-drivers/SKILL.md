@@ -9,7 +9,7 @@ description: Character driver skill for Linux kernel char devices. Use when impl
 
 Guide agents through Linux character device implementation: `struct file_operations`, `cdev` registration, safe userspace copies, `ioctl` design, and basic `mmap` — focused depth beyond `skills/kernel/device-drivers`.
 
-## When to Use
+## Triggers
 
 - Exposing hardware to `/dev/mydev`
 - Implementing `read`/`write`/`poll` from kernel
@@ -137,7 +137,7 @@ Implement `poll` + `wake_up_interruptible` for blocking reads; use `fasync_helpe
 
 ### 6. Agent usage
 
-```
+```text
 /writing-char-drivers Add unlocked_ioctl SET_SPEED to existing platform driver
 ```
 
@@ -151,10 +151,10 @@ Implement `poll` + `wake_up_interruptible` for blocking reads; use `fasync_helpe
 | mmap SIGSEGV | Cached mapping to device | `pgprot_noncached` |
 | Sleep in ioctl | Holding spinlock | Drop lock before blocking |
 
-## Related Skills
+## Related skills
 
 - `skills/kernel-dev/platform-device-model` — probe context
 - `skills/kernel/device-drivers` — full driver lifecycle
-- `skills/kernel/kernel-concurrency` — locking in file ops
+- `skills/kernel-dev/kernel-concurrency` — locking in file ops
 - `skills/kernel-dev/kernel-debugging-advanced` — trace ioctl path
 - `skills/low-level-programming/linux-kernel-modules` — module boilerplate

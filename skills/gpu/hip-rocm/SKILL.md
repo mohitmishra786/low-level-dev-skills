@@ -9,7 +9,7 @@ description: HIP and ROCm skill for AMD GPU programming. Use when writing HIP ke
 
 Guide agents through AMD GPU programming with HIP: the HIP runtime API, `hipcc` compilation, porting CUDA code with HIPIFY (`hipify-perl`, `hipify-clang`), ROCm toolchain setup, profiling with `rocprof`, debugging with `rocgdb`, HIP-vs-CUDA API mapping, and MI300X-specific optimizations.
 
-## When to Use
+## Triggers
 
 - Porting an existing CUDA codebase to AMD GPUs
 - Setting up ROCm on Linux for MI200/MI300 hardware
@@ -153,6 +153,7 @@ rocprofv3 --kernel-trace -- ./app
 ```
 
 Key metrics (AMD terminology):
+
 - **VALU utilization** — compute unit activity
 - **LDS bank conflicts** — shared memory (LDS) stalls
 - **Memory throughput** — HBM bandwidth utilization
@@ -226,7 +227,7 @@ hipcc -lrocblas -o gemm_test gemm.hip
 | `HSA_STATUS_ERROR` | GPU busy or OOM | `rocm-smi --showmeminfo`; reduce allocation |
 | rocprof empty output | No kernels launched | Verify `hipGetLastError()` after launch |
 
-## Related Skills
+## Related skills
 
 - `skills/gpu/cuda` — source CUDA patterns being ported
 - `skills/gpu/cuda-profiling` — Nsight concepts map to rocprof

@@ -41,7 +41,7 @@ cargo audit --json | jq '.vulnerabilities.list[].advisory.id'
 
 Output format:
 
-```
+```text
 error[RUSTSEC-2023-0052]: Vulnerability in `vm-superio`
     Severity: low
        Title: MMIO Register Misuse
@@ -117,7 +117,7 @@ GitHub Actions CI integration:
 
 ### 3. RUSTSEC advisory database
 
-The RUSTSEC database at https://rustsec.org/ tracks vulnerabilities, unmaintained crates, and unsound code.
+The RUSTSEC database at <https://rustsec.org/> tracks vulnerabilities, unmaintained crates, and unsound code.
 
 ```bash
 # Browse advisories from CLI

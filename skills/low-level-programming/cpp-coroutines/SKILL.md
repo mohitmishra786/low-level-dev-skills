@@ -189,6 +189,7 @@ std::suspend_never{};    // never suspends (no-op)
 ### 5. Coroutine frame layout and memory
 
 The compiler allocates a coroutine frame (heap object) containing:
+
 - Local variables that live across suspension points
 - The promise object
 - The current suspension state (where to resume)

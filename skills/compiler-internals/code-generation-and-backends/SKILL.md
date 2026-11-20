@@ -9,7 +9,7 @@ description: Code generation and backends skill for LLVM targets. Use when expla
 
 Overview LLVM (and general compiler) backend code generation: IR legalization, SelectionDAG instruction selection, register allocation, assembly emission, and what adding a new target entails — complementing IR skills and `skills/compiler-internals/llvm-passes`.
 
-## When to Use
+## Triggers
 
 - Reading `llc` output for a specific target
 - Understanding why IR type legalizer inserted extra ops
@@ -20,7 +20,7 @@ Overview LLVM (and general compiler) backend code generation: IR legalization, S
 
 ### 1. Backend pipeline (LLVM)
 
-```
+```text
 LLVM IR per function
 ├── IR legalizer (types/ops target supports)
 ├── SelectionDAGBuilder
@@ -73,7 +73,7 @@ Full port is large — reuse existing backend closest to arch.
 
 ### 7. Agent usage
 
-```
+```text
 /code-generation-and-backends Trace how this IR add becomes AArch64 ADD instruction
 ```
 
@@ -87,7 +87,7 @@ Full port is large — reuse existing backend closest to arch.
 | llc vs clang differ | Different targets passed | Same `-mtriple` |
 | TableGen build fail | Syntax in .td | `llvm-tblgen` error line |
 
-## Related Skills
+## Related skills
 
 - `skills/compiler-internals/llvm-ir-and-passes` — pre-codegen IR
 - `skills/compiler-internals/compiler-optimizations-deep` — RA intuition

@@ -9,7 +9,7 @@ description: io_uring skill for Linux async I/O. Use when building high-performa
 
 Guide agents through Linux io_uring: the submission/completion queue model (SQE/CQE), liburing API, multi-shot accept/recv, provided buffer rings, fixed files and registered buffers, zero-copy send, Rust integration with tokio-uring, performance comparison with epoll, and security considerations.
 
-## When to Use
+## Triggers
 
 - Building a high-throughput network or disk server on Linux 5.1+
 - Replacing epoll + thread pool with fewer syscalls
@@ -22,7 +22,7 @@ Guide agents through Linux io_uring: the submission/completion queue model (SQE/
 
 ### 1. SQ/CQ model
 
-```
+```text
 Application                    Kernel
     │                            │
     ├── mmap SQ ring ───────────►│ submission queue (SQE)
@@ -198,7 +198,7 @@ cargo add tokio-uring
 | Complexity | Lower | Higher |
 | Kernel version | 2.6+ | 5.1+ (features vary) |
 
-```
+```text
 Choose io_uring when
 ├── Syscall overhead is measurable bottleneck
 ├── High connection count with multi-shot
@@ -230,7 +230,7 @@ io_uring has been an attack surface — keep kernels patched; sandbox untrusted 
 | Slower than epoll | Small batch size | Batch more SQEs; use SQPOLL |
 | Permission denied | io_uring disabled | sysctl or run with capability |
 
-## Related Skills
+## Related skills
 
 - `skills/async-io/dpdk` — kernel bypass alternative for networking
 - `skills/async-io/af-xdp` — XDP socket path for packet I/O

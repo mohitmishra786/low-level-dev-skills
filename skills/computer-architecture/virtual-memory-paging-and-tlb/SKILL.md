@@ -9,7 +9,7 @@ description: Virtual memory skill for paging, page tables, and TLB. Use when exp
 
 Explain virtual memory: paging, multi-level page tables, TLB role, page faults, and address translation — bridging OS kernels, embedded MPU, and performance analysis.
 
-## When to Use
+## Triggers
 
 - Understanding `mmap`, `brk`, and demand paging
 - Debugging segfaults and guard pages
@@ -20,7 +20,7 @@ Explain virtual memory: paging, multi-level page tables, TLB role, page faults, 
 
 ### 1. Translation overview
 
-```
+```text
 Virtual address (VA)
 ├── TLB lookup → physical on hit
 └── TLB miss → page table walk → fill TLB
@@ -30,7 +30,7 @@ Virtual address (VA)
 
 ### 2. Page table (x86-64 4-level example)
 
-```
+```text
 CR3 → PML4 → PDPT → PD → PT → physical frame
 ```
 
@@ -74,7 +74,7 @@ pmap -x $$
 
 ### 7. Agent usage
 
-```
+```text
 /virtual-memory-paging-and-tlb Explain why 4 KiB random access hurts TLB and hugepage helps
 ```
 
@@ -88,7 +88,7 @@ pmap -x $$
 | W^X fault | JIT without mprotect dance | Separate RW and RX mappings |
 | Wrong phys on MCU | No MMU — linear map | Use linker script addresses |
 
-## Related Skills
+## Related skills
 
 - `skills/computer-architecture/memory-hierarchy-and-caches` — cache after translation
 - `skills/kernel-dev/kernel-memory-management` — kernel page allocator

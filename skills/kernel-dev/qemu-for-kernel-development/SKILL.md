@@ -9,7 +9,7 @@ description: QEMU kernel development skill for driver and kernel testing. Use wh
 
 Guide agents through QEMU-based kernel and driver development workflows: building/booting custom kernels, attaching virtio block/network, using Buildroot or minimal initramfs, and rapid module test cycles — focused on kernel dev vs general `skills/virtualization/qemu-kvm`.
 
-## When to Use
+## Triggers
 
 - Test kernel patch without bare metal
 - Develop driver against virtio or emulated DT platform
@@ -90,7 +90,7 @@ virt machine provides virtio devices; platform drivers can target QEMU `-device`
 
 ### 6. Agent usage
 
-```
+```text
 /qemu-for-kernel-development Boot arm64 virt with custom Image and virtio rootfs for driver CI
 ```
 
@@ -104,7 +104,7 @@ virt machine provides virtio devices; platform drivers can target QEMU `-device`
 | Slow without KVM | TCG emulation | `-enable-kvm` on x86 host |
 | DTB mismatch | Wrong machine | Use `virt` DTB from kernel `make dtbs` |
 
-## Related Skills
+## Related skills
 
 - `skills/virtualization/qemu-kvm` — KVM, VFIO, libvirt
 - `skills/qemu/qemu-embedded-simulation` — bare-metal MCU QEMU

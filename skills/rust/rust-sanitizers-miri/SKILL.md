@@ -57,6 +57,7 @@ RUSTFLAGS="-Z sanitizer=undefined" \
 For stable Rust, use the `cross` tool with a Docker image that has sanitizers pre-configured, or run `cargo test` inside a Docker container with a nightly image.
 
 Alternatively, for simpler UB checking without nightly:
+
 ```bash
 # cargo-sanitize (wrapper)
 cargo install cargo-sanitize
@@ -65,7 +66,7 @@ cargo sanitize address
 
 ### 3. Interpreting ASan output in Rust
 
-```
+```text
 ==12345==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x602000000050
 READ of size 4 at 0x602000000050 thread T0
     #0 0x401234 in myapp::module::function /src/main.rs:15
@@ -77,6 +78,7 @@ READ of size 4 at 0x602000000050 thread T0
 ```
 
 Rust-specific patterns:
+
 | ASan error | Likely Rust cause |
 |------------|------------------|
 | `heap-buffer-overflow` | `unsafe` slice access past bounds |
@@ -148,7 +150,8 @@ RUSTFLAGS="-Z sanitizer=thread" \
 ```
 
 TSan output:
-```
+
+```text
 WARNING: ThreadSanitizer: data race (pid=12345)
   Write of size 4 at 0x7f... by thread T2 (mutexes: write M1):
     #0 myapp::counter::increment src/counter.rs:10

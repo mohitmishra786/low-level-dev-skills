@@ -9,7 +9,7 @@ description: Kernel memory management skill for Linux mm subsystem. Use when usi
 
 Guide agents through Linux kernel memory allocation: physical page allocator (buddy), SLUB kmalloc caches, vmalloc virtual mappings, zones (DMA/Normal), and safe allocation patterns in drivers — extending `skills/kernel/kernel-internals`.
 
-## When to Use
+## Triggers
 
 - Choosing `kmalloc` vs `vmalloc` vs `get_free_pages`
 - Debugging kernel OOM or slab corruption
@@ -20,7 +20,7 @@ Guide agents through Linux kernel memory allocation: physical page allocator (bu
 
 ### 1. Allocator decision tree
 
-```
+```text
 Need physically contiguous memory for DMA?
 ├── Yes → dma_alloc_coherent() or CMA pool
 └── No
@@ -84,7 +84,7 @@ Kernel config: `CONFIG_SLUB_DEBUG`, `CONFIG_KASAN` for use-after-free.
 
 ### 7. Agent usage
 
-```
+```text
 /kernel-memory-management Choose allocator for 2 MiB driver ring buffer in process context
 ```
 
@@ -98,7 +98,7 @@ Kernel config: `CONFIG_SLUB_DEBUG`, `CONFIG_KASAN` for use-after-free.
 | Slab corruption | Use-after-free | KASAN; audit `kfree` pairing |
 | `GFP_KERNEL` in IRQ | Sleeping allocator in atomic | `GFP_ATOMIC` |
 
-## Related Skills
+## Related skills
 
 - `skills/kernel/kernel-internals` — page cache, OOM killer
 - `skills/kernel/device-drivers` — `dma_alloc_coherent`

@@ -1,6 +1,6 @@
 # West Manifest Reference
 
-Source: https://docs.zephyrproject.org/latest/develop/west/manifest.html
+Source: <https://docs.zephyrproject.org/latest/develop/west/manifest.html>
 
 ## Table of Contents
 
@@ -82,7 +82,7 @@ zephyr_include_directories(include)
 zephyr_library_sources(src/my_hal.c)
 ```
 
-```
+```text
 # modules/my-hal/Kconfig
 config MY_HAL
     bool "My HAL driver"

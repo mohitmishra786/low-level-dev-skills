@@ -9,7 +9,7 @@ description: CPU pipeline skill for hazards, forwarding, and stalls. Use when ex
 
 Explain classic and modern CPU pipeline concepts: stages, data and control hazards, forwarding/bypassing, stalls, and branch handling — foundational for optimization and understanding microarchitecture counters.
 
-## When to Use
+## Triggers
 
 - Interpreting pipeline stall metrics from `skills/profilers/intel-vtune-amd-uprof`
 - Teaching why instruction order affects throughput
@@ -20,7 +20,7 @@ Explain classic and modern CPU pipeline concepts: stages, data and control hazar
 
 ### 1. Five-stage classic pipeline (MIPS-style mental model)
 
-```
+```text
 IF → ID → EX → MEM → WB
 ```
 
@@ -35,13 +35,13 @@ Overlapped execution: instruction N in EX while N+1 in ID.
 
 Without forwarding:
 
-```
+```text
 stall until writeback completes
 ```
 
 ### 3. Control hazards (branches)
 
-```
+```text
 Branch in ID → target unknown until EX
 ├── Predict taken/not-taken (static or dynamic)
 ├── Flush wrong-path instructions on mispredict
@@ -82,7 +82,7 @@ VTune "Microarchitecture Exploration" maps to pipeline slots.
 
 ### 7. Agent usage
 
-```
+```text
 /cpu-pipelines-and-hazards Explain RAW hazard in this ARM assembly loop and how to break it
 ```
 
@@ -95,7 +95,7 @@ VTune "Microarchitecture Exploration" maps to pipeline slots.
 | Wrong cycle model | Ignored OoO execution | Use perf hardware counters |
 | "NOP fixes it" | Timing-sensitive MMIO | Never tune device delays by NOP |
 
-## Related Skills
+## Related skills
 
 - `skills/computer-architecture/branch-prediction-and-speculation` — mispredict cost
 - `skills/computer-architecture/memory-hierarchy-and-caches` — load latency

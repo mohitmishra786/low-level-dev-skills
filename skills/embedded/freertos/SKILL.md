@@ -51,6 +51,7 @@ int main(void) {
 ```
 
 Priority guidelines:
+
 - `tskIDLE_PRIORITY` (0) — idle task, never block here
 - ISR-deferred tasks — highest priority to service interrupts quickly
 - Avoid priorities above `configMAX_PRIORITIES - 1`

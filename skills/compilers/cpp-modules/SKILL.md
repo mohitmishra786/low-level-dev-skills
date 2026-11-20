@@ -32,7 +32,7 @@ Guide agents through authoring, building, and debugging C++20 modules: named mod
 
 ### 1. Module concepts overview
 
-```
+```text
 C++20 module kinds:
 ├── Named module interface unit  (.cppm / .ixx)  — exports declarations
 ├── Module implementation unit   (.cpp)           — defines module members

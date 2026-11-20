@@ -9,7 +9,7 @@ description: Triton language skill for Python GPU kernel authoring. Use when wri
 
 Guide agents through writing GPU kernels in OpenAI Triton: the `@triton.jit` decorator, block-oriented `tl.load`/`tl.store` with masking, atomic operations, shared memory via `tl.constexpr`, benchmarking with `triton.testing.Benchmark`, PyTorch integration, and debugging with barriers.
 
-## When to Use
+## Triggers
 
 - Writing custom PyTorch ops faster than pure PyTorch but without raw CUDA
 - Prototyping fused kernels (e.g., softmax + scale + bias)
@@ -45,6 +45,7 @@ def add(x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
 ```
 
 Key concepts:
+
 - `tl.program_id(0)` — block index (like `blockIdx.x`)
 - `tl.arange(0, BLOCK)` — vector of thread indices within block
 - `mask` — predication for tail elements (no separate bounds kernel)
@@ -223,7 +224,7 @@ Compare against PyTorch reference on small inputs before scaling up.
 | NaN in output | Uninitialized masked lanes | Pass `other=0.0` to masked loads |
 | torch.compile fails | No fake kernel | Register `register_fake` meta function |
 
-## Related Skills
+## Related skills
 
 - `skills/gpu/cuda` — underlying CUDA concepts when Triton limits are hit
 - `skills/gpu/cuda-profiling` — Nsight profiling of Triton-compiled kernels

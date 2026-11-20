@@ -9,7 +9,7 @@ description: I2C and SPI bus driver skill for Linux client drivers. Use when wri
 
 Guide agents through Linux I2C and SPI **client** drivers: bus registration, `i2c_transfer` / `spi_sync`, regmap abstraction, DT `compatible` on bus children, and probe patterns — complementing platform MMIO drivers in `skills/kernel/device-drivers`.
 
-## When to Use
+## Triggers
 
 - Sensor or PMIC on I2C/SPI bus
 - Converting bare-metal SPI register reads to kernel driver
@@ -130,7 +130,7 @@ cat /sys/bus/i2c/devices/i2c-1/1-0048/name
 
 ### 6. Agent usage
 
-```
+```text
 /bus-drivers-i2c-spi Write regmap-based driver for I2C PMIC at 0x58
 ```
 
@@ -144,7 +144,7 @@ cat /sys/bus/i2c/devices/i2c-1/1-0048/name
 | regmap -EIO | 16-bit vs 8-bit reg | Set `reg_bits`, `val_bits` |
 | DMA not used | Small `spi_sync` OK | `spi_sync_transfer` for bulk |
 
-## Related Skills
+## Related skills
 
 - `skills/kernel/device-drivers` — IRQ, DMA, PM runtime
 - `skills/kernel-dev/device-tree` — bus child nodes

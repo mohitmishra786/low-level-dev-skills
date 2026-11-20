@@ -9,7 +9,7 @@ description: Deep compiler optimizations skill for RA, ISel, and PGO. Use when e
 
 Explain optimization phases beyond flags: mid-level IR opts, register allocation, instruction selection/scheduling, vectorization boundaries, PGO, and post-link BOLT — bridging `skills/compilers/pgo` and LLVM/GCC internals.
 
-## When to Use
+## Triggers
 
 - `-O3` did not vectorize a hot loop
 - Teaching why register pressure causes spills
@@ -20,7 +20,7 @@ Explain optimization phases beyond flags: mid-level IR opts, register allocation
 
 ### 1. Compiler pipeline map
 
-```
+```text
 Frontend → LLVM IR / GCC GIMPLE
 ├── Mid-level: DCE, GVN, LICM, inlining
 ├── Loop opts: unroll, vectorize
@@ -78,7 +78,7 @@ Loop-invariant code motion hoists `x * scale` out of inner loop when legal — r
 
 ### 7. Agent usage
 
-```
+```text
 /compiler-optimizations-deep Why did LLVM fail to vectorize this reduction loop?
 ```
 
@@ -92,7 +92,7 @@ Loop-invariant code motion hoists `x * scale` out of inner loop when legal — r
 | `-O3` slower | Code bloat / cache | Try `-O2` or PGO |
 | Different GCC/Clang | Pass ordering differs | Compare IR + asm |
 
-## Related Skills
+## Related skills
 
 - `skills/compilers/pgo` — PGO and BOLT detail
 - `skills/compiler-internals/llvm-ir-and-passes` — IR-level opts

@@ -62,7 +62,7 @@ Common board targets:
 
 ### 2. Application structure
 
-```
+```text
 my_app/
 ├── CMakeLists.txt
 ├── prj.conf              # Kconfig fragment
@@ -81,7 +81,7 @@ target_sources(app PRIVATE src/main.c)
 
 ### 3. Kconfig — feature configuration
 
-```
+```text
 # prj.conf — Kconfig fragment (key=value)
 CONFIG_GPIO=y
 CONFIG_UART_CONSOLE=y
@@ -159,7 +159,7 @@ void my_function(void) {
 
 Backend configuration in `prj.conf`:
 
-```
+```text
 CONFIG_LOG=y
 CONFIG_LOG_BACKEND_UART=y        # UART output
 CONFIG_LOG_BACKEND_RTT=y         # Segger RTT output
