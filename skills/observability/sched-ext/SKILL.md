@@ -78,11 +78,15 @@ The `sched-ext/scx` repository (v1.1.4) ships production schedulers in Rust and 
 # Fedora, Arch, CachyOS, openSUSE Tumbleweed package them (scx-scheds)
 sudo scx_lavd                 # runs until Ctrl-C, then the kernel falls back to the fair class
 
-# Managed through scx.service with scxcli
+# Managed by systemd: v1.1.4 ships services/scx.service, which runs the scheduler named in
+# /etc/default/scx (SCX_SCHEDULER=scx_cosmos, optional SCX_FLAGS=...)
+sudo systemctl enable --now scx.service
+systemctl status scx.service
+
+# scxcli (front end for scx.service) is only on the main branch, not in v1.1.4:
+#   cargo build --release -p scxcli
 scxcli list                   # recommended schedulers and current state
 sudo scxcli start scx_cosmos
-scxcli get
-sudo scxcli stop
 
 # From source
 git clone https://github.com/sched-ext/scx && cd scx
@@ -192,10 +196,30 @@ restart:
 # Build next to the in-tree examples (they provide libbpf, bpftool and the scx headers)
 cp scx_mini.bpf.c scx_mini.c linux/tools/sched_ext/
 sed -i 's/^c-sched-targets = /c-sched-targets = scx_mini /' linux/tools/sched_ext/Makefile
-make -C linux/tools/sched_ext O=$KBUILD_OUTPUT LLVM=1 scx_mini   # needs clang >= 16
-sudo $KBUILD_OUTPUT/build/bin/scx_mini
+
+# KOUT: the kernel's O= build directory (the BTF in $KOUT/vmlinux is used for vmlinux.h)
+KOUT="$HOME/src/build-scx"
+make -C linux/tools/sched_ext O="$KOUT" LLVM=1 scx_mini   # needs clang >= 16
+sudo "$KOUT/build/bin/scx_mini"
+# Without O=, the binary is linux/tools/sched_ext/build/bin/scx_mini
+
 # dmesg: sched_ext: BPF scheduler "mini" enabled
 ```
+
+Rust user space: the scx repository's schedulers generate the libbpf-rs skeleton in `build.rs`
+(`scx_utils::BpfBuilder`) and drive it with `scx_utils` macros. The calls in
+`scheds/rust/scx_cosmos/src/main.rs` at v1.1.4, in order:
+
+```rust
+let mut skel = scx_ops_open!(skel_builder, open_object, cosmos_ops, open_opts)?; // open
+let mut skel = scx_ops_load!(skel, cosmos_ops, uei)?;                            // verify + load
+let link = scx_ops_attach!(skel, cosmos_ops)?;                                   // start scheduling
+while !shutdown.load(Ordering::Relaxed) && !uei_exited!(&skel, uei) { /* stats */ }
+drop(link);                                                                      // detach
+let exit = uei_report!(&skel, uei)?;   // why it exited; exit.should_restart() → reopen
+```
+
+Copy one of those schedulers as a template rather than starting from scratch.
 
 ### 5. Core callbacks and kfuncs
 
