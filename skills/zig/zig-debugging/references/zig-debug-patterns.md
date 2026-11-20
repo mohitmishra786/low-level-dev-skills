@@ -3,14 +3,14 @@
 ## Panic Handler Customization
 
 ```zig
-// Custom panic handler in root file (src/main.zig)
-pub fn panic(msg: []const u8, error_return_trace: ?*std.builtin.StackTrace, ret_addr: ?usize) noreturn {
-    _ = ret_addr;
+// Custom panic handler in root file (src/main.zig).
+// `panic` is a namespace; std.debug.FullPanic builds one from a single function.
+// (The old `pub fn panic(msg, ?*StackTrace, ?usize)` form still compiles but is deprecated.)
+pub const panic = std.debug.FullPanic(myPanic);
+
+fn myPanic(msg: []const u8, first_trace_addr: ?usize) noreturn {
     std.debug.print("\n=== PANIC ===\n{s}\n", .{msg});
-    if (error_return_trace) |trace| {
-        std.debug.dumpStackTrace(trace.*);
-    }
-    std.debug.dumpCurrentStackTrace(null);
+    std.debug.dumpCurrentStackTrace(.{ .first_address = first_trace_addr orelse @returnAddress() });
     std.process.exit(1);
 }
 ```
@@ -19,17 +19,13 @@ pub fn panic(msg: []const u8, error_return_trace: ?*std.builtin.StackTrace, ret_
 
 ```zig
 // Print current stack trace
-std.debug.dumpCurrentStackTrace(null);
+std.debug.dumpCurrentStackTrace(.{});
 
-// Capture stack trace
-var addresses: [32]usize = undefined;
-var trace = std.builtin.StackTrace{
-    .instruction_addresses = &addresses,
-    .index = 0,
-};
-std.debug.captureStackTrace(null, &trace);
+// Capture a stack trace now, print it later
+var addr_buf: [32]usize = undefined;
+const trace = std.debug.captureCurrentStackTrace(.{}, &addr_buf);
 // Later:
-std.debug.dumpStackTrace(trace);
+std.debug.dumpStackTrace(&trace);
 
 // Print source location at comptime
 const location = @src();
@@ -40,17 +36,18 @@ std.debug.print("{s}:{d}\n", .{ location.file, location.line });
 
 ```zig
 // {}: default format
-// {d}: decimal integer
+// {d}: decimal integer or float (fixed notation; {d:.3} for precision)
 // {x}: hex (lowercase)
 // {X}: hex (uppercase)
 // {o}: octal
 // {b}: binary
 // {e}: float scientific
-// {f}: float fixed
 // {s}: string/slice
 // {c}: character (u8 as char)
 // {u}: unicode codepoint
-// {any}: any type (uses std format)
+// {t}: enum tag or error name
+// {f}: call the value's format(self, *std.Io.Writer) method (not "float fixed")
+// {any}: any type, debug representation
 // {*}: pointer address
 
 const val: u32 = 255;
@@ -60,13 +57,13 @@ std.debug.print("{d} {x} {b} {o}\n", .{val, val, val, val});
 // Struct formatting
 const Point = struct { x: f32, y: f32 };
 const p = Point{ .x = 1.5, .y = 2.7 };
-std.debug.print("{}\n", .{p});
-// → main.Point{ .x = 1.5e+00, .y = 2.7e+00 }
+std.debug.print("{any}\n", .{p});
+// → .{ .x = 1.5, .y = 2.7 }
 
 // Pointer
 const ptr: *const u32 = &val;
 std.debug.print("{*}\n", .{ptr});
-// → *const u32@0x7fff...
+// → u32@7ffc...
 ```
 
 ## Compile-Time Debugging
@@ -113,20 +110,20 @@ const T = u32;
 ## Memory Debugging
 
 ```zig
-// Use GeneralPurposeAllocator for leak detection
-var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+// Use DebugAllocator (formerly GeneralPurposeAllocator) for leak detection
+var da: std.heap.DebugAllocator(.{}) = .init;
 defer {
-    const leaked = gpa.deinit();
+    const leaked = da.deinit();
     if (leaked == .leak) std.debug.print("Memory leaked!\n", .{});
 }
-const allocator = gpa.allocator();
+const allocator = da.allocator();
 
 // Debug allocation failures
-var gpa = std.heap.GeneralPurposeAllocator(.{
-    .safety = true,           // Check for use-after-free
+var da2: std.heap.DebugAllocator(.{
+    .safety = true,           // Check for double free / invalid free
     .never_unmap = true,      // Keep memory mapped (detect UAF faster)
     .retain_metadata = true,  // Keep freed block metadata
-}){};
+}) = .init;
 ```
 
 ## Testing and Debug Assertions
@@ -161,6 +158,6 @@ if (x <= 0) {
 # Watch for slice OOB
 (gdb) watch -l array_var.len
 
-# Catch allocation failures in GPA
-(gdb) break std.heap.GeneralPurposeAllocator.alloc
+# Break in DebugAllocator.alloc (the symbol name includes the full config struct)
+(gdb) rbreak ^heap\.debug_allocator\.DebugAllocator.*\.alloc$
 ```

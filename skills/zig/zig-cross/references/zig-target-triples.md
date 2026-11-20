@@ -6,7 +6,8 @@
 <cpu_arch>-<os>-<abi>
 ```
 
-- `cpu_arch`: x86_64, aarch64, arm, thumb, thumbv6m, thumbv7m, thumbv7em, thumbv8m, riscv32, riscv64, mips, mipsel, wasm32, wasm64, ...
+- `cpu_arch`: x86_64, x86, aarch64, arm, thumb, riscv32, riscv64, mips, mipsel, bpfel, wasm32, wasm64, ...
+  (no `thumbv7em`/`armv7`/`i386`/`riscv32imac`: pick the core or extensions with `-mcpu`)
 - `os`: linux, windows, macos, ios, freebsd, netbsd, openbsd, dragonfly, solaris, freestanding, wasi, other
 - `abi`: none, gnu, gnueabi, gnueabihf, musl, musleabi, musleabihf, eabi, eabihf, msvc, android, ...
 
@@ -22,7 +23,7 @@
 | `aarch64_be-linux-gnu` | glibc | ARM64 big-endian |
 | `arm-linux-gnueabi` | glibc soft-float | ARM32, no FPU |
 | `arm-linux-gnueabihf` | glibc hard-float | ARM32 with FPU |
-| `armv7-linux-gnueabihf` | glibc | ARMv7 with FPU (Pi 2/3) |
+| `arm-linux-gnueabihf` + `-mcpu cortex_a7` | glibc | ARMv7 with FPU (Pi 2/3) |
 | `riscv32-linux-gnu` | glibc | RISC-V 32-bit Linux |
 | `riscv64-linux-gnu` | glibc | RISC-V 64-bit Linux |
 | `mipsel-linux-gnu` | glibc | MIPS little-endian |
@@ -36,7 +37,7 @@
 | `x86_64-windows-gnu` | MinGW ABI, cross-compilable |
 | `x86_64-windows-msvc` | MSVC ABI, requires Windows SDK |
 | `aarch64-windows-gnu` | ARM64 Windows (MinGW) |
-| `i386-windows-gnu` | 32-bit Windows |
+| `x86-windows-gnu` | 32-bit Windows |
 
 ## macOS / iOS Targets
 
@@ -53,16 +54,16 @@
 
 ### ARM Cortex-M
 
-| Triple | MCU Family | Notes |
-|--------|-----------|-------|
-| `thumb-freestanding-eabi` | Generic Thumb | |
-| `thumbv6m-freestanding-eabi` | Cortex-M0/M0+ | RP2040 core |
-| `thumbv7m-freestanding-eabi` | Cortex-M3 | STM32F1, LPC17xx |
-| `thumbv7em-freestanding-eabi` | Cortex-M4/M7 (soft-float) | |
-| `thumbv7em-freestanding-eabihf` | Cortex-M4/M7 (hard-float) | STM32F4/F7, nRF52 |
-| `thumbv8m.base-freestanding-eabi` | Cortex-M23 | |
-| `thumbv8m.main-freestanding-eabi` | Cortex-M33/M35P | STM32U5, nRF9160 |
-| `thumbv8m.main-freestanding-eabihf` | Cortex-M33 with FPU | |
+| Target + CPU | MCU Family | Notes |
+|--------------|-----------|-------|
+| `thumb-freestanding-eabi -mcpu cortex_m0plus` | Cortex-M0/M0+ | RP2040 core |
+| `thumb-freestanding-eabi -mcpu cortex_m3` | Cortex-M3 | STM32F1, LPC17xx |
+| `thumb-freestanding-eabi -mcpu cortex_m4` | Cortex-M4 (soft-float) | |
+| `thumb-freestanding-eabihf -mcpu cortex_m4+vfp4d16sp` | Cortex-M4F (hard-float) | STM32F4, nRF52 |
+| `thumb-freestanding-eabihf -mcpu cortex_m7+fp_armv8d16` | Cortex-M7 with DP FPU | STM32F7/H7 |
+| `thumb-freestanding-eabi -mcpu cortex_m23` | Cortex-M23 | |
+| `thumb-freestanding-eabi -mcpu cortex_m33` | Cortex-M33 (soft-float) | |
+| `thumb-freestanding-eabihf -mcpu cortex_m33+fp_armv8d16sp` | Cortex-M33 with FPU | STM32U5, nRF9160 |
 
 ### ARM Cortex-A (freestanding)
 
@@ -76,11 +77,11 @@
 | Triple | Notes |
 |--------|-------|
 | `riscv32-freestanding` | RISC-V 32-bit (generic) |
-| `riscv32im-freestanding` | With multiply extension |
-| `riscv32imc-freestanding` | With multiply and compressed |
-| `riscv32imac-freestanding` | With atomics (ESP32-C3) |
+| `riscv32-freestanding -mcpu generic_rv32+m` | With multiply extension |
+| `riscv32-freestanding -mcpu generic_rv32+m+c` | With multiply and compressed (ESP32-C3) |
+| `riscv32-freestanding -mcpu generic_rv32+m+a+c` | With atomics and compressed |
 | `riscv64-freestanding` | RISC-V 64-bit |
-| `riscv64gc-freestanding` | RISC-V 64 with GC extensions |
+| `riscv64-freestanding -mcpu baseline_rv64` | RISC-V 64 with GC extensions |
 
 ### Other
 
@@ -88,7 +89,7 @@
 |--------|-------|
 | `mips-freestanding-none` | MIPS32 bare metal |
 | `avr-freestanding-none` | AVR (Arduino) |
-| `bpf-freestanding-none` | eBPF |
+| `bpfel-freestanding-none` | eBPF (little-endian; `bpfeb` for big-endian) |
 
 ## WASM Targets
 
@@ -122,15 +123,16 @@ cortex_m0                   # Cortex-M0
 cortex_m0plus               # Cortex-M0+
 cortex_m3                   # Cortex-M3
 cortex_m4                   # Cortex-M4 (no FPU)
-cortex_m4+vfp4              # Cortex-M4 with FPU
-cortex_m7+vfp5_d16          # Cortex-M7 with FPU
+cortex_m4+vfp4d16sp         # Cortex-M4F: single-precision FPU (+vfp4 would emit f64 VFP ops)
+cortex_m7+fp_armv8d16       # Cortex-M7 with double-precision FPU
+cortex_m7+fp_armv8d16sp     # Cortex-M7 with single-precision FPU
 cortex_m33                  # Cortex-M33
-cortex_m33+vfp5_d16         # Cortex-M33 with FPU
+cortex_m33+fp_armv8d16sp    # Cortex-M33 with FPU
 
-# RISC-V extensions
-riscv32i                    # Base integer
-riscv32im                   # + Multiply
-riscv32imc                  # + Compressed
-riscv32imac                 # + Atomics + Compressed
-riscv64gc                   # 64-bit general
+# RISC-V (with -target riscv32-... / riscv64-...)
+generic_rv32                # Base integer (RV32I)
+generic_rv32+m              # + Multiply
+generic_rv32+m+c            # + Compressed
+generic_rv32+m+a+c          # + Atomics + Compressed
+baseline_rv64               # RV64GC
 ```

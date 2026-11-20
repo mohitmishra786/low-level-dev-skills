@@ -126,10 +126,12 @@ Enable in release builds:
 // build.zig
 const exe = b.addExecutable(.{
     .name = "myapp",
-    .root_source_file = b.path("src/main.zig"),
-    .target = target,
-    .optimize = optimize,
-    .error_tracing = true,  // enable even in ReleaseFast
+    .root_module = b.createModule(.{
+        .root_source_file = b.path("src/main.zig"),
+        .target = target,
+        .optimize = optimize,
+        .error_tracing = true,  // keep error return traces even in ReleaseFast
+    }),
 });
 ```
 
@@ -145,12 +147,13 @@ pub fn main() !void {
     // Basic print (always to stderr)
     std.debug.print("x = {d}, name = {s}\n", .{ x, name });
 
-    // Print any value (useful for structs)
+    // Print any value (useful for structs); {f} calls a type's format method
     const point = Point{ .x = 1, .y = 2 };
     std.debug.print("point = {any}\n", .{point});
 
-    // Formatted output
+    // Formatted output; {t} prints an enum or error name
     std.debug.print("hex: {x}, binary: {b}\n", .{ x, x });
+    std.debug.print("mode: {t}\n", .{@import("builtin").mode});
 
     // Log levels (respects compile-time log level)
     const log = std.log.scoped(.my_module);
@@ -164,25 +167,21 @@ pub fn main() !void {
 ### 7. std.log configuration
 
 ```zig
-// Override default log level at root
-pub const std_options = std.Options{
+// In the root source file: log level and custom handler (one std_options declaration)
+pub const std_options: std.Options = .{
     .log_level = .debug,  // .debug | .info | .warn | .err
+    .logFn = logFn,
 };
 
-// Custom log handler
-pub fn logFn(
+fn logFn(
     comptime level: std.log.Level,
-    comptime scope: @TypeOf(.enum_literal),
+    comptime scope: @EnumLiteral(),
     comptime format: []const u8,
     args: anytype,
 ) void {
     const prefix = "[" ++ @tagName(level) ++ "] (" ++ @tagName(scope) ++ "): ";
     std.debug.print(prefix ++ format ++ "\n", args);
 }
-
-pub const std_options = std.Options{
-    .logFn = logFn,
-};
 ```
 
 ### 8. VS Code / IDE integration

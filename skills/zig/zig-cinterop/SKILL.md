@@ -1,18 +1,18 @@
 ---
 name: zig-cinterop
-description: Zig C interoperability skill. Use when calling C from Zig, calling Zig from C, using @cImport and @cInclude, running translate-c on C headers, defining extern structs and packed structs, matching C ABI types, or building mixed C/Zig projects. Activates on queries about @cImport, @cInclude, translate-c, extern struct, packed struct, Zig C ABI, calling C from Zig, exporting Zig to C, or bindgen equivalents.
+description: Zig C interoperability skill. Use when calling C from Zig, calling Zig from C, translating headers with b.addTranslateC or @cImport, running translate-c on C headers, defining extern structs and packed structs, matching C ABI types, or building mixed C/Zig projects. Activates on queries about addTranslateC, @cImport, @cInclude, translate-c, extern struct, packed struct, Zig C ABI, calling C from Zig, exporting Zig to C, or bindgen equivalents.
 ---
 
 # Zig C Interop
 
 ## Purpose
 
-Guide agents through Zig's C interoperability: `@cImport`/`@cInclude` for calling C, `translate-c` for header inspection, `extern struct` and `packed struct` for ABI-compatible types, exporting Zig for C consumption, and `zig cc` for mixed C/Zig builds.
+Guide agents through Zig's C interoperability: `b.addTranslateC` (and the deprecated `@cImport`) for calling C, `translate-c` for header inspection, `extern struct` and `packed struct` for ABI-compatible types, exporting Zig for C consumption, and `zig cc` for mixed C/Zig builds.
 
 ## Triggers
 
 - "How do I call a C function from Zig?"
-- "How do I use @cImport and @cInclude?"
+- "How do I call a C library from Zig (addTranslateC / @cImport)?"
 - "How do I export Zig functions to be called from C?"
 - "How do I define a struct that matches a C struct?"
 - "What does translate-c do?"
@@ -20,16 +20,44 @@ Guide agents through Zig's C interoperability: `@cImport`/`@cInclude` for callin
 
 ## Workflow
 
-### 1. Calling C from Zig with @cImport
+### 1. Calling C from Zig
+
+Since Zig 0.16 the `@cImport` builtin is deprecated. Translate C headers in `build.zig` with
+`b.addTranslateC` and import the result as a normal module.
+
+```c
+/* src/c.h — everything the Zig code needs from C */
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "mylib.h"
+```
 
 ```zig
-const c = @cImport({
-    @cInclude("stdio.h");
-    @cInclude("string.h");
-    @cInclude("mylib.h");
-    @cDefine("MY_FEATURE", "1");  // Equivalent to -DMY_FEATURE=1
-    @cUndef("SOME_MACRO");
+// build.zig
+const c_h = b.addTranslateC(.{
+    .root_source_file = b.path("src/c.h"),
+    .target = target,
+    .optimize = optimize,
 });
+c_h.addIncludePath(b.path("include/"));
+c_h.defineCMacro("MY_FEATURE", "1");  // equivalent to -DMY_FEATURE=1
+
+const exe = b.addExecutable(.{
+    .name = "app",
+    .root_module = b.createModule(.{
+        .root_source_file = b.path("src/main.zig"),
+        .target = target,
+        .optimize = optimize,
+        .link_libc = true,  // required when calling libc
+        .imports = &.{.{ .name = "c", .module = c_h.createModule() }},
+    }),
+});
+```
+
+```zig
+// src/main.zig
+const c = @import("c");
 
 pub fn main() void {
     _ = c.printf("Hello from C: %d\n", @as(c_int, 42));
@@ -39,10 +67,15 @@ pub fn main() void {
 }
 ```
 
-In `build.zig`:
+Older code uses `@cImport`, which still compiles on 0.16. `@cDefine` must come before the
+`@cInclude` that depends on it:
+
 ```zig
-exe.linkLibC();  // Required when using C functions
-exe.addIncludePath(b.path("include/"));
+const c = @cImport({
+    @cDefine("MY_FEATURE", "1");
+    @cInclude("stdio.h");
+    @cInclude("mylib.h");
+});
 ```
 
 ### 2. translate-c — inspect C header translation
@@ -60,7 +93,8 @@ zig translate-c -I include/ -DFEATURE=1 mylib.h > mylib.zig
 zig translate-c mylib.h | grep -A5 "struct MyStruct"
 ```
 
-This is Zig's equivalent of `bindgen` — you use it to understand what Zig generates, then use `@cImport` directly in code.
+This is Zig's equivalent of `bindgen`. Use it to see what Zig generates; `b.addTranslateC` runs the
+same translation as a build step.
 
 ### 3. C type mapping
 
@@ -86,11 +120,10 @@ This is Zig's equivalent of `bindgen` — you use it to understand what Zig gene
 const str = "hello";
 _ = c.puts(str);  // Zig string literals are [*:0]const u8
 
-// Dynamic strings — need null terminator
-var buf: [64:0]u8 = undefined;
-const len = std.fmt.bufPrint(buf[0..63], "hello {d}", .{42}) catch unreachable;
-buf[len] = 0;
-_ = c.puts(&buf);
+// Dynamic strings — need a null terminator
+var buf: [64]u8 = undefined;
+const msg = try std.fmt.bufPrintSentinel(&buf, "hello {d}", .{42}, 0);  // [:0]u8
+_ = c.puts(msg.ptr);
 ```
 
 ### 4. extern struct — ABI-compatible structs
@@ -111,9 +144,13 @@ const Header = extern struct {
     flags: u16,
 };
 
-// Use with C API
-var p = Point{ .x = 10, .y = 20 };
+// translate-c already generates c.struct_Point; use it directly
+var p = c.struct_Point{ .x = 10, .y = 20 };
 _ = c.draw_point(&p);
+
+// A hand-written extern struct is a distinct type: cast the pointer
+var zp = Point{ .x = 10, .y = 20 };
+_ = c.draw_point(@ptrCast(&zp));
 ```
 
 ### 5. packed struct — bit-level layout
@@ -144,12 +181,15 @@ export fn zig_add(a: c_int, b: c_int) c_int {
     return a + b;
 }
 
-// Export with specific calling convention
-pub fn my_func(x: u32) callconv(.C) u32 {
+// Export under a chosen name with @export (calling convention is .c; .C no longer exists)
+fn myFunc(x: u32) callconv(.c) u32 {
     return x * 2;
 }
+comptime {
+    @export(&myFunc, .{ .name = "my_func" });
+}
 
-// Export a struct (use extern struct for C layout)
+// Export a constant
 export const VERSION: c_int = 42;
 ```
 
@@ -162,7 +202,7 @@ Generate a C header (manual or with tools):
 
 int zig_add(int a, int b);
 uint32_t my_func(uint32_t x);
-extern int VERSION;
+extern const int VERSION;
 
 #endif
 ```
@@ -171,25 +211,30 @@ extern int VERSION;
 
 ```zig
 // Build Zig as a C-compatible static library
-const lib = b.addStaticLibrary(.{
+const lib = b.addLibrary(.{
     .name = "myzig",
-    .root_source_file = b.path("src/lib.zig"),
-    .target = target,
-    .optimize = optimize,
+    .linkage = .static,
+    .root_module = b.createModule(.{
+        .root_source_file = b.path("src/lib.zig"),
+        .target = target,
+        .optimize = optimize,
+    }),
 });
 
 // The C code that uses the Zig library
 const c_exe = b.addExecutable(.{
     .name = "c_consumer",
-    .target = target,
-    .optimize = optimize,
+    .root_module = b.createModule(.{
+        .target = target,
+        .optimize = optimize,
+        .link_libc = true,
+    }),
 });
-c_exe.addCSourceFile(.{
+c_exe.root_module.addCSourceFile(.{
     .file = b.path("src/main.c"),
     .flags = &.{"-std=c11"},
 });
-c_exe.linkLibrary(lib);
-c_exe.linkLibC();
+c_exe.root_module.linkLibrary(lib);
 b.installArtifact(c_exe);
 ```
 
@@ -211,10 +256,9 @@ extern fn lib_destroy(h: *MyHandle) void;
 ### 9. Variadic functions
 
 ```zig
-// Call variadic C functions using @call with variadic args
-const c = @cImport(@cInclude("stdio.h"));
+// Variadic C functions translated from headers can be called directly
+const c = @import("c");  // translated with b.addTranslateC (section 1)
 
-// printf works directly through @cImport
 _ = c.printf("value: %d\n", @as(c_int, 42));
 
 // For custom variadic C functions, use extern with ...

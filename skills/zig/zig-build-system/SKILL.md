@@ -7,7 +7,7 @@ description: Zig build system skill for multi-file Zig projects. Use when writin
 
 ## Purpose
 
-Guide agents through writing `build.zig` files: executables, libraries, C source integration, build options, test configuration, and `build.zig.zon` package manifests.
+Guide agents through writing `build.zig` files for Zig 0.16: executables, libraries, C source integration, build options, test configuration, and `build.zig.zon` package manifests.
 
 ## Triggers
 
@@ -25,7 +25,7 @@ Guide agents through writing `build.zig` files: executables, libraries, C source
 ```bash
 # Initialize a new project
 mkdir myproject && cd myproject
-zig init          # creates src/main.zig and build.zig
+zig init          # creates build.zig, build.zig.zon, src/main.zig, src/root.zig
 
 # Build
 zig build
@@ -39,20 +39,26 @@ zig build test
 
 ### 2. build.zig structure
 
+Since Zig 0.15, every artifact is built from a root module created with `b.createModule`.
+Source file, target, optimize mode, libc linking and imports are module settings.
+
 ```zig
 const std = @import("std");
 
 pub fn build(b: *std.Build) void {
-    // Standard options (--optimize, --target)
-    const optimize = b.standardOptimizeOption(.{});
+    // Standard options (-Doptimize=..., -Dtarget=...)
     const target = b.standardTargetOptions(.{});
+    const optimize = b.standardOptimizeOption(.{});
 
-    // Executable
-    const exe = b.addExecutable(.{
-        .name = "myapp",
+    const exe_mod = b.createModule(.{
         .root_source_file = b.path("src/main.zig"),
         .target = target,
         .optimize = optimize,
+    });
+
+    const exe = b.addExecutable(.{
+        .name = "myapp",
+        .root_module = exe_mod,
     });
 
     // Install step (zig build → copies to zig-out/bin/)
@@ -67,11 +73,9 @@ pub fn build(b: *std.Build) void {
     const run_step = b.step("run", "Run the app");
     run_step.dependOn(&run_cmd.step);
 
-    // Test step (zig build test)
+    // Test step (zig build test) — tests the same module
     const unit_tests = b.addTest(.{
-        .root_source_file = b.path("src/main.zig"),
-        .target = target,
-        .optimize = optimize,
+        .root_module = exe_mod,
     });
     const run_unit_tests = b.addRunArtifact(unit_tests);
     const test_step = b.step("test", "Run unit tests");
@@ -82,40 +86,47 @@ pub fn build(b: *std.Build) void {
 ### 3. Libraries
 
 ```zig
-// Static library
-const lib = b.addStaticLibrary(.{
-    .name = "mylib",
+const lib_mod = b.createModule(.{
     .root_source_file = b.path("src/mylib.zig"),
     .target = target,
     .optimize = optimize,
 });
+
+// Static library (addStaticLibrary was removed; use addLibrary)
+const lib = b.addLibrary(.{
+    .name = "mylib",
+    .linkage = .static,
+    .root_module = lib_mod,
+});
 b.installArtifact(lib);
 
 // Shared library
-const shared_lib = b.addSharedLibrary(.{
+const shared_lib = b.addLibrary(.{
     .name = "mylib",
-    .root_source_file = b.path("src/mylib.zig"),
-    .target = target,
-    .optimize = optimize,
+    .linkage = .dynamic,
+    .root_module = lib_mod,
     .version = .{ .major = 1, .minor = 0, .patch = 0 },
 });
 b.installArtifact(shared_lib);
 
 // Link library into executable
-exe.linkLibrary(lib);
+exe.root_module.linkLibrary(lib);
 ```
 
 ### 4. Adding C source files
 
+C sources, include paths and system libraries are added to a module, not to the artifact.
+`exe.addCSourceFile(...)`, `exe.linkLibC()` and similar `Compile` methods no longer exist.
+
 ```zig
 // Single C file
-exe.addCSourceFile(.{
+exe.root_module.addCSourceFile(.{
     .file = b.path("src/legacy.c"),
     .flags = &.{ "-std=c11", "-Wall", "-Wextra" },
 });
 
 // Multiple C files
-exe.addCSourceFiles(.{
+exe.root_module.addCSourceFiles(.{
     .files = &.{
         "src/a.c",
         "src/b.c",
@@ -125,13 +136,13 @@ exe.addCSourceFiles(.{
 });
 
 // Include directories
-exe.addIncludePath(b.path("include/"));
-exe.addIncludePath(.{ .cwd_relative = "/usr/local/include" });
+exe.root_module.addIncludePath(b.path("include/"));
+exe.root_module.addIncludePath(.{ .cwd_relative = "/usr/local/include" });
 
-// System libraries
-exe.linkSystemLibrary("curl");
-exe.linkSystemLibrary("ssl");
-exe.linkLibC();  // link libc (required if calling C stdlib)
+// System libraries (second argument: needed/weak/use_pkg_config/...)
+exe.root_module.linkSystemLibrary("curl", .{});
+exe.root_module.linkSystemLibrary("ssl", .{});
+exe.root_module.link_libc = true;  // or .link_libc = true in createModule
 ```
 
 ### 5. Build-time options
@@ -171,6 +182,7 @@ pub fn build(b: *std.Build) void {
 ```
 
 In Zig source:
+
 ```zig
 const build_options = @import("build_options");
 
@@ -189,7 +201,7 @@ zig build -Dlogging=true -Dbackend=vulkan -Dmax-connections=256
 ### 6. Module system
 
 ```zig
-// Create a module (reusable across targets)
+// Public module: other packages can import it via b.dependency(...).module("mymodule")
 const mymodule = b.addModule("mymodule", .{
     .root_source_file = b.path("src/mymodule.zig"),
 });
@@ -197,15 +209,26 @@ const mymodule = b.addModule("mymodule", .{
 // Use module in executable
 exe.root_module.addImport("mymodule", mymodule);
 
-// Share module between exe and tests
-const utils = b.addModule("utils", .{
+// Private module shared between exe and tests
+const utils = b.createModule(.{
     .root_source_file = b.path("src/utils.zig"),
 });
 exe.root_module.addImport("utils", utils);
 unit_tests.root_module.addImport("utils", utils);
+
+// Imports can also be listed when the module is created
+const app_mod = b.createModule(.{
+    .root_source_file = b.path("src/app.zig"),
+    .target = target,
+    .optimize = optimize,
+    .imports = &.{
+        .{ .name = "utils", .module = utils },
+    },
+});
 ```
 
 In Zig source:
+
 ```zig
 const utils = @import("utils");
 const mymodule = @import("mymodule");
@@ -213,21 +236,22 @@ const mymodule = @import("mymodule");
 
 ### 7. Package management with build.zig.zon
 
+`zig init` writes a `build.zig.zon` with a generated `fingerprint`. The package `name` is an enum
+literal, not a string. Zig 0.16 refuses to build a package, or a dependency, that has no
+fingerprint or uses a string name.
+
 ```zig
 // build.zig.zon
 .{
-    .name = "myapp",
+    .name = .myapp,
     .version = "0.1.0",
-    .minimum_zig_version = "0.13.0",
+    .fingerprint = 0x8798022aacdd7f5b, // generated by zig init; never copy between packages
+    .minimum_zig_version = "0.16.0",
 
     .dependencies = .{
-        .zig_clap = .{
-            .url = "https://github.com/Hejsil/zig-clap/archive/refs/tags/0.9.1.tar.gz",
-            .hash = "1220...",  // Run zig build to get the hash
-        },
-        .known_folders = .{
-            .url = "https://github.com/ziglibs/known-folders/archive/refs/heads/master.tar.gz",
-            .hash = "1220...",
+        .clap = .{
+            .url = "https://github.com/Hejsil/zig-clap/archive/refs/tags/0.12.0.tar.gz",
+            .hash = "...", // filled in by zig fetch --save
         },
     },
 
@@ -241,9 +265,17 @@ const mymodule = @import("mymodule");
 }
 ```
 
+```bash
+# Add a dependency and write its hash into build.zig.zon
+zig fetch --save https://github.com/Hejsil/zig-clap/archive/refs/tags/0.12.0.tar.gz
+
+# Missing or wrong fingerprint: zig build prints the value to use
+zig build    # error: missing top-level 'fingerprint' field; suggested value: 0x...
+```
+
 ```zig
 // build.zig — use the dependency
-const clap_dep = b.dependency("zig_clap", .{
+const clap_dep = b.dependency("clap", .{
     .target = target,
     .optimize = optimize,
 });
@@ -251,10 +283,11 @@ exe.root_module.addImport("clap", clap_dep.module("clap"));
 ```
 
 ```bash
-# Fetch dependencies (creates zig-cache/packages/)
-zig build    # auto-fetches on first run
+# zig build fetches missing dependencies into ./zig-pkg/ (Zig 0.16+)
+zig build
 
-# Zig will print the hash if missing — copy it into build.zig.zon
+# Work on a local checkout of a dependency without editing build.zig.zon
+zig build --fork=../zig-clap
 ```
 
 ### 8. Custom build steps

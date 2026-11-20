@@ -50,11 +50,12 @@ pub extern fn process(v: ?*Vec3, count: usize, name: ?[*:0]const u8) c_int;
 pub const MAX_ITEMS = @as(c_int, 1024);
 ```
 
-### Workflow: translate-c → @cImport
+### Workflow: translate-c → addTranslateC
 
-1. Run `translate-c` to see Zig's interpretation of the C API
+1. Run `zig translate-c` to see Zig's interpretation of the C API
 2. Identify type mappings, function signatures, pointer nullability
-3. Use `@cImport` in actual code (handles the translation automatically)
+3. In real code, translate headers with `b.addTranslateC` in `build.zig` and `@import` the module
+   (`@cImport` does the same inline but is deprecated since 0.16)
 4. Only use the translated output as a manual reference, not as source
 
 ## C ABI Type Mapping Reference
@@ -100,7 +101,7 @@ pub const MAX_ITEMS = @as(c_int, 1024);
 | `T *` (nullable) | `?*T` |
 | `T *` (non-null) | `*T` |
 | `T **` | `*?*T` or `**T` |
-| `void (*fn)(int)` | `*const fn (c_int) callconv(.C) void` |
+| `void (*fn)(int)` | `?*const fn (c_int) callconv(.c) void` |
 
 ### Enum types
 
@@ -133,29 +134,27 @@ void register_callback(callback_t cb, void *ctx);
 ```
 
 ```zig
-const c = @cImport(@cInclude("mylib.h"));
+const c = @import("c");  // b.addTranslateC module, see SKILL.md section 1
 
-fn my_callback(ctx: ?*anyopaque, event: c_int) callconv(.C) void {
-    const self = @as(*MyType, @ptrCast(@alignCast(ctx)));
+fn my_callback(ctx: ?*anyopaque, event: c_int) callconv(.c) void {
+    const self: *MyType = @ptrCast(@alignCast(ctx));
     self.handle(event);
 }
 
 // Register
-c.register_callback(my_callback, @ptrCast(my_obj));
+c.register_callback(my_callback, &my_obj);
 ```
 
 ### Error handling (C errno pattern)
 
 ```zig
-const c = @cImport({
-    @cInclude("errno.h");
-    @cInclude("string.h");
-});
+// c.h: #include <fcntl.h> <unistd.h> <string.h>
+const c = @import("c");
 
-fn open_file(path: [*:0]const u8) !void {
+fn openFile(path: [*:0]const u8) !void {
     const fd = c.open(path, c.O_RDONLY);
     if (fd < 0) {
-        const err = c.__errno_location().*;  // Linux
+        const err = std.c._errno().*;  // portable; avoids glibc-only __errno_location
         const msg = c.strerror(err);
         std.log.err("open failed: {s}", .{msg});
         return error.OpenFailed;
@@ -167,10 +166,8 @@ fn open_file(path: [*:0]const u8) !void {
 ### Memory management with C allocator
 
 ```zig
-const c = @cImport({
-    @cInclude("stdlib.h");
-    @cInclude("string.h");
-});
+// c.h: #include <stdlib.h> <string.h>
+const c = @import("c");
 
 // Allocate C memory (must free with c.free)
 const buf = c.malloc(1024) orelse return error.OutOfMemory;
