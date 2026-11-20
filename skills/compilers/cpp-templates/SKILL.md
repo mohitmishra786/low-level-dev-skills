@@ -220,3 +220,4 @@ void process(T x) {
 - Use `skills/build-systems/build-acceleration` for ccache and PCH to reduce overall compile time
 - Use `skills/compilers/clang` for Clang-specific diagnostics and concept error output
 - Use `skills/low-level-programming/cpp-coroutines` for another advanced C++20 feature
+- Use `skills/compilers/modern-c-cpp-standards` for C++26 static reflection, which replaces many template metaprogramming tricks

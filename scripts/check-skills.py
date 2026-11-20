@@ -32,6 +32,9 @@ for skill in sorted(skills_dir.glob("*/*/SKILL.md")):
     desc = re.search(r"^description:\s*(.+)$", front, re.M)
     if not name or name.group(1).strip() != skill.parent.name:
         report(skill, f"frontmatter name must be '{skill.parent.name}'")
+    for key, val in ((k, v) for k, v in re.findall(r"^(\w[\w-]*):[ \t]*(.*)$", front, re.M)):
+        if val and val[0] not in "\"'|>" and re.search(r"\s#", val):
+            report(skill, f"frontmatter '{key}' has an unquoted ' #' (YAML comment); quote the value")
     if not desc:
         report(skill, "frontmatter has no description")
     else:
